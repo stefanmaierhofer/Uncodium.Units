@@ -1,0 +1,9 @@
+type project
+id Uncodium.Units
+authors Stefan Maierhofer
+description
+    Units of measure.
+files
+    ..\..\bin\Release\Uncodium.Units.dll ==> lib\net45
+    ..\..\bin\Release\Uncodium.Units.pdb ==> lib\net45
+    ..\..\bin\Release\Uncodium.Units.xml ==> lib\net45

@@ -1,0 +1,16 @@
+framework:net45
+
+source https://vrvis.myget.org/F/aardvark/api/v3/index.json
+source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
+source https://api.nuget.org/v3/index.json
+
+nuget NUnit                             ~> 3.2.0
+nuget System.ValueTuple
+
+group Build
+content: none
+source https://api.nuget.org/v3/index.json
+source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
+
+github vrvis/Aardvark.Fake:standalone
+

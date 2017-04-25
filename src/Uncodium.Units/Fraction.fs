@@ -34,28 +34,51 @@ type Fraction =
             let f = float(bigint.Max(Fraction.scale numerator, Fraction.scale denominator))
             Fraction(bigint(numerator * f), bigint(denominator * f))
 
-        member this.Simplified
+        member self.Simplified
             with get () =
-                let d = Fraction.gcd this.Numerator this.Denominator
-                if d = bigint(1) then this
-                else Fraction(this.Numerator / d, this.Denominator / d)
+                let d = Fraction.gcd self.Numerator self.Denominator
+                if d = bigint(1) then self
+                else Fraction(self.Numerator / d, self.Denominator / d)
 
-        member this.Float with get () = float this.Numerator / float this.Denominator
+        member self.Float with get () = float self.Numerator / float self.Denominator
 
-        member this.Inverse with get () = Fraction(this.Denominator, this.Numerator)
+        member self.Inverse with get () = Fraction(self.Denominator, self.Numerator)
 
-        override this.ToString() = sprintf "(%A/%A)" this.Numerator this.Denominator
+        member self.Pow(b : int) = Fraction(bigint.Pow(self.Numerator, b), bigint.Pow(self.Denominator, b))
+
+        member self.IsIdentical(other : Fraction) = self.Numerator = other.Numerator && self.Denominator = other.Denominator
+
+        override self.ToString() = sprintf "(%A/%A)" self.Numerator self.Denominator
 
         static member (*) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Numerator, a.Denominator * b.Denominator)
+        static member (*) (a : Fraction, b : bigint) = Fraction(a.Numerator * b, a.Denominator)
+        static member (*) (a : bigint, b : Fraction) = Fraction(a * b.Numerator, b.Denominator)
         static member (*) (a : Fraction, b : int) = Fraction(a.Numerator * bigint b, a.Denominator)
+        static member (*) (a : int, b : Fraction) = Fraction(bigint a * b.Numerator, b.Denominator)
         static member (*) (a : Fraction, b : int64) = Fraction(a.Numerator * bigint b, a.Denominator)
+        static member (*) (a : int64, b : Fraction) = Fraction(bigint a * b.Numerator, b.Denominator)
 
         static member (/) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Denominator, a.Denominator * b.Numerator)
+        static member (/) (a : Fraction, b : bigint) = Fraction(a.Numerator / b, a.Denominator)
+        static member (/) (a : bigint, b : Fraction) = Fraction(a / b.Numerator, b.Denominator)
         static member (/) (a : Fraction, b : int) = Fraction(a.Numerator, a.Denominator * bigint b)
+        static member (/) (a : int, b : Fraction) = Fraction(bigint a / b.Numerator, b.Denominator)
         static member (/) (a : Fraction, b : int64) = Fraction(a.Numerator, a.Denominator * bigint b)
+        static member (/) (a : int64, b : Fraction) = Fraction(bigint a / b.Numerator, b.Denominator)
 
         static member (+) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator)
+        static member (-) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Denominator - b.Numerator * a.Denominator, a.Denominator * b.Denominator)
         
+        static member One           = Fraction(1L, 1L)
+        static member OneHalf       = Fraction(1L, 2L)
+        static member OneThird      = Fraction(1L, 3L)
+        static member TwoThirds     = Fraction(2L, 3L)
+        static member OneQuarter    = Fraction(1L, 4L)
+        static member ThreeQuarters = Fraction(3L, 4L)
+        static member OneFifth      = Fraction(1L, 5L)
+        static member Pi            = Fraction(314159265358979323846264338327950288419716939937510I, bigint.Pow(10I, 50))
+        static member e             = Fraction(271828182845904523536028747135266249775724709369995I, bigint.Pow(10I, 50))
+
         static member private gcd a b =
             if a = b then a
             else if a > b then Fraction.gcd (a-b) b else Fraction.gcd a (b-a)

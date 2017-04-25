@@ -5,54 +5,21 @@
 open Uncodium.Units
 open Unit
 
-Meter / Meter
-Radian
+Constants.AstronomicalUnit
+Constants.Lightyear
+Constants.JulianYear
 
-KibibitPerSecond
+Second * Kilogram
+Constants.AstronomicalUnit + Constants.JulianYear
 
-UsDryGallon.Factor.Simplified
+let foo1 = Constant("foo1", "foo1", 80, Centimeter)
+let foo2 = Constant("foo2", "foo2", 2, Decimeter)
+let r1 = foo1 + foo1
+let r2 = foo1 + foo2
+let r3 = foo2 + foo1
+let r4 = Constants.AstronomicalUnit + Constants.Lightsecond
 
-Yard
-Foot
-Yard / Foot
-
-Litre
-
-SpeedOfLight
-Minute
-Hour
-Day
-JulianYear
-Lightyear
-
-Meter
-Centimeter
-Microsecond
-
-Meter * Second
-SpeedOfLight
-
-Meter * Meter
-Meter / Meter
-Meter / Second / Meter
-
-Decimeter
-Decimeter * Centimeter
-
-Day / Hour
-
-Meter / Second
-SpeedOfLight
-JulianYear
-SpeedOfLight * JulianYear
-
-Centimeter
-Centimeter / Meter
-
-let Velocity = Meter / Second
-let Acceleration = Velocity / Second
-
-Velocity
-Acceleration
-
-Lux
+let foo3 = Constant("foo3", "foo3", 1, Minute)
+let foo4 = Constant("foo4", "foo4", 1, Second)
+let r5 = foo3 + foo4
+let r6 = foo4 + foo3

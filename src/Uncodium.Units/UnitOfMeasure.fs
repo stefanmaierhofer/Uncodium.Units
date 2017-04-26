@@ -3,10 +3,10 @@
 open System
 open System.Collections.Generic
 
-type UnitOfMeasure(name : string, symbol : string, baseUnit : Option<UnitPowers>, factor : Fraction) =
+type UnitOfMeasure(name : string, symbol : string, unit : Option<UnitPowers>, factor : Fraction) =
     member self.Name = name
     member self.Symbol = symbol
-    member self.Unit = baseUnit
+    member self.Unit = unit
     member self.Factor = factor
     
     new(name : string, symbol : string, unit : UnitOfMeasure, factor : Fraction) =
@@ -294,7 +294,6 @@ type Value(x : Fraction, unit : Option<UnitOfMeasure>) =
         match b.Unit with
         | Some u -> Value(b.X, Some (a / u))
         | None -> Value(b.X, Some a)
-
 
 and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfMeasure>) =
     member self.Name = name

@@ -5,6 +5,8 @@
 open Uncodium.Units
 open Unit
 
+Fraction(1,2).Pow(-1)
+
 Constants.AstronomicalUnit
 Constants.Lightyear
 Constants.JulianYear
@@ -23,3 +25,5 @@ let foo3 = Constant("foo3", "foo3", 1, Minute)
 let foo4 = Constant("foo4", "foo4", 1, Second)
 let r5 = foo3 + foo4
 let r6 = foo4 + foo3
+
+Radian

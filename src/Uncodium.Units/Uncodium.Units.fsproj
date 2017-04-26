@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Fraction.fs" />
-    <Compile Include="Kind.fs" />
     <Compile Include="UnitOfMeasure.fs" />
     <Compile Include="Units.fs" />
     <None Include="Script.fsx" />

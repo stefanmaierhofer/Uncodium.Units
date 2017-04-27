@@ -6,3 +6,9 @@ open Unit
 open Uncodium.Units.Unit.Constants
 
 (1 * Mile).ConvertTo(Meter)
+
+let MPG = Mile / UsGallon
+let x = 25 * MPG;
+
+let y = x.ConvertTo(Kilometer / Litre)
+

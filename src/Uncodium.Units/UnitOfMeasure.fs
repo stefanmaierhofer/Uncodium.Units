@@ -258,6 +258,12 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
+    static member (=>) (self : Value, unit : UnitOfMeasure) =
+        if self.Unit.HasUnitsEquivalentTo unit then
+                Value(self.X * self.Unit.Factor / unit.Factor, unit)
+            else
+                invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
+
     member self.Float with get () = self.X * self.Unit.Factor
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
@@ -296,6 +302,14 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
         match b.Unit <> UnitOfMeasure.None with
         | true -> Value(b.X, a * b.Unit)
         | false -> Value(b.X, a)
+    static member (*) (a : Value, b : UnitPrefix)    =
+        match a.Unit <> UnitOfMeasure.None with
+        | true -> Value(a.X, a.Unit * b)
+        | false -> Value(a.X * b.Factor, UnitOfMeasure.None)
+    static member (*) (a : UnitPrefix, b : Value)    =
+        match b.Unit <> UnitOfMeasure.None with
+        | true -> Value(b.X, a * b.Unit)
+        | false -> Value(b.X * a.Factor, UnitOfMeasure.None)
         
     static member (/) (a : Value, b : float)    = Value(a.X / Fraction b, a.Unit)
     static member (/) (a : float, b : Value)    = Value(Fraction a / b.X, b.Unit)
@@ -425,16 +439,19 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 
-    member self.ConvertTo(unit : UnitOfMeasure) = Value(self.X, self.Unit).ConvertTo(unit)
+    static member (=>) (self : Constant, unit : UnitOfMeasure) = Value(self.X, self.Unit) => unit
 
-    static member (+) (a : Constant, b : Constant) = Value(a.X, a.Unit) + Value(b.X, b.Unit)
+    static member (+) (a : Constant, b : Constant) = Value(a) + Value(b)
 
-    static member (-) (a : Constant, b : Constant) = Value(a.X, a.Unit) - Value(b.X, b.Unit)
+    static member (-) (a : Constant, b : Constant) = Value(a) - Value(b)
 
-    static member (*) (a : Constant, b : Constant) = Value(a.X, a.Unit) * Value(b.X, b.Unit)
-    static member (*) (a : Constant, b : UnitOfMeasure) = Value(a.X, a.Unit) * b
-    static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b.X, b.Unit)
+    static member (*) (a : Constant, b : Constant) = Value(a) * Value(b)
+    static member (*) (a : Constant, b : UnitOfMeasure) = Value(a) * b
+    static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b)
+    static member (*) (a : Constant, b : UnitPrefix) = Value(a) * b
+    static member (*) (a : UnitPrefix, b : Constant) = a * Value(b)
+    static member (*) (a : float, b : Constant) = a * Value(b.X, b.Unit)
 
-    static member (/) (a : Constant, b : Constant) = Value(a.X, a.Unit) / Value(b.X, b.Unit)
-    static member (/) (a : Constant, b : UnitOfMeasure) = Value(a.X, a.Unit) / b
-    static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b.X, b.Unit)
+    static member (/) (a : Constant, b : Constant) = Value(a) / Value(b)
+    static member (/) (a : Constant, b : UnitOfMeasure) = Value(a) / b
+    static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b)

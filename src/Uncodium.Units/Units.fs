@@ -6,7 +6,7 @@ open System.Numerics
 module Unit =
     
     let private (^) (a : int) (b : int) = bigint.Pow(bigint a, b)
-
+    
     // Prefixes
     let Deca  = UnitPrefix("deca",  "da", 10)
     let Hecto = UnitPrefix("hecto", "h",  100)
@@ -176,7 +176,7 @@ module Unit =
     let UsSurveyChain                   = UnitOfMeasure("US survey chain",                      "ch",    UsSurveyRod,                4                               )
     let UsSurveyFurlong                 = UnitOfMeasure("US survey furlong",                    "fur",   UsSurveyChain,             10                               )
     let UsSurveyMile                    = UnitOfMeasure("US survey mile",                       "mi",    UsSurveyFurlong,            8                               )
-    let UsSurveyLeague                  = UnitOfMeasure("US survey league",                     "lea",   UsSurveyFurlong,            3                               )
+    let UsSurveyLeague                  = UnitOfMeasure("US survey league",                     "lea",   UsSurveyMile,               3                               )
            
                                                                                                                                                        
            

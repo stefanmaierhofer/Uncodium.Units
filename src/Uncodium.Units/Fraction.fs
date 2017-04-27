@@ -15,30 +15,48 @@ type Fraction =
                 | true -> { Numerator = numerator; Denominator = denominator }
                 | false -> { Numerator = -numerator; Denominator = -denominator }
                 
+        new(numerator: bigint, denominator: int64) = Fraction(numerator, bigint denominator)
         new(numerator: bigint, denominator: int) = Fraction(numerator, bigint denominator)
-        new(numerator: int, denominator: bigint) = Fraction(bigint numerator, denominator)
-        new(numerator: int, denominator: int) = Fraction(bigint numerator, bigint denominator)
-        new(numerator: int64, denominator: int64) = Fraction(bigint numerator, bigint denominator)
+        new(numerator : bigint, denominator : float) =
+            let f = Fraction.scale denominator
+            Fraction(numerator * f, bigint(denominator * float(f)))
+        new(numerator : bigint, denominator : float32) = Fraction(numerator, float denominator)
         new(numerator: bigint) = Fraction(numerator, bigint 1)
-        new(numerator: int) = Fraction(bigint numerator, bigint 1)
+        
+        new(numerator: int64, denominator: bigint) = Fraction(bigint numerator, denominator)
+        new(numerator: int64, denominator: int64) = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: int) = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: float) = Fraction(bigint numerator, denominator)
+        new(numerator: int64, denominator: float32) = Fraction(bigint numerator, denominator)
         new(numerator: int64) = Fraction(bigint numerator, bigint 1)
+
+        new(numerator: int, denominator: bigint) = Fraction(bigint numerator, denominator)
+        new(numerator: int, denominator: int64) = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: int) = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: float) = Fraction(bigint numerator, denominator)
+        new(numerator: int, denominator: float32) = Fraction(bigint numerator, denominator)
+        new(numerator: int) = Fraction(bigint numerator, bigint 1)
+        
+        new(numerator : float, denominator : bigint) =
+            let f = Fraction.scale numerator
+            Fraction(bigint(numerator * float(f)), denominator * f)
+        new(numerator : float, denominator : int64) = Fraction(numerator, bigint denominator)
+        new(numerator : float, denominator : int) = Fraction(numerator, bigint denominator)
+        new(numerator : float, denominator : float) =
+            let f = float(bigint.Max(Fraction.scale numerator, Fraction.scale denominator))
+            Fraction(bigint(numerator * f), bigint(denominator * f))
+        new(numerator : float, denominator : float32) = Fraction(numerator, float denominator)
         new(numerator : float) =
             let d = Fraction.scale numerator
             let n = bigint(numerator * float(d))
             Fraction(n, d)
-        new(numerator : bigint, denominator : float) =
-            let f = Fraction.scale denominator
-            Fraction(numerator * f, bigint(denominator * float(f)))
-        new(numerator : int, denominator : float) = Fraction(bigint numerator, denominator)
-        new(numerator : int64, denominator : float) = Fraction(bigint numerator, denominator)
-        new(numerator : float, denominator : bigint) =
-            let f = Fraction.scale numerator
-            Fraction(bigint(numerator * float(f)), denominator * f)
-        new(numerator : float, denominator : int) = Fraction(numerator, bigint denominator)
-        new(numerator : float, denominator : int64) = Fraction(numerator, bigint denominator)
-        new(numerator : float, denominator : float) =
-            let f = float(bigint.Max(Fraction.scale numerator, Fraction.scale denominator))
-            Fraction(bigint(numerator * f), bigint(denominator * f))
+            
+        new(numerator : float32, denominator : bigint) = Fraction(float numerator, denominator)
+        new(numerator : float32, denominator : int64) = Fraction(float numerator, bigint denominator)
+        new(numerator : float32, denominator : int) = Fraction(float numerator, bigint denominator)
+        new(numerator : float32, denominator : float) = Fraction(float numerator, denominator)
+        new(numerator : float32, denominator : float32) = Fraction(float numerator, float denominator)
+        new(numerator : float32) = Fraction(float numerator)
 
         member self.Simplified
             with get () =

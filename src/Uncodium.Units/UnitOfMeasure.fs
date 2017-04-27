@@ -113,7 +113,6 @@ type UnitOfMeasure(name : string, symbol : string, unit : Option<UnitPowers>, fa
             | (None, Some u2) -> u2.HasUnitsEquivalentTo(self)
             | _ -> false
 
-    
     override self.ToString () = 
         match self.Unit with
         | Some u -> 
@@ -222,7 +221,30 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
     member self.X = x
     member self.Unit = unit
 
+    new(x : Fraction, unit : UnitOfMeasure) = Value(x, Some unit)
+    new(x : Fraction) = Value(x, None)
+
+    new(x : bigint, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
+    new(x : bigint, unit : UnitOfMeasure) = Value(Fraction x, Some unit)
+    new(x : bigint) = Value(Fraction x, None)
+
+    new(x : int64, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
+    new(x : int64, unit : UnitOfMeasure) = Value(Fraction x, Some unit)
+    new(x : int64) = Value(Fraction x, None)
+
     new(x : int, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
+    new(x : int, unit : UnitOfMeasure) = Value(Fraction x, Some unit)
+    new(x : int) = Value(Fraction x, None)
+
+    new(x : float, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
+    new(x : float, unit : UnitOfMeasure) = Value(Fraction x, Some unit)
+    new(x : float) = Value(Fraction x, None)
+
+    new(x : float32, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
+    new(x : float32, unit : UnitOfMeasure) = Value(Fraction x, Some unit)
+    new(x : float32) = Value(Fraction x, None)
+
+    new(x : Value) = Value(x.X, x.Unit)
     
     override self.ToString () =
         match self.Unit with
@@ -378,7 +400,6 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
 
     override self.GetHashCode() = hash (self.X, self.Unit)
 
-
 and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfMeasure>) =
     member self.Name = name
     member self.Symbol = symbol
@@ -386,14 +407,29 @@ and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfM
     member self.Unit = unit
 
     new(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure) = Constant(name, symbol, x, Some unit)
-    new(name : string, symbol : string, x : int, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
-    new(name : string, symbol : string, x : bigint, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
-    new(name : string, symbol : string, x : float, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
-    new(name : string, symbol : string, x : int, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
-    new(name : string, symbol : string, x : bigint, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
-    new(name : string, symbol : string, x : float, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
-    new(name : string, symbol : string, x : Value) = Constant(name, symbol, x.X, x.Unit)
     new(name : string, symbol : string, x : Fraction) = Constant(name, symbol, x, None)
+
+    new(name : string, symbol : string, x : bigint, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
+    new(name : string, symbol : string, x : bigint, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
+    new(name : string, symbol : string, x : bigint) = Constant(name, symbol, Fraction x, None)
+
+    new(name : string, symbol : string, x : int64, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
+    new(name : string, symbol : string, x : int64, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
+    new(name : string, symbol : string, x : int64) = Constant(name, symbol, Fraction x, None)
+
+    new(name : string, symbol : string, x : int, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
+    new(name : string, symbol : string, x : int, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
+    new(name : string, symbol : string, x : int) = Constant(name, symbol, Fraction x, None)
+
+    new(name : string, symbol : string, x : float, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
+    new(name : string, symbol : string, x : float, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
+    new(name : string, symbol : string, x : float) = Constant(name, symbol, Fraction x, None)
+
+    new(name : string, symbol : string, x : float32, unit : Option<UnitOfMeasure>) = Constant(name, symbol, Fraction x, unit)
+    new(name : string, symbol : string, x : float32, unit : UnitOfMeasure) = Constant(name, symbol, Fraction x, Some unit)
+    new(name : string, symbol : string, x : float32) = Constant(name, symbol, Fraction x, None)
+
+    new(name : string, symbol : string, x : Value) = Constant(name, symbol, x.X, x.Unit)
 
     override self.ToString () =
         match self.Unit with

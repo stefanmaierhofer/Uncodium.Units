@@ -93,7 +93,6 @@ type Fraction =
         static member inline relation (a : Fraction) (b : Fraction) f =
             if a.Denominator = b.Denominator then f a.Numerator  b.Numerator
             else f (a.Numerator * b.Denominator) (b.Numerator * a.Denominator)
-
         static member op_LessThan (a, b) = Fraction.relation a b (<)
         static member op_LessThanOrEqual (a, b) = Fraction.relation a b (<=)
         static member op_Equality (a, b) = Fraction.relation a b (=)

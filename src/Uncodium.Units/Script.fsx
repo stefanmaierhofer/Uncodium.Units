@@ -1,9 +1,10 @@
 ﻿#load "Fraction.fs"
-#load "Kind.fs"
 #load "UnitOfMeasure.fs"
 #load "Units.fs"
 open Uncodium.Units
 open Unit
+
+(1.0 * Meter / Second) = (3.6 * Kilometer / Hour)
 
 Fraction(1,2).Pow(-1)
 

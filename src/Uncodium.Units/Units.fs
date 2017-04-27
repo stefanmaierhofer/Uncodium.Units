@@ -329,7 +329,7 @@ module Unit =
     let Megajoule                       = Mega * Joule
     let Gigajoule                       = Giga * Joule
     
-    let Electronvolt                    = UnitOfMeasure("electronvolt",             "eV",   Joule,              Fraction(1.60217656535, 1e-19)  )
+    let Electronvolt                    = UnitOfMeasure("electronvolt",             "eV",   Joule,              Fraction(1602176620898I, 10^31)  )
     
     let Watthour                        = UnitOfMeasure("watt hour",                "Wh",   Watt * Hour                                         )
     let KilowattHour                    = UnitOfMeasure("kilowatt hour",            "kWh",  Kilowatt * Hour                                     )

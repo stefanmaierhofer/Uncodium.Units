@@ -41,17 +41,14 @@ type UnitOfMeasure(name : string, symbol : string, unit : Option<UnitPowers>, fa
     new(name : string, symbol : string) =
         UnitOfMeasure(name, symbol, None, 1)
 
-    override self.ToString () = 
-        match self.Unit with
-        | Some u -> 
-            let ps : UnitPower[] = u.Value
-            if u.Count = 1 && (ps.[0].Power = 1) then
-                let p = ps.[0].Unit
-                sprintf "%s (%s) %s" p.Name p.Symbol (string p.Factor)
-            else
-                sprintf "%s (%s) %s %s" self.Name self.Symbol (string u) (string self.Factor)
-
-        | None -> sprintf "%s (%s) %s" self.Name self.Symbol (string self.Factor)
+    static member (*) (a : float, b : UnitOfMeasure)    = Value(Fraction a, Some b)
+    static member (*) (a : UnitOfMeasure, b : float)    = Value(Fraction b, Some a)
+    static member (*) (a : int, b : UnitOfMeasure)    = Value(Fraction a, Some b)
+    static member (*) (a : UnitOfMeasure, b : int)    = Value(Fraction b, Some a)
+    static member (*) (a : int64, b : UnitOfMeasure)    = Value(Fraction a, Some b)
+    static member (*) (a : UnitOfMeasure, b : int64)    = Value(Fraction b, Some a)
+    static member (*) (a : bigint, b : UnitOfMeasure)    = Value(Fraction a, Some b)
+    static member (*) (a : UnitOfMeasure, b : bigint)    = Value(Fraction b, Some a)
         
     static member (*) (a : UnitOfMeasure, b : UnitOfMeasure) =
         let psa =
@@ -115,7 +112,20 @@ type UnitOfMeasure(name : string, symbol : string, unit : Option<UnitPowers>, fa
             | (Some u1, None) -> u1.HasEquivalentUnits(other)
             | (None, Some u2) -> u2.HasEquivalentUnits(self)
             | _ -> false
-            
+
+    
+    override self.ToString () = 
+        match self.Unit with
+        | Some u -> 
+            let ps : UnitPower[] = u.Value
+            if u.Count = 1 && (ps.[0].Power = 1) then
+                let p = ps.[0].Unit
+                sprintf "%s (%s) %s" p.Name p.Symbol (string p.Factor)
+            else
+                sprintf "%s (%s) %s %s" self.Name self.Symbol (string u) (string self.Factor)
+
+        | None -> sprintf "%s (%s) %s" self.Name self.Symbol (string self.Factor)
+ 
     static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
         let neg = powers |> Seq.filter (fun kv -> kv.Value < 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
@@ -208,12 +218,12 @@ and UnitPrefix(name : string, symbol : string, factor : Fraction) =
         | None -> Some (UnitPowers {Unit = unit; Power = 1})
         | Some x -> Some x
 
-type Value(x : Fraction, unit : Option<UnitOfMeasure>) =
-    member this.X = x
-    member this.Unit = unit
+and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
+    member self.X = x
+    member self.Unit = unit
 
     new(x : int, unit : Option<UnitOfMeasure>) = Value(Fraction x, unit)
-
+    
     override self.ToString () =
         match self.Unit with
         | Some u -> string(self.X.Float) + " " + u.Symbol
@@ -294,6 +304,67 @@ type Value(x : Fraction, unit : Option<UnitOfMeasure>) =
         match b.Unit with
         | Some u -> Value(b.X, Some (a / u))
         | None -> Value(b.X, Some a)
+
+    static member inline relation (a : Value) (b : Value) f =
+        if a.HasEquivalentUnits b then
+            match (a.Unit, b.Unit) with
+            | (Some u1, Some u2) -> f (a.X * u1.Factor) (b.X * u2.Factor)
+            | (Some u1, None) -> f (a.X * u1.Factor) b.X
+            | (None, Some u2) -> f a.X (b.X * u2.Factor)
+            | (None, None) -> f a.X b.X
+        else
+            invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
+
+    static member op_LessThan (a, b) = Value.relation a b (<)
+    static member op_LessThanOrEqual (a, b) = Value.relation a b (<=)
+    static member op_Equality (a, b) = Value.relation a b (=)
+    static member op_Inequality (a, b) = Value.relation a b (<>)
+    static member op_GreaterThanOrEqual (a, b) = Value.relation a b (>=)
+    static member op_GreaterThan (a, b) = Value.relation a b (>)
+
+    interface IComparable<Value> with
+        member self.CompareTo other =
+            if self.HasEquivalentUnits other then
+                match (self.Unit, other.Unit) with
+                | (Some u1, Some u2) -> ((self.X * u1.Factor) :> IComparable<_>).CompareTo(other.X * u2.Factor)
+                | (Some u1, None) -> ((self.X * u1.Factor) :> IComparable<_>).CompareTo(other.X)
+                | (None, Some u2) -> (self.X :> IComparable<_>).CompareTo(other.X * u2.Factor)
+                | (None, None) -> (self.X :> IComparable<_>).CompareTo(other.X)
+            else
+                invalidOp (sprintf "Values (%A) and (%A) have different units." self other)
+
+    interface IComparable with
+        member self.CompareTo obj =
+            match obj with
+                | null              -> 1
+                | :? Value as other -> (self :> IComparable<_>).CompareTo(other)
+                | _                 -> invalidArg "obj" "not a Value"
+
+    interface IEquatable<Value> with
+        member self.Equals other =
+            if self.HasEquivalentUnits other then
+                match (self.Unit, other.Unit) with
+                | (Some u1, Some u2) -> self.X * u1.Factor = other.X * u2.Factor
+                | (Some u1, None) -> self.X * u1.Factor = other.X
+                | (None, Some u2) -> self.X = other.X * u2.Factor
+                | (None, None) -> self.X = other.X
+            else
+                invalidOp (sprintf "Values (%A) and (%A) have different units." self other)
+
+    override self.GetHashCode() = hash (self.X, self.Unit)
+
+    override self.Equals(obj) =
+        match obj with
+        | :? Value as other ->
+            if self.HasEquivalentUnits other then
+                match (self.Unit, other.Unit) with
+                | (Some u1, Some u2) -> self.X * u1.Factor = other.X * u2.Factor
+                | (Some u1, None) -> self.X * u1.Factor = other.X
+                | (None, Some u2) -> self.X = other.X * u2.Factor
+                | (None, None) -> self.X = other.X
+            else
+                invalidOp (sprintf "Values (%A) and (%A) have different units." self other)
+        | _ -> false
 
 and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfMeasure>) =
     member self.Name = name

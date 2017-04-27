@@ -257,6 +257,17 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
         | (None, None) -> true
         | _ -> false
 
+    member self.ConvertTo(unit : UnitOfMeasure) =
+        match self.Unit with
+
+        | Some unitSelf ->
+            if unitSelf.HasUnitsEquivalentTo unit then
+                Value(self.X * unitSelf.Factor / unit.Factor, unit)
+            else
+                invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
+
+        | None -> Value(self.X, Some unit)
+
     static member (*) (a : Value, b : float)    = Value(a.X * Fraction b, a.Unit)
     static member (*) (a : float, b : Value)    = Value(Fraction a * b.X, b.Unit)
     static member (*) (a : Value, b : int)      = Value(a.X * Fraction b, a.Unit)
@@ -437,6 +448,8 @@ and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfM
         | None -> string(self.X.Float)
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
+
+    member self.ConvertTo(unit : UnitOfMeasure) = Value(self.X, self.Unit).ConvertTo(unit)
 
     static member (+) (a : Constant, b : Constant) = Value(a.X, a.Unit) + Value(b.X, b.Unit)
 

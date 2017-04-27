@@ -3,6 +3,6 @@
 #load "Units.fs"
 open Uncodium.Units
 open Unit
+open Uncodium.Units.Unit.Constants
 
-80 * Centimeter + 2 * Decimeter
-2 * Decimeter + 2 * Meter
+(1 * Mile).ConvertTo(Meter)

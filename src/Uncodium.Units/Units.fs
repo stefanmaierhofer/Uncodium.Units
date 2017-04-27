@@ -159,9 +159,9 @@ module Unit =
     let Point                           = UnitOfMeasure("point",                                "p",     Meter,                      0.000352777778                  )
     let Pica                            = UnitOfMeasure("pica",                                 "P/",    Meter,                      0.004233333                     )
     let Inch                            = UnitOfMeasure("inch",                                 "in",    Meter,                      0.0254                          )
-    let Foot                            = UnitOfMeasure("foot",                                 "ft",    Meter,                      0.3048                          )
-    let Yard                            = UnitOfMeasure("yard",                                 "yd",    Meter,                      0.9144                          )
-    let Mile                            = UnitOfMeasure("mile",                                 "mi",    Foot,                   1_280                               )
+    let Foot                            = UnitOfMeasure("foot",                                 "ft",    Inch,                      12                               )
+    let Yard                            = UnitOfMeasure("yard",                                 "yd",    Foot,                       3                               )
+    let Mile                            = UnitOfMeasure("mile",                                 "mi",    Foot,                   5_280                               )
                                                                                                                                 
     let Chain                           = UnitOfMeasure("chain",                                "ch",    Meter,                     20.1168                          )
     let Link                            = UnitOfMeasure("link",                                 "li",    Meter, Fraction(           20.1168        ,  100           ))

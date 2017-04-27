@@ -103,14 +103,14 @@ type UnitOfMeasure(name : string, symbol : string, unit : Option<UnitPowers>, fa
             | 0 -> UnitOfMeasure(s, s, None, self.Factor.Pow(b))
             | _ -> UnitOfMeasure(s, s, Some ps, self.Factor.Pow(b))
 
-    member self.HasEquivalentUnits (other : UnitOfMeasure) =
+    member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         if obj.ReferenceEquals(self, other) then
             true
         else
             match (self.Unit, other.Unit) with
-            | (Some u1, Some u2) -> u1.HasEquivalentUnits(u2)
-            | (Some u1, None) -> u1.HasEquivalentUnits(other)
-            | (None, Some u2) -> u2.HasEquivalentUnits(self)
+            | (Some u1, Some u2) -> u1.HasUnitsEquivalentTo(u2)
+            | (Some u1, None) -> u1.HasUnitsEquivalentTo(other)
+            | (None, Some u2) -> u2.HasUnitsEquivalentTo(self)
             | _ -> false
 
     
@@ -183,12 +183,12 @@ and UnitPowers(ps : UnitPower[]) =
         |> Seq.toArray
         |> UnitPowers
         
-    member self.HasEquivalentUnits (other : UnitPowers) =
+    member self.HasUnitsEquivalentTo (other : UnitPowers) =
         match self.Count = other.Count with
         | true -> Seq.zip self.Value other.Value |> Seq.forall (fun (x,y) -> x.Unit = y.Unit && x.Power = y.Power) 
         | false -> false
 
-    member self.HasEquivalentUnits (other : UnitOfMeasure) =
+    member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         match self.Count with
         | 1 ->
             let x = self.Value.[0]
@@ -229,9 +229,9 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
         | Some u -> string(self.X.Float) + " " + u.Symbol
         | None -> string(self.X.Float)
     
-    member self.HasEquivalentUnits (other : Value) =
+    member self.HasUnitsEquivalentTo (other : Value) =
         match (self.Unit, other.Unit) with
-        | (Some u1, Some u2) -> u1.HasEquivalentUnits(u2)
+        | (Some u1, Some u2) -> u1.HasUnitsEquivalentTo(u2)
         | (None, None) -> true
         | _ -> false
 
@@ -305,8 +305,28 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
         | Some u -> Value(b.X, Some (a / u))
         | None -> Value(b.X, Some a)
 
-    static member inline relation (a : Value) (b : Value) f =
-        if a.HasEquivalentUnits b then
+    static member (+) (a : Value, b : Value) =
+        if a.HasUnitsEquivalentTo b then
+            match (a.Unit, b.Unit) with
+            | (Some u1, Some u2) -> Value(a.X + b.X * u2.Factor / u1.Factor, Some u1)
+            | (Some u1, None) -> Value(a.X + b.X, Some u1)
+            | (None, Some u2) -> Value(a.X + b.X, Some u2)
+            | (None, None) -> Value(a.X + b.X, None)
+        else
+            invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
+
+    static member (-) (a : Value, b : Value) =
+        if a.HasUnitsEquivalentTo b then
+            match (a.Unit, b.Unit) with
+            | (Some u1, Some u2) -> Value(a.X - b.X * u2.Factor / u1.Factor, Some u1)
+            | (Some u1, None) -> Value(a.X - b.X, Some u1)
+            | (None, Some u2) -> Value(a.X - b.X, Some u2)
+            | (None, None) -> Value(a.X - b.X, None)
+        else
+            invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
+    
+    static member inline op (a : Value) (b : Value) f =
+        if a.HasUnitsEquivalentTo b then
             match (a.Unit, b.Unit) with
             | (Some u1, Some u2) -> f (a.X * u1.Factor) (b.X * u2.Factor)
             | (Some u1, None) -> f (a.X * u1.Factor) b.X
@@ -314,17 +334,17 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
             | (None, None) -> f a.X b.X
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
-
-    static member op_LessThan (a, b) = Value.relation a b (<)
-    static member op_LessThanOrEqual (a, b) = Value.relation a b (<=)
-    static member op_Equality (a, b) = Value.relation a b (=)
-    static member op_Inequality (a, b) = Value.relation a b (<>)
-    static member op_GreaterThanOrEqual (a, b) = Value.relation a b (>=)
-    static member op_GreaterThan (a, b) = Value.relation a b (>)
+        
+    static member op_LessThan (a, b) = Value.op a b (<)
+    static member op_LessThanOrEqual (a, b) = Value.op a b (<=)
+    static member op_Equality (a, b) = Value.op a b (=)
+    static member op_Inequality (a, b) = Value.op a b (<>)
+    static member op_GreaterThanOrEqual (a, b) = Value.op a b (>=)
+    static member op_GreaterThan (a, b) = Value.op a b (>)
 
     interface IComparable<Value> with
         member self.CompareTo other =
-            if self.HasEquivalentUnits other then
+            if self.HasUnitsEquivalentTo other then
                 match (self.Unit, other.Unit) with
                 | (Some u1, Some u2) -> ((self.X * u1.Factor) :> IComparable<_>).CompareTo(other.X * u2.Factor)
                 | (Some u1, None) -> ((self.X * u1.Factor) :> IComparable<_>).CompareTo(other.X)
@@ -342,7 +362,7 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
 
     interface IEquatable<Value> with
         member self.Equals other =
-            if self.HasEquivalentUnits other then
+            if self.HasUnitsEquivalentTo other then
                 match (self.Unit, other.Unit) with
                 | (Some u1, Some u2) -> self.X * u1.Factor = other.X * u2.Factor
                 | (Some u1, None) -> self.X * u1.Factor = other.X
@@ -350,21 +370,14 @@ and Value(x : Fraction, unit : Option<UnitOfMeasure>) =
                 | (None, None) -> self.X = other.X
             else
                 invalidOp (sprintf "Values (%A) and (%A) have different units." self other)
+    
+    override self.Equals(obj) =
+        match obj with
+        | :? Value as other -> (self :> IEquatable<_>).Equals(other)
+        | _ -> false
 
     override self.GetHashCode() = hash (self.X, self.Unit)
 
-    override self.Equals(obj) =
-        match obj with
-        | :? Value as other ->
-            if self.HasEquivalentUnits other then
-                match (self.Unit, other.Unit) with
-                | (Some u1, Some u2) -> self.X * u1.Factor = other.X * u2.Factor
-                | (Some u1, None) -> self.X * u1.Factor = other.X
-                | (None, Some u2) -> self.X = other.X * u2.Factor
-                | (None, None) -> self.X = other.X
-            else
-                invalidOp (sprintf "Values (%A) and (%A) have different units." self other)
-        | _ -> false
 
 and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfMeasure>) =
     member self.Name = name
@@ -387,70 +400,16 @@ and Constant(name : string, symbol : string, x : Fraction, unit : Option<UnitOfM
         | Some u -> string(self.X.Float) + " " + u.Symbol
         | None -> string(self.X.Float)
     
-    member self.HasEquivalentUnits (other : Constant) =
-        match (self.Unit, other.Unit) with
-        | (Some u1, Some u2) -> u1.HasEquivalentUnits(u2)
-        | (None, None) -> true
-        | _ -> false
+    member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 
-    static member (+) (a : Constant, b : Constant) =
-        if (not (a.HasEquivalentUnits b)) then
-            match (a.Unit, b.Unit) with
-            | (Some u1, Some u2) -> failwith (sprintf "Incompatible units. Cannot add (%A) and (%A)." u1 u2)
-            | (Some u1, None) -> failwith (sprintf "Incompatible units. Cannot add (%A) and ()." u1)
-            | (None, Some u2) -> failwith (sprintf "Incompatible units. Cannot add () and (%A)." u2)
-            | (None, None) -> failwith (sprintf "Incompatible units. Cannot add () and ().")
-        else
-            match (a.Unit, b.Unit) with
-            | (Some u1, Some u2) ->
-                //printfn "(%A %A) (%A %A)" a.X u1.Factor b.X u2.Factor
-                let bx = b.X * (u2.Factor / u1.Factor)
-                //printfn "(%A) + (%A) = (%A)" a.X bx (a.X + bx)
-                Value(a.X + bx, Some u1)
-            | _ -> Value(a.X + b.X, a.Unit)
+    static member (+) (a : Constant, b : Constant) = Value(a.X, a.Unit) + Value(b.X, b.Unit)
 
-    static member (-) (a : Constant, b : Constant) =
-        if (not (a.HasEquivalentUnits b)) then
-            match (a.Unit, b.Unit) with
-            | (Some u1, Some u2) -> failwith (sprintf "Incompatible units. Cannot subtract (%A) and (%A)." u1 u2)
-            | (Some u1, None) -> failwith (sprintf "Incompatible units. Cannot subtract (%A) and ()." u1)
-            | (None, Some u2) -> failwith (sprintf "Incompatible units. Cannot subtract () and (%A)." u2)
-            | (None, None) -> failwith (sprintf "Incompatible units. Cannot subtract () and ().")
-        else
-            match (a.Unit, b.Unit) with
-            | (Some u1, Some u2) ->
-                //printfn "(%A %A) (%A %A)" a.X u1.Factor b.X u2.Factor
-                let bx = b.X * (u2.Factor / u1.Factor)
-                //printfn "(%A) - (%A) = (%A)" a.X bx (a.X + bx)
-                Value(a.X - bx, Some u1)
-            | _ -> Value(a.X - b.X, a.Unit)
+    static member (-) (a : Constant, b : Constant) = Value(a.X, a.Unit) - Value(b.X, b.Unit)
 
-    static member (*) (a : Constant, b : Constant) = 
-        match (a.Unit, b.Unit) with
-        | (Some u1, Some u2) -> Value(a.X * b.X, Some (u1 * u2))
-        | (Some u1, None) -> Value(a.X * b.X, Some u1)
-        | (None, Some u2) -> Value(a.X * b.X, Some u2)
-        | (None, None) -> Value(a.X * b.X, None)
-    static member (*) (a : Constant, b : UnitOfMeasure) =
-        match a.Unit with
-        | Some u -> Value(a.X, Some (u * b))
-        | None -> Value(a.X, Some b)
-    static member (*) (a : UnitOfMeasure, b : Constant) =
-        match b.Unit with
-        | Some u -> Value(b.X, Some (a * u))
-        | None -> Value(b.X, Some a)
+    static member (*) (a : Constant, b : Constant) = Value(a.X, a.Unit) * Value(b.X, b.Unit)
+    static member (*) (a : Constant, b : UnitOfMeasure) = Value(a.X, a.Unit) * b
+    static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b.X, b.Unit)
 
-    static member (/) (a : Constant, b : Constant) = 
-        match (a.Unit, b.Unit) with
-        | (Some u1, Some u2) -> Value(a.X / b.X, Some (u1 * u2))
-        | (Some u1, None) -> Value(a.X / b.X, Some u1)
-        | (None, Some u2) -> Value(a.X / b.X, Some u2)
-        | (None, None) -> Value(a.X / b.X, None)
-    static member (/) (a : Constant, b : UnitOfMeasure) =
-        match a.Unit with
-        | Some u -> Value(a.X, Some (u / b))
-        | None -> Value(a.X, Some b)
-    static member (/) (a : UnitOfMeasure, b : Constant) =
-        match b.Unit with
-        | Some u -> Value(b.X.Inverse, Some (a / u))
-        | None -> Value(b.X.Inverse, Some a)
+    static member (/) (a : Constant, b : Constant) = Value(a.X, a.Unit) / Value(b.X, b.Unit)
+    static member (/) (a : Constant, b : UnitOfMeasure) = Value(a.X, a.Unit) / b
+    static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b.X, b.Unit)

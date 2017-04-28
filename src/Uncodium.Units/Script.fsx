@@ -7,11 +7,11 @@ open Uncodium.Units.Unit.Constants
 open Uncodium.Units.Unit.Imperial.Length
 
 
-(1 * Knot) => Kilometer / Hour
+1 * Knot => Kilometer / Hour
 
-(8 * Decimeter + 45 * Centimeter) => Yard
+8 * Decimeter + 45 * Centimeter => Yard
 
-(1 * Furlong) => Meter
+1 * Furlong => Meter
 
 1 * Meter + 1 * Decimeter + 1 * Centimeter + 1 * Millimeter
 

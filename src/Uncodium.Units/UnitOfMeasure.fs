@@ -3,15 +3,15 @@
 open System
 open System.Collections.Generic
 
-type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, factor : Fraction) =
+type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, factor : Fraction) =
 
     member self.Name = name
     member self.Symbol = symbol
-    member self.Dimension = dimension
+    member self.BaseUnits = baseUnits
     member self.Factor = factor
     
     new(name : string, symbol : string, unit : UnitOfMeasure, factor : Fraction) =
-        match unit.Dimension.IsEmpty with
+        match unit.BaseUnits.IsEmpty with
 
         | true ->
             if unit.Name = "" then
@@ -20,7 +20,7 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
                 UnitOfMeasure(name, symbol, UnitPowers {Unit = unit; Power = 1}, factor * unit.Factor)
         
         | false ->
-            let dim = if unit.Dimension.IsEmpty then UnitPowers.None else unit.Dimension
+            let dim = if unit.BaseUnits.IsEmpty then UnitPowers.None else unit.BaseUnits
             UnitOfMeasure(name, symbol, dim, factor * unit.Factor)
                 
     new(name : string, symbol : string, unit : UnitOfMeasure, factor : bigint) =
@@ -38,6 +38,8 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
     new(name : string, symbol : string) =
         UnitOfMeasure(name, symbol, UnitPowers.None, Fraction.One)
 
+    member self.IsBaseUnit with get () = self.BaseUnits.IsBaseUnit
+
     static member None = UnitOfMeasure("dimensionless", "-")
 
     static member (*) (a : float, b : UnitOfMeasure)    = Value(Fraction a, b)
@@ -51,13 +53,13 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
         
     static member (*) (a : UnitOfMeasure, b : UnitOfMeasure) =
         let psa =
-            match a.Dimension.IsEmpty with
+            match a.BaseUnits.IsEmpty with
             | true -> UnitPowers { Unit = a; Power = 1 }
-            | false -> a.Dimension
+            | false -> a.BaseUnits
         let psb =
-            match b.Dimension.IsEmpty with
+            match b.BaseUnits.IsEmpty with
             | true -> UnitPowers { Unit = b; Power = 1 }
-            | false -> b.Dimension
+            | false -> b.BaseUnits
         let ps : UnitPowers = psa * psb
         let s = string ps
         match ps.Count with
@@ -66,13 +68,13 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
 
     static member (/) (a : UnitOfMeasure, b : UnitOfMeasure) =
         let psa =
-            match a.Dimension.IsEmpty with
+            match a.BaseUnits.IsEmpty with
             | true -> UnitPowers { Unit = a; Power = 1 }
-            | false -> a.Dimension
+            | false -> a.BaseUnits
         let psb =
-            match b.Dimension.IsEmpty with
+            match b.BaseUnits.IsEmpty with
             | true -> UnitPowers { Unit = b; Power = 1 }
-            | false -> b.Dimension
+            | false -> b.BaseUnits
         let ps : UnitPowers = psa / psb
         let s = string ps
         match ps.Count with
@@ -81,9 +83,9 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
 
     static member (/) (a : int, b : UnitOfMeasure) =
         let ps =
-            match b.Dimension.IsEmpty with
+            match b.BaseUnits.IsEmpty with
             | true -> UnitPowers { Unit = b; Power = -1 }
-            | false -> b.Dimension.Inverse
+            | false -> b.BaseUnits.Inverse
         let s = string ps
         match ps.Count with
         | 0 -> UnitOfMeasure(s, s, UnitPowers.None, a / b.Factor)
@@ -94,9 +96,9 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
             UnitOfMeasure("", "", UnitPowers.None, Fraction.One)
         else
             let ps =
-                match self.Dimension.IsEmpty with
+                match self.BaseUnits.IsEmpty with
                 | true -> UnitPowers { Unit = self; Power = b }
-                | false -> self.Dimension.Pow(b)
+                | false -> self.BaseUnits.Pow(b)
             let s = string ps
             match ps.Count with
             | 0 -> UnitOfMeasure(s, s, UnitPowers.None, self.Factor.Pow(b))
@@ -106,22 +108,22 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
         if obj.ReferenceEquals(self, other) then
             true
         else
-            match (self.Dimension.IsEmpty, other.Dimension.IsEmpty) with
-            | (false, false) -> self.Dimension.HasUnitsEquivalentTo(other.Dimension)
-            | (false, true) -> self.Dimension.HasUnitsEquivalentTo(other)
-            | (true, false) -> other.Dimension.HasUnitsEquivalentTo(self)
+            match (self.BaseUnits.IsEmpty, other.BaseUnits.IsEmpty) with
+            | (false, false) -> self.BaseUnits.HasUnitsEquivalentTo(other.BaseUnits)
+            | (false, true) -> self.BaseUnits.HasUnitsEquivalentTo(other)
+            | (true, false) -> other.BaseUnits.HasUnitsEquivalentTo(self)
             | _ -> false
 
     override self.ToString () = 
-        match self.Dimension.IsEmpty with
+        match self.BaseUnits.IsEmpty with
         | true -> sprintf "%s (%s) %s" self.Name self.Symbol (string self.Factor)
         | false -> 
-            let ps : UnitPower[] = self.Dimension.Value
-            if self.Dimension.Count = 1 && (ps.[0].Power = 1) then
+            let ps : UnitPower[] = self.BaseUnits.Powers
+            if self.BaseUnits.Count = 1 && (ps.[0].Power = 1) then
                 let p = ps.[0].Unit
                 sprintf "%s (%s) %s" p.Name p.Symbol (string p.Factor)
             else
-                sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.Dimension) (string self.Factor)
+                sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Factor)
 
  
     static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
@@ -131,32 +133,34 @@ type UnitOfMeasure(name : string, symbol : string, dimension : UnitPowers, facto
 
 and UnitPower = { Unit : UnitOfMeasure; Power : int }
 
-and UnitPowers(ps : UnitPower[]) =
+and UnitPowers(powers : UnitPower[]) =
     
     static member None : UnitPowers = UnitPowers [| |]
 
-    member self.Value with get () = ps
-    member self.Count with get () = ps.Length
+    member self.Powers with get () = powers
+    member self.Count = self.Powers.Length
 
-    new(ps : seq<UnitPower>) = UnitPowers (ps |> UnitPowers.normalize)
-    new(p : UnitPower) = UnitPowers [| p |]
+    new(powers : seq<UnitPower>) = UnitPowers (powers |> UnitPowers.normalize)
+    new(power : UnitPower) = UnitPowers [| power |]
+
+    member self.IsBaseUnit with get() = self.Powers.Length = 0
         
     member self.Inverse
         with get () =
-            let xs = self.Value |> Seq.map (fun x -> { Unit = x.Unit; Power = -x.Power }) |> UnitPowers.normalize
+            let xs = self.Powers |> Seq.map (fun x -> { Unit = x.Unit; Power = -x.Power }) |> UnitPowers.normalize
             UnitPowers(xs)
 
-    member self.IsEmpty with get () = self.Value.Length = 0 || (self.Value.Length = 1 && self.Value.[0].Unit.Name = "")
+    member self.IsEmpty with get () = self.Powers.Length = 0 || (self.Powers.Length = 1 && self.Powers.[0].Unit.Name = "")
 
-    override self.ToString () = String.Join("", self.Value |> Seq.map (fun x -> "[" + x.Unit.Symbol + "^" + string(x.Power) + "]"))
+    override self.ToString () = String.Join("", self.Powers |> Seq.map (fun x -> "[" + x.Unit.Symbol + "^" + string(x.Power) + "]"))
 
     static member (*) (a : UnitPowers, b : UnitPowers) =
-        if a.Value.Length = 0 then b
-        elif b.Value.Length = 0 then a
+        if a.Powers.Length = 0 then b
+        elif b.Powers.Length = 0 then a
         else
             let d = Dictionary<UnitOfMeasure, int>()
-            for x in a.Value do d.Add(x.Unit, x.Power)
-            for x in b.Value do
+            for x in a.Powers do d.Add(x.Unit, x.Power)
+            for x in b.Powers do
                 match d.ContainsKey x.Unit with
                 | false -> d.Add(x.Unit, x.Power)
                 | true -> d.[x.Unit] <- (d.[x.Unit] + x.Power)
@@ -164,12 +168,12 @@ and UnitPowers(ps : UnitPower[]) =
             d |> Seq.map (fun kv -> { Unit = kv.Key; Power = kv.Value }) |> UnitPowers
 
     static member (/) (a : UnitPowers, b : UnitPowers) =
-        if a.Value.Length = 0 then b.Inverse
-        elif b.Value.Length = 0 then a
+        if a.Powers.Length = 0 then b.Inverse
+        elif b.Powers.Length = 0 then a
         else
             let d = Dictionary<UnitOfMeasure, int>()
-            for x in a.Value do d.Add(x.Unit, x.Power)
-            for x in b.Value do
+            for x in a.Powers do d.Add(x.Unit, x.Power)
+            for x in b.Powers do
                 match d.ContainsKey x.Unit with
                 | false -> d.Add(x.Unit, -x.Power)
                 | true -> d.[x.Unit] <- (d.[x.Unit] - x.Power)
@@ -177,7 +181,7 @@ and UnitPowers(ps : UnitPower[]) =
             d |> Seq.map (fun kv -> { Unit = kv.Key; Power = kv.Value }) |> UnitPowers
 
     member self.Pow(b : int) =
-        self.Value
+        self.Powers
         |> Seq.map (fun x -> { Unit = x.Unit; Power = x.Power * b})
         |> Seq.filter (fun x -> x.Power <> 0)
         |> Seq.toArray
@@ -185,13 +189,13 @@ and UnitPowers(ps : UnitPower[]) =
         
     member self.HasUnitsEquivalentTo (other : UnitPowers) =
         match self.Count = other.Count with
-        | true -> Seq.zip self.Value other.Value |> Seq.forall (fun (x,y) -> x.Unit = y.Unit && x.Power = y.Power) 
+        | true -> Seq.zip self.Powers other.Powers |> Seq.forall (fun (x,y) -> x.Unit = y.Unit && x.Power = y.Power) 
         | false -> false
 
     member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         match self.Count with
         | 1 ->
-            let x = self.Value.[0]
+            let x = self.Powers.[0]
             x.Unit = other && x.Power = 1
         | _ -> false
         
@@ -214,9 +218,9 @@ and UnitPrefix(name : string, symbol : string, factor : Fraction) =
     static member (/) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Factor / b.Factor)
 
     static member private baseOrSelf (unit:UnitOfMeasure) : UnitPowers =
-        match unit.Dimension.IsEmpty with
+        match unit.BaseUnits.IsEmpty with
         | true -> UnitPowers {Unit = unit; Power = 1}
-        | false -> unit.Dimension
+        | false -> unit.BaseUnits
 
 and Value(x : Fraction, unit : UnitOfMeasure) =
     member self.X = x

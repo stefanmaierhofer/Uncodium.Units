@@ -13,7 +13,7 @@ namespace Uncodium.Units.Tests
     public class UnitOfMeasureTests
     {
         [Test]
-        public void Dimensions_CanCreateBaseUnit()
+        public void CanCreateBaseUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
             Assert.IsTrue(m.Name == "meter");
@@ -24,7 +24,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void Dimensions_CanCreateScaledUnit()
+        public void CanCreateScaledUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
             var cm = new UnitOfMeasure("centimeter", "cm", m, new Fraction(1, 100));
@@ -38,7 +38,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void Dimensions_UnitPerSameUnitYieldsDimensionlessUnit()
+        public void UnitPerSameUnitYieldsDimensionlessUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
             var u = m / m;

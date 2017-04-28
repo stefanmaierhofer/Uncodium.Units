@@ -104,7 +104,7 @@ module Unit =
     let Katal       = UnitOfMeasure("katal",        "kat",  Mole / Second                               )
     
     // Information
-    let Bit  = UnitOfMeasure("bit", "bit", None, 1)
+    let Bit  = UnitOfMeasure("bit", "bit")
     let Byte = UnitOfMeasure("byte", "B", Bit, 8)
     
     let Kibibyte  = Kibi * Byte
@@ -353,7 +353,7 @@ module Unit =
 
             let Thou            = UnitOfMeasure("thou",             "th",       Foot,       Fraction(1, 12_000)     )
             let Inch            = UnitOfMeasure("thou",             "th",       Foot,       Fraction(1, 12)         )
-            let Chain           = UnitOfMeasure("chain",            "ch",       Yard,       22                      )
+            let Chain           = UnitOfMeasure("chain",            "ch",       Foot,       66                      )
             let Furlong         = UnitOfMeasure("furlong",          "fur",      Chain,      10                      )
             let Mile            = UnitOfMeasure("mile",             "ml",       Furlong,     8                      )
             let League          = UnitOfMeasure("league",           "lea",      Mile,        3                      )

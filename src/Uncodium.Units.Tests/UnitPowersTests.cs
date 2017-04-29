@@ -20,7 +20,7 @@ namespace Uncodium.Units.Tests
         public void NonBaseUnitWillThrow() => Assert.Throws<ArgumentException>(() => new UnitPowers(Gram, 1));
 
         [Test]
-        public void DimensionLess()
+        public void Dimensionless()
         {
             var x = new UnitPowers();
             Assert.IsTrue(x.IsDimensionLess == true);
@@ -36,7 +36,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionMeterTimesMeter()
+        public void MeterTimesMeter()
         {
             var a = new UnitPowers(Meter, 1);
             var x = a * a;
@@ -47,7 +47,25 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionMeterPerMeter()
+        public void DimensionlessTimesDimensionless()
+        {
+            var a = new UnitPowers();
+            var x = a * a;
+            Assert.IsTrue(x.IsDimensionLess == true);
+            Assert.IsTrue(x.Count == 0);
+        }
+
+        [Test]
+        public void DimensionlessPerDimensionless()
+        {
+            var a = new UnitPowers();
+            var x = a / a;
+            Assert.IsTrue(x.IsDimensionLess == true);
+            Assert.IsTrue(x.Count == 0);
+        }
+
+        [Test]
+        public void MeterPerMeter()
         {
             var a = new UnitPowers(Meter, 1);
             var x = a / a;
@@ -56,7 +74,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionMeterTimesSecond()
+        public void MeterTimesSecond()
         {
             var a = new UnitPowers(Meter, 1);
             var b = new UnitPowers(Second, 1);
@@ -70,7 +88,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionSecondTimesMeter_Sorting()
+        public void SecondTimesMeter_Sorting()
         {
             var a = new UnitPowers(Meter, 1);
             var b = new UnitPowers(Second, 1);
@@ -84,7 +102,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionMeterPerSecond()
+        public void MeterPerSecond()
         {
             var a = new UnitPowers(Meter, 1);
             var b = new UnitPowers(Second, 1);
@@ -98,7 +116,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void DimensionSecondPerMeter_Sorting()
+        public void SecondPerMeter_Sorting()
         {
             var a = new UnitPowers(Meter, 1);
             var b = new UnitPowers(Second, 1);
@@ -109,6 +127,13 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(x.Powers[0].Power == 1);
             Assert.IsTrue(x.Powers[1].Unit == Meter);
             Assert.IsTrue(x.Powers[1].Power == -1);
+        }
+
+        [Test]
+        public void DimensionlessToStringIsEmpty()
+        {
+            var a = new UnitPowers();
+            Assert.IsTrue(a.ToString() == "");
         }
     }
 }

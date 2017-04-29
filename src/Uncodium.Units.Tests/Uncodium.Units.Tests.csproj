@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ValueTests.cs" />
     <Compile Include="UnitPowersTests.cs" />
     <Compile Include="UnitOfMeasureTests.cs" />
     <Compile Include="FractionTests.cs" />

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static Uncodium.Units.Unit;
+using static Uncodium.Units.SI;
+using static Uncodium.Units.Time;
+using static Uncodium.Units.Physics;
 
 namespace Uncodium.Units.Tests
 {
@@ -43,6 +45,10 @@ namespace Uncodium.Units.Tests
         [Test]public void Formatting_3() => Assert.IsTrue((1 * Meter / Second).ToString() == "1 m/s");
         [Test]public void Formatting_4() => Assert.IsTrue((1 * Meter / Second).ToString() == "1 m/s");
         [Test] public void Formatting_5() => Assert.IsTrue((3.6 * Kilometer / Hour).ToString() == "3.6 km/h");
-        [Test] public void Formatting_6() => Assert.IsTrue((1 * Foot / Second).ToString() == "1 ft/s");
+        [Test] public void Formatting_6() => Assert.IsTrue((1 * International.Foot / Second).ToString() == "1 ft/s");
+        [Test] public void Formatting_7() => Assert.IsTrue((new Fraction(3600, 1000) * Kilogram * KilometersPerHour).ToString() == "1 [kg^1][m^1][s^-1]");
+        [Test] public void Formatting_8() => Assert.IsTrue((1 * SquareMeter + 50 * SquareDecimeter).ToString() == "1.5 m²");
+        [Test] public void Formatting_9() => Assert.IsTrue((50 * SquareDecimeter + 1 * SquareMeter).ToString() == "150 dm²");
+        [Test] public void Formatting_10() => Assert.IsTrue((50 * Decimeter * Decimeter + 1 * Meter * Meter).ToString() == "1.5 [m^2]");
     }
 }

@@ -60,7 +60,7 @@ type Fraction =
 
         member self.Simplified
             with get () =
-                let d = Fraction.gcd self.Numerator self.Denominator
+                let d = bigint.GreatestCommonDivisor(self.Numerator, self.Denominator)
                 if d = bigint(1) then self
                 else Fraction(self.Numerator / d, self.Denominator / d)
 
@@ -99,6 +99,8 @@ type Fraction =
             else
                 Fraction(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator).Simplified
 
+        static member (+) (a : int, b : Fraction) = Fraction(bigint a * b.Denominator + b.Numerator, b.Denominator).Simplified
+                
         static member (-) (a : Fraction, b : Fraction) =
             if a.Denominator = b.Denominator then
                 Fraction(a.Numerator - b.Numerator, a.Denominator).Simplified
@@ -117,7 +119,7 @@ type Fraction =
         static member op_Inequality (a, b) = Fraction.relation a b (<>)
         static member op_GreaterThanOrEqual (a, b) = Fraction.relation a b (>=)
         static member op_GreaterThan (a, b) = Fraction.relation a b (>)
-                  
+        
         interface IComparable<Fraction> with
             member self.CompareTo { Numerator = numerator; Denominator = denominator } =
                 if self.Denominator = denominator then
@@ -150,30 +152,25 @@ type Fraction =
                 else
                     self.Numerator * other.Denominator = other.Numerator * self.Denominator
             | _ -> false
-
-        static member One           = Fraction(1L, 1L)
-        static member OneHalf       = Fraction(1L, 2L)
-        static member OneThird      = Fraction(1L, 3L)
-        static member TwoThirds     = Fraction(2L, 3L)
-        static member OneQuarter    = Fraction(1L, 4L)
-        static member ThreeQuarters = Fraction(3L, 4L)
-        static member OneFifth      = Fraction(1L, 5L)
-        static member Pi            = Fraction(314159265358979323846264338327950288419716939937510I, bigint.Pow(10I, 50))
-        static member e             = Fraction(271828182845904523536028747135266249775724709369995I, bigint.Pow(10I, 50))
         
-        static member private gcd a b =
-            if a = 0I || b = 0I then 1I
-            else
-                match (a < 0I, b < 0I) with
-                | (false, false) -> Fraction.gcd' a b
-                | (false, true) -> -Fraction.gcd' a -b
-                | (true, false) -> Fraction.gcd' -a b
-                | (true, true) -> -Fraction.gcd' -a -b
+        static member Pow (a : int, e : int) = Fraction.Pow(bigint a, e)
+        static member Pow (a : bigint, e : int) =
+            match e with
+            | 0 -> Fraction.One
+            | x when x > 0 -> Fraction(bigint.Pow(a, x), 1I)
+            | x when x < 0 -> Fraction(1I, bigint.Pow(a, -x))
+            | _ -> invalidOp "must not happen"
 
-        static member private gcd' a b =
-            if a = b then a
-            else if a > b then Fraction.gcd' (a-b) b else Fraction.gcd' a (b-a)
+        static member One               = Fraction(1L, 1L)
+        static member OneHalf           = Fraction(1L, 2L)
+        static member OneThird          = Fraction(1L, 3L)
+        static member TwoThirds         = Fraction(2L, 3L)
+        static member OneQuarter        = Fraction(1L, 4L)
+        static member ThreeQuarters     = Fraction(3L, 4L)
 
+        static member Pi                = Fraction(314159265358979323846264338327950288419716939937510I, bigint.Pow(10I, 50))
+        static member e                 = Fraction(271828182845904523536028747135266249775724709369995I, bigint.Pow(10I, 50))
+        
         static member private scale (x : float) : bigint =
             let s = string x
             match s.IndexOf('.') with

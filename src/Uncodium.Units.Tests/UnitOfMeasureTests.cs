@@ -5,7 +5,10 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static Uncodium.Units.Unit;
+using Uncodium.Units;
+using static Uncodium.Units.SI;
+using static Uncodium.Units.Time;
+using static Uncodium.Units.Physics;
 
 namespace Uncodium.Units.Tests
 {
@@ -212,7 +215,7 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CombinedUnit_Symbol_7()
         {
-            var x = Foot / Second;
+            var x = International.Foot / Second;
 
             Assert.IsTrue(x.Name == "[m^1][s^-1]");
             Assert.IsTrue(x.Symbol == "ft/s");

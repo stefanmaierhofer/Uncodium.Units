@@ -5,10 +5,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static Uncodium.Units.Unit;
 
 namespace Uncodium.Units.Tests
 {
+    using static SI;
+
     [TestFixture]
     public class UnitPowersTests
     {

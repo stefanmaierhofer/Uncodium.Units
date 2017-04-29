@@ -41,21 +41,16 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, facto
 
     new(name : string, symbol : string) =
         UnitOfMeasure(name, symbol, UnitPowers.None, Fraction.One)
+    
+    new(value : Value) =
+        let u : UnitOfMeasure = value.Unit
+        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Factor)
 
     member self.IsBaseUnit with get () = self.BaseUnits.IsDimensionLess
     member self.HasSymbol with get() = self.Symbol <> ""
 
     static member None = UnitOfMeasure("dimensionless", "-")
-
-    static member (*) (a : float, b : UnitOfMeasure)    = Value(Fraction a, b)
-    static member (*) (a : UnitOfMeasure, b : float)    = Value(Fraction b, a)
-    static member (*) (a : int, b : UnitOfMeasure)    = Value(Fraction a, b)
-    static member (*) (a : UnitOfMeasure, b : int)    = Value(Fraction b, a)
-    static member (*) (a : int64, b : UnitOfMeasure)    = Value(Fraction a, b)
-    static member (*) (a : UnitOfMeasure, b : int64)    = Value(Fraction b, a)
-    static member (*) (a : bigint, b : UnitOfMeasure)    = Value(Fraction a, b)
-    static member (*) (a : UnitOfMeasure, b : bigint)    = Value(Fraction b, a)
-        
+    
     static member (*) (a : UnitOfMeasure, b : UnitOfMeasure) =
         let psa =
             match a.IsBaseUnit && a.Symbol <> "" with
@@ -75,6 +70,18 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, facto
         match powers.Count with
         | 0 -> UnitOfMeasure(name, symbol, UnitPowers.None, a.Factor * b.Factor)
         | _ -> UnitOfMeasure(name, symbol, powers, a.Factor * b.Factor)
+    static member (*) (a : UnitOfMeasure, b : Fraction)      = Value(b, a)
+    static member (*) (a : UnitOfMeasure, b : bigint)        = Value(Fraction b, a)
+    static member (*) (a : UnitOfMeasure, b : int64)         = Value(Fraction b, a)
+    static member (*) (a : UnitOfMeasure, b : int)           = Value(Fraction b, a)
+    static member (*) (a : UnitOfMeasure, b : float)         = Value(Fraction b, a)
+    static member (*) (a : UnitOfMeasure, b : float32)       = Value(Fraction b, a)
+    static member (*) (a : Fraction, b : UnitOfMeasure)      = Value(a, b)
+    static member (*) (a : bigint, b : UnitOfMeasure)        = Value(Fraction a, b)
+    static member (*) (a : int64, b : UnitOfMeasure)         = Value(Fraction a, b)
+    static member (*) (a : int, b : UnitOfMeasure)           = Value(Fraction a, b)
+    static member (*) (a : float, b : UnitOfMeasure)         = Value(Fraction a, b)
+    static member (*) (a : float32, b : UnitOfMeasure)       = Value(Fraction a, b)
 
     static member (/) (a : UnitOfMeasure, b : UnitOfMeasure) =
         let psa =
@@ -226,25 +233,7 @@ and UnitPowers(powers : UnitPower[]) =
         let pos = powers |> Seq.filter (fun x -> x.Power > 0) |> Seq.sortBy (fun x -> x.Unit.Name)
         let neg = powers |> Seq.filter (fun x -> x.Power < 0) |> Seq.sortBy (fun x -> x.Unit.Name)
         Seq.append pos neg |> Seq.toArray
-        
-and UnitPrefix(name : string, symbol : string, factor : Fraction) =
-    member this.Name = name
-    member this.Symbol = symbol
-    member this.Factor = factor
-    
-    new(name : string, symbol : string, factor : int) = UnitPrefix(name, symbol, Fraction factor)
-    new(name : string, symbol : string, factor : bigint) = UnitPrefix(name, symbol, Fraction factor)
-
-    static member (*) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Factor * b.Factor)
-    static member (*) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Factor * b.Factor)
-    static member (/) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Factor / b.Factor)
-    static member (/) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Factor / b.Factor)
-
-    static member private baseOrSelf (unit:UnitOfMeasure) : UnitPowers =
-        match unit.IsBaseUnit with
-        | true -> UnitPowers {Unit = unit; Power = 1}
-        | false -> unit.BaseUnits
-
+     
 and Value(x : Fraction, unit : UnitOfMeasure) =
     member self.X = x
     member self.Unit = unit
@@ -272,7 +261,11 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     
     override self.ToString () =
         if self.Unit <> UnitOfMeasure.None then
-            string(self.X.Float) + " " + self.Unit.Symbol
+            if self.Unit.BaseUnits.Count < 3 then
+                string(self.X.Float) + " " + self.Unit.Symbol
+            else
+                let f : Fraction = self.Float
+                string(f.Float) + " " + self.Unit.Symbol
         else
             string(self.X.Float)
     
@@ -294,73 +287,98 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
 
-    static member (*) (a : Value, b : float)    = Value(a.X * Fraction b, a.Unit)
-    static member (*) (a : float, b : Value)    = Value(Fraction a * b.X, b.Unit)
-    static member (*) (a : Value, b : int)      = Value(a.X * Fraction b, a.Unit)
-    static member (*) (a : int, b : Value)      = Value(Fraction a * b.X, b.Unit)
-    static member (*) (a : Value, b : int64)    = Value(a.X * Fraction b, a.Unit)
-    static member (*) (a : int64, b : Value)    = Value(Fraction a * b.X, b.Unit)
-    static member (*) (a : Value, b : Value)    =
+    member self.ToUnitOfMeasure () =
+        let u = self.Unit
+        let f = self.X * u.Factor
+        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, f) 
+    
+    static member (*) (a : Value, b : Value)         =
         match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
         | (true, true) -> Value(a.X * b.X, a.Unit * b.Unit)
         | (true, false) -> Value(a.X * b.X, a.Unit)
         | (false, true) -> Value(a.X * b.X, b.Unit)
         | (false, false) -> Value(a.X * b.X, UnitOfMeasure.None)
-    static member (*) (a : Value, b : Constant) =
-        let f : Fraction = a.X * b.X
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
-        | (true, true) -> Value(f, a.Unit * b.Unit)
-        | (true, false) -> Value(f, a.Unit)
-        | (false, true) -> Value(f, b.Unit)
-        | (false, false) -> Value(f, UnitOfMeasure.None)
-    static member (*) (a : Constant, b : Value) =
-        let f : Fraction = a.X * b.X
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
-        | (true, true) -> Value(f, a.Unit * b.Unit)
-        | (true, false) -> Value(f, a.Unit)
-        | (false, true) -> Value(f, b.Unit)
-        | (false, false) -> Value(f, UnitOfMeasure.None)
-    static member (*) (a : Value, b : UnitOfMeasure)    =
+    static member (*) (a : Value, b : UnitOfMeasure) =
         match a.Unit <> UnitOfMeasure.None with
         | true -> Value(a.X, a.Unit * b)
         | false -> Value(a.X, b)
-    static member (*) (a : UnitOfMeasure, b : Value)    =
-        match b.Unit <> UnitOfMeasure.None with
-        | true -> Value(b.X, a * b.Unit)
-        | false -> Value(b.X, a)
     static member (*) (a : Value, b : UnitPrefix)    =
         match a.Unit <> UnitOfMeasure.None with
         | true -> Value(a.X, a.Unit * b)
-        | false -> Value(a.X * b.Factor, UnitOfMeasure.None)
+        | false ->
+            let x : Fraction = a.X * b.Factor
+            Value(x, UnitOfMeasure.None)
+    static member (*) (a : Value, b : Constant)      =
+        let f : Fraction = a.X * b.X
+        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        | (true, true) -> Value(f, a.Unit * b.Unit)
+        | (true, false) -> Value(f, a.Unit)
+        | (false, true) -> Value(f, b.Unit)
+        | (false, false) -> Value(f, UnitOfMeasure.None)
+    static member (*) (a : Value, b : Fraction)      = Value(a.X * b, a.Unit)
+    static member (*) (a : Value, b : bigint)        = Value(a.X * Fraction b, a.Unit)
+    static member (*) (a : Value, b : int64)         = Value(a.X * Fraction b, a.Unit)
+    static member (*) (a : Value, b : int)           = Value(a.X * Fraction b, a.Unit)
+    static member (*) (a : Value, b : float)         = Value(a.X * Fraction b, a.Unit)
+    static member (*) (a : Value, b : float32)       = Value(a.X * Fraction b, a.Unit)
+    static member (*) (a : UnitOfMeasure, b : Value) =
+        match b.Unit <> UnitOfMeasure.None with
+        | true -> Value(b.X, a * b.Unit)
+        | false -> Value(b.X, a)
     static member (*) (a : UnitPrefix, b : Value)    =
         match b.Unit <> UnitOfMeasure.None with
         | true -> Value(b.X, a * b.Unit)
         | false -> Value(b.X * a.Factor, UnitOfMeasure.None)
+    static member (*) (a : Constant, b : Value)      =
+        let f : Fraction = a.X * b.X
+        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        | (true, true) -> Value(f, a.Unit * b.Unit)
+        | (true, false) -> Value(f, a.Unit)
+        | (false, true) -> Value(f, b.Unit)
+        | (false, false) -> Value(f, UnitOfMeasure.None)
+    static member (*) (a : int64, b : Value)         = Value(Fraction a * b.X, b.Unit)
+    static member (*) (a : int, b : Value)           = Value(Fraction a * b.X, b.Unit)
+    static member (*) (a : float, b : Value)         = Value(Fraction a * b.X, b.Unit)
+    static member (*) (a : float32, b : Value)       = Value(Fraction a * b.X, b.Unit)
         
-    static member (/) (a : Value, b : float)    = Value(a.X / Fraction b, a.Unit)
-    static member (/) (a : float, b : Value)    = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : Value, b : int)      = Value(a.X / Fraction b, a.Unit)
-    static member (/) (a : int, b : Value)      = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : Value, b : int64)    = Value(a.X / Fraction b, a.Unit)
-    static member (/) (a : int64, b : Value)    = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : Value, b : Value)    =
+    static member (/) (a : Value, b : Value)         =
         match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
         | (true, true) -> Value(a.X / b.X, a.Unit / b.Unit)
         | (true, false) -> Value(a.X / b.X, a.Unit)
         | (false, true) -> Value(a.X / b.X, b.Unit)
         | (false, false) -> Value(a.X / b.X, UnitOfMeasure.None)
-    static member (/) (a : Value, b : Constant) = a / Value(b)
-    static member (/) (a : Constant, b : Value) = Value(a) / b
-    static member (/) (a : Value, b : UnitOfMeasure)    =
+    static member (/) (a : Value, b : UnitOfMeasure) =
         match a.Unit <> UnitOfMeasure.None with
         | true -> Value(a.X, a.Unit / b)
         | false -> Value(a.X, b)
-    static member (/) (a : UnitOfMeasure, b : Value)    =
+    static member (/) (a : Value, b : UnitPrefix)    =
+        match a.Unit <> UnitOfMeasure.None with
+        | true -> Value(a.X, a.Unit / b)
+        | false -> 
+            let x : Fraction = a.X / b.Factor
+            Value(x, UnitOfMeasure.None)
+    static member (/) (a : Value, b : Constant)      = a / Value(b)
+    static member (/) (a : Value, b : Fraction)      = Value(a.X / b, a.Unit)
+    static member (/) (a : Value, b : bigint)        = Value(a.X / Fraction b, a.Unit)
+    static member (/) (a : Value, b : int64)         = Value(a.X / Fraction b, a.Unit)
+    static member (/) (a : Value, b : int)           = Value(a.X / Fraction b, a.Unit)
+    static member (/) (a : Value, b : float)         = Value(a.X / Fraction b, a.Unit)
+    static member (/) (a : Value, b : float32)       = Value(a.X / Fraction b, a.Unit)
+    static member (/) (a : UnitOfMeasure, b : Value) =
         match b.Unit <> UnitOfMeasure.None with
         | true -> Value(b.X, a / b.Unit)
         | false -> Value(b.X, a)
+    static member (/) (a : UnitPrefix, b : Value)    =
+        match b.Unit <> UnitOfMeasure.None with
+        | true -> Value(b.X, a / b.Unit)
+        | false -> Value(b.X / a.Factor, UnitOfMeasure.None)
+    static member (/) (a : Constant, b : Value)      = Value(a) / b
+    static member (/) (a : int64, b : Value)         = Value(Fraction a / b.X, b.Unit)
+    static member (/) (a : int, b : Value)           = Value(Fraction a / b.X, b.Unit)
+    static member (/) (a : float, b : Value)         = Value(Fraction a / b.X, b.Unit)
+    static member (/) (a : float32, b : Value)       = Value(Fraction a / b.X, b.Unit)
 
-    static member (+) (a : Value, b : Value) =
+    static member (+) (a : Value, b : Value)    =
         if a.HasUnitsEquivalentTo b then
             match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
             | (true, true) -> Value(a.X + b.X * b.Unit.Factor / a.Unit.Factor, a.Unit)
@@ -369,6 +387,12 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             | (false, false) -> Value(a.X + b.X, UnitOfMeasure.None)
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
+    static member (+) (a : Value, b : Fraction) = Value(a.X + b, a.Unit)
+    static member (+) (a : Value, b : bigint)   = Value(a.X + Fraction b, a.Unit)
+    static member (+) (a : Value, b : int64)    = Value(a.X + Fraction b, a.Unit)
+    static member (+) (a : Value, b : int)      = Value(a.X + Fraction b, a.Unit)
+    static member (+) (a : Value, b : float)    = Value(a.X + Fraction b, a.Unit)
+    static member (+) (a : Value, b : float32)  = Value(a.X + Fraction b, a.Unit)
 
     static member (-) (a : Value, b : Value) =
         if a.HasUnitsEquivalentTo b then
@@ -379,6 +403,12 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             | (false, false) -> Value(a.X - b.X, UnitOfMeasure.None)
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
+    static member (-) (a : Value, b : Fraction) = Value(a.X - b, a.Unit)
+    static member (-) (a : Value, b : bigint)   = Value(a.X - Fraction b, a.Unit)
+    static member (-) (a : Value, b : int64)    = Value(a.X - Fraction b, a.Unit)
+    static member (-) (a : Value, b : int)      = Value(a.X - Fraction b, a.Unit)
+    static member (-) (a : Value, b : float)    = Value(a.X - Fraction b, a.Unit)
+    static member (-) (a : Value, b : float32)  = Value(a.X - Fraction b, a.Unit)
     
     static member inline op (a : Value) (b : Value) f =
         if a.HasUnitsEquivalentTo b then
@@ -396,6 +426,8 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     static member op_Inequality (a, b) = Value.op a b (<>)
     static member op_GreaterThanOrEqual (a, b) = Value.op a b (>=)
     static member op_GreaterThan (a, b) = Value.op a b (>)
+
+    static member inline op_Equality (a : Value, f : Fraction) = a.X * a.Unit.Factor = f
 
     interface IComparable<Value> with
         member self.CompareTo other =
@@ -473,11 +505,35 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
 
     static member (*) (a : Constant, b : Constant) = Value(a) * Value(b)
     static member (*) (a : Constant, b : UnitOfMeasure) = Value(a) * b
+    //static member (*) (a : Constant, b : Fraction) = Value(b.X, b.Unit) * b
+    //static member (*) (a : Constant, b : int) = Value(b.X, b.Unit) * b
     static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b)
     static member (*) (a : Constant, b : UnitPrefix) = Value(a) * b
     static member (*) (a : UnitPrefix, b : Constant) = a * Value(b)
+    //static member (*) (a : Fraction, b : Constant) = a * Value(b.X, b.Unit)
+    static member (*) (a : int, b : Constant) = a * Value(b.X, b.Unit)
     static member (*) (a : float, b : Constant) = a * Value(b.X, b.Unit)
 
     static member (/) (a : Constant, b : Constant) = Value(a) / Value(b)
     static member (/) (a : Constant, b : UnitOfMeasure) = Value(a) / b
+    //static member (/) (a : Constant, b : Fraction) = Value(b.X, b.Unit) / b
+    //static member (/) (a : Constant, b : int) = Value(b.X, b.Unit) / b
     static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b)
+
+and UnitPrefix(name : string, symbol : string, factor : Fraction) =
+    member this.Name = name
+    member this.Symbol = symbol
+    member this.Factor = factor
+    
+    new(name : string, symbol : string, factor : int) = UnitPrefix(name, symbol, Fraction factor)
+    new(name : string, symbol : string, factor : bigint) = UnitPrefix(name, symbol, Fraction factor)
+
+    static member (*) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Factor * b.Factor)
+    static member (*) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Factor * b.Factor)
+    static member (/) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Factor / b.Factor)
+    static member (/) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Factor / b.Factor)
+
+    static member private baseOrSelf (unit:UnitOfMeasure) : UnitPowers =
+        match unit.IsBaseUnit with
+        | true -> UnitPowers {Unit = unit; Power = 1}
+        | false -> unit.BaseUnits

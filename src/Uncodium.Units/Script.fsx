@@ -2,27 +2,66 @@
 #load "UnitOfMeasure.fs"
 #load "Units.fs"
 open Uncodium.Units
-open Unit
-open Uncodium.Units.Unit.Constants
-open Uncodium.Units.Unit.Imperial.Length
+open SI
+open Physics
+open Astronomy
+open Time
+open Information
+open International
 
+1 * UnitOfMeasure(International.Pound * StandardGravity) => Newton |> string
 
-1 * Knot => Kilometer / Hour
+1 * Poundal => Newton |> string
+1 * PoundForce => Newton |> string
+1 * Slug => Kilogram |> string
+
+StandardGravity |> string
+
+(6 * International.Foot => Meter) |> string
+(6 * Us.Survey.Foot => Meter) |> string
+(0.95 * International.Grain) |> string
+
+Fraction(254, 10_000) * Fraction(3_937, 100)
+
+1 * Newton
+
+1 * ImperialHorsepower => MetricHorsepower
+
+1 * SquareMillimeter + 2 * SquareCentimeter + 3 * SquareDecimeter + 4 * SquareMeter
+
+4 * SquareMeter + 3 * SquareDecimeter + 2 * SquareCentimeter + 1 * SquareMillimeter
+
+//1 * SquareMile + 1 * SquareKilometer
+
+//1 * SquareKilometer + 1 * SquareMile
+
+50 * Decimeter * Decimeter + 1 * Meter * Meter
+
+1 * SquareMeter + 50 * SquareDecimeter
+50 * SquareDecimeter + 1 * SquareMeter
+
+Kilogram * KilometersPerHour
+
+3.6 * Kilogram * KilometersPerHour
+
+string (1 * (Meter / Second) + 0.4 * (Kilometer/Hour) => KilometersPerHour)
+
+//1 * Knot => Kilometer / Hour
 
 8 * Decimeter + 45 * Centimeter => Yard
 
-1 * Furlong => Meter
+//1 * Furlong => Meter
 
 1 * Meter + 1 * Decimeter + 1 * Centimeter + 1 * Millimeter
 
 18536717372I * Byte => Gibibyte
 
-Lightsecond => League
+//Lightsecond => League
 
 11.5 * Kilometer => Mile
 300.0 * Mile => Kilometer
 
-1 * Pound => Kilogram
+//1 * Pound => Kilogram
 
 let s (t : float) = 0.5 * StandardGravity * t * t * Second
 s 1.0

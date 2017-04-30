@@ -53,7 +53,19 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Fraction.fs" />
     <Compile Include="UnitOfMeasure.fs" />
-    <Compile Include="Units.fs" />
+    <Compile Include="SI.fs" />
+    <Compile Include="International.fs" />
+    <Compile Include="UK.fs" />
+    <Compile Include="US.fs" />
+    <Compile Include="Typography.fs" />
+    <Compile Include="Math.fs" />
+    <Compile Include="Time.fs" />
+    <Compile Include="Physics.fs" />
+    <Compile Include="Astronomy.fs" />
+    <Compile Include="Information.fs" />
+    <Compile Include="Nautical.fs" />
+    <Compile Include="Historic.fs" />
+    <Compile Include="VariousStuffNotYetAdded.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
   <ItemGroup>

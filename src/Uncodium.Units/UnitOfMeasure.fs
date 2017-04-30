@@ -537,3 +537,14 @@ and UnitPrefix(name : string, symbol : string, factor : Fraction) =
         match unit.IsBaseUnit with
         | true -> UnitPowers {Unit = unit; Power = 1}
         | false -> unit.BaseUnits
+
+
+type internal U = UnitOfMeasure
+type internal F = Fraction
+
+module internal Fun =
+
+    let (^^) (a : int) (b : int) : Fraction = Fraction.Pow(bigint a, b)
+
+    let (^) (a : UnitOfMeasure) (b : int) : UnitOfMeasure = a.Pow(b)
+

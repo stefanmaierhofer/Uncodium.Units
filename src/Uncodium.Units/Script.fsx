@@ -8,6 +8,7 @@
 #load "Math.fs"
 #load "Time.fs"
 #load "Physics.fs"
+#load "Photometry.fs"
 #load "Astronomy.fs"
 #load "Information.fs"
 #load "Nautical.fs"
@@ -20,6 +21,9 @@ open Astronomy
 open Time
 open Information
 open International
+
+Photometry.Lux |> string
+Photometry.Lumen |> string
 
 Joule / (Mole * Kelvin) |> string
 (Meter.Pow(3)) / (Kilogram * Second.Pow(2)) |> string

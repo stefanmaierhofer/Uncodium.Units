@@ -165,7 +165,7 @@ module Physics =
     let ConductanceQuantum      = Constant("conductance quantum",           "Gₒ",       2 * e.Pow(2) / h                                            )
     
     /// 1 / Gₒ.
-    let InverseConductanceQuantum   = Constant("inverse conductance quantum",   "Gₒ⁻¹", h / (2 * e.Pow(2))                                          )
+    let InverseConductanceQuantum = Constant("inverse conductance quantum", "Gₒ⁻¹", h / (2 * e.Pow(2))                                              )
 
     /// The conductance quantum, denoted by the symbol Gₒ is the quantized unit of electrical conductance.
     let MagneticFluxQuantum     = Constant("magnetic flux quantum",         "Φₒ",       h / (2 * e)                                                 )
@@ -198,7 +198,7 @@ module Physics =
 
     /// The ångström (or angstrom) is a unit of length equal to 10^−10 m (one ten-billionth of a meter) or 0.1 nanometer.
     /// Its symbol is Å, a letter in the Swedish alphabet.
-    let Angstrom                = Constant("ångström",                      "Å",        E 10.0 -10,         Meter                                     )
+    let Angstrom                = Constant("ångström",                      "Å",        E 10.0 -10,         Meter                                   )
     
     /// The hartree (symbol: Eh or Ha), also known as the Hartree energy,
     /// is the atomic unit of energy, named after the British physicist Douglas Hartree.

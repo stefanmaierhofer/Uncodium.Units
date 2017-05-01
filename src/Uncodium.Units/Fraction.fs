@@ -64,7 +64,10 @@ type Fraction =
                 if d = bigint(1) then self
                 else Fraction(self.Numerator / d, self.Denominator / d)
 
-        member self.Float with get () = float self.Numerator / float self.Denominator
+        member self.Float
+            with get () =
+                let x = self.Simplified
+                float x.Numerator / float x.Denominator
 
         member self.Inverse with get () = Fraction(self.Denominator, self.Numerator)
 

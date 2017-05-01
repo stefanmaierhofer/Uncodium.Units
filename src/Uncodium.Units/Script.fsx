@@ -21,7 +21,49 @@ open Time
 open Information
 open International
 
+Joule / (Mole * Kelvin) |> string
+(Meter.Pow(3)) / (Kilogram * Second.Pow(2)) |> string
+CubicMeter / (Kilogram * Second.Pow(2)) |> string
+
+FineStructureConstant |> string
+CoulombConstant |> string
+ElementaryCharge |> string
+UnifiedAtomicMassUnit |> string
+ElectronMass |> string
+ProtonMass |> string
+BohrMagneton |> string
+ConductanceQuantum |> string
+InverseConductanceQuantum |> string
+MagneticFluxQuantum |> string
+JosephsonConstant |> string
+NuclearMagneton |> string
+VonKlietzingConstant |> string
+ClassicalElectronRadius |> string
+RydbergConstant |> string
+WBosonMass 
+ZBosonMass |> string
+HartreeEnergy |> string
+
+Electronvolt/SpeedOfLight.Pow(2)
+
+let a = 2 * Kilometer
+a.Inverse |> string
+1 / a |> string
+1 / a
+
+VacuumPermeability |> string
+VacuumPermittivity |> string
+Newton / Ampere.Pow(2) |> string
+Farad / Meter |> string
+Newton / (Ampere.Pow(2))
+1 / (VacuumPermeability * U(SpeedOfLight).Pow(2))
+1 / U(VacuumPermeability) |> string
+1 / Value(VacuumPermeability) |> string
+
 1 * UnitOfMeasure(International.Pound * StandardGravity) => Newton |> string
+
+ImpedanceOfFreeSpace |> string
+
 
 1 * Poundal => Newton |> string
 1 * PoundForce => Newton |> string
@@ -32,6 +74,8 @@ StandardGravity |> string
 (6 * International.Foot => Meter) |> string
 (6 * Us.Survey.Foot => Meter) |> string
 (0.95 * International.Grain) |> string
+
+1 / (2 * Meter) |> string
 
 Fraction(254, 10_000) * Fraction(3_937, 100)
 

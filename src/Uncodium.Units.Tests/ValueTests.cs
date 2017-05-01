@@ -15,6 +15,24 @@ namespace Uncodium.Units.Tests
     public class ValueTests
     {
         [Test]
+        public void ReciprocalValue_1()
+        {
+            var a = 2 * Meter;
+            var b = 1 / a;
+            Assert.IsTrue(a.ToString() == "2 m");
+            Assert.IsTrue(b.ToString() == "0.5 [m^-1]");
+        }
+
+        [Test]
+        public void ReciprocalValue_2()
+        {
+            var a = 2 * Meter;
+            var b = a.Inverse;
+            Assert.IsTrue(a.ToString() == "2 m");
+            Assert.IsTrue(b.ToString() == "0.5 [m^-1]");
+        }
+
+        [Test]
         public void Dimensions_1()
         {
             var a = 1.0 * Meter / Second;

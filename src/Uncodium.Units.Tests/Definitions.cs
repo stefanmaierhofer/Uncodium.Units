@@ -35,6 +35,9 @@ namespace Uncodium.Units.Tests
         [Test] public void Apothecaries_2()         => Assert.IsTrue(   1 * International.Pound     ==  International.Scruple       * 350                                   );
         [Test] public void Apothecaries_3()         => Assert.IsTrue(   1 * International.Pound     ==  International.Dram          * 256                                   );
 
-
+        /*
+         * TODO:
+         * The Boltzmann constant (kB or k) is the gas constant R divided by the Avogadro constant N_A:
+         */
     }
 }

@@ -282,7 +282,7 @@ namespace Uncodium.Units.Tests
             var x = 1 / Meter;
 
             Assert.IsTrue(x.Name == "[m^-1]");
-            Assert.IsTrue(x.Symbol == "1/m");
+            Assert.IsTrue(x.Symbol == "[m^-1]");
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace Uncodium.Units.Tests
             var x = 1 / Kilometer;
 
             Assert.IsTrue(x.Name == "[m^-1]");
-            Assert.IsTrue(x.Symbol == "1/km");
+            Assert.IsTrue(x.Symbol == "[m^-1]");
         }
 
         [Test]

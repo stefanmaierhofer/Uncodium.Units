@@ -46,6 +46,10 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, facto
         let u : UnitOfMeasure = value.Unit
         UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Factor)
 
+    new(value : Constant) =
+        let u : UnitOfMeasure = value.Unit
+        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Factor)
+
     member self.IsBaseUnit with get () = self.BaseUnits.IsDimensionLess
     member self.HasSymbol with get() = self.Symbol <> ""
 
@@ -109,11 +113,7 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, facto
             | true -> UnitPowers { Unit = b; Power = -1 }
             | false -> b.BaseUnits.Inverse
         let name = string powers
-        let symbol =
-            if b.HasSymbol && b.BaseUnits.Count < 2 then
-                "1/" + b.Symbol
-            else
-                name
+        let symbol = name
         match powers.Count with
         | 0 -> UnitOfMeasure(name, symbol, UnitPowers.None, a / b.Factor)
         | _ -> UnitOfMeasure(name, symbol, powers, a / b.Factor)
@@ -286,12 +286,14 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     member self.Float with get () = self.X * self.Unit.Factor
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
-
+    
     member self.ToUnitOfMeasure () =
         let u = self.Unit
         let f = self.X * u.Factor
         UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, f) 
     
+    member self.Pow (b : int) = Value(self.X.Pow(b), self.Unit.Pow(b))
+         
     static member (*) (a : Value, b : Value)         =
         match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
         | (true, true) -> Value(a.X * b.X, a.Unit * b.Unit)
@@ -336,6 +338,7 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
         | (true, false) -> Value(f, a.Unit)
         | (false, true) -> Value(f, b.Unit)
         | (false, false) -> Value(f, UnitOfMeasure.None)
+    static member (*) (a : Fraction, b : Value)      = Value(a * b.X, b.Unit)
     static member (*) (a : int64, b : Value)         = Value(Fraction a * b.X, b.Unit)
     static member (*) (a : int, b : Value)           = Value(Fraction a * b.X, b.Unit)
     static member (*) (a : float, b : Value)         = Value(Fraction a * b.X, b.Unit)
@@ -373,10 +376,10 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
         | true -> Value(b.X, a / b.Unit)
         | false -> Value(b.X / a.Factor, UnitOfMeasure.None)
     static member (/) (a : Constant, b : Value)      = Value(a) / b
-    static member (/) (a : int64, b : Value)         = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : int, b : Value)           = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : float, b : Value)         = Value(Fraction a / b.X, b.Unit)
-    static member (/) (a : float32, b : Value)       = Value(Fraction a / b.X, b.Unit)
+    static member (/) (a : int64, b : Value)         = Value(Fraction a / b.X, 1 / b.Unit)
+    static member (/) (a : int, b : Value)           = Value(Fraction a / b.X, 1 / b.Unit)
+    static member (/) (a : float, b : Value)         = Value(Fraction a / b.X, 1 / b.Unit)
+    static member (/) (a : float32, b : Value)       = Value(Fraction a / b.X, 1 / b.Unit)
 
     static member (+) (a : Value, b : Value)    =
         if a.HasUnitsEquivalentTo b then
@@ -497,6 +500,8 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 
+    member self.Pow (b : int) = Value(self.X.Pow(b), self.Unit.Pow(b))
+
     static member (=>) (self : Constant, unit : UnitOfMeasure) = Value(self.X, self.Unit) => unit
 
     static member (+) (a : Constant, b : Constant) = Value(a) + Value(b)
@@ -505,20 +510,21 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
 
     static member (*) (a : Constant, b : Constant) = Value(a) * Value(b)
     static member (*) (a : Constant, b : UnitOfMeasure) = Value(a) * b
-    //static member (*) (a : Constant, b : Fraction) = Value(b.X, b.Unit) * b
-    //static member (*) (a : Constant, b : int) = Value(b.X, b.Unit) * b
+    static member (*) (a : Constant, b : Fraction) = Value(a) * b
+    static member (*) (a : Constant, b : int) = Value(a) * b
     static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b)
     static member (*) (a : Constant, b : UnitPrefix) = Value(a) * b
     static member (*) (a : UnitPrefix, b : Constant) = a * Value(b)
-    //static member (*) (a : Fraction, b : Constant) = a * Value(b.X, b.Unit)
-    static member (*) (a : int, b : Constant) = a * Value(b.X, b.Unit)
-    static member (*) (a : float, b : Constant) = a * Value(b.X, b.Unit)
+    static member (*) (a : Fraction, b : Constant) = a * Value(b)
+    static member (*) (a : int, b : Constant) = a * Value(b)
+    static member (*) (a : float, b : Constant) = a * Value(b)
 
     static member (/) (a : Constant, b : Constant) = Value(a) / Value(b)
     static member (/) (a : Constant, b : UnitOfMeasure) = Value(a) / b
-    //static member (/) (a : Constant, b : Fraction) = Value(b.X, b.Unit) / b
-    //static member (/) (a : Constant, b : int) = Value(b.X, b.Unit) / b
+    static member (/) (a : Constant, b : Fraction) = Value(a) / b
+    static member (/) (a : Constant, b : int) = Value(a) / b
     static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b)
+    static member (/) (a : int, b : Constant) = a / Value(b)
 
 and UnitPrefix(name : string, symbol : string, factor : Fraction) =
     member this.Name = name
@@ -547,4 +553,6 @@ module internal Fun =
     let (^^) (a : int) (b : int) : Fraction = Fraction.Pow(bigint a, b)
 
     let (^) (a : UnitOfMeasure) (b : int) : UnitOfMeasure = a.Pow(b)
+
+    let E (m : float) (e : int) = F(m) * F.Pow(10, e)
 

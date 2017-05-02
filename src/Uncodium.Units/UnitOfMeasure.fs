@@ -262,12 +262,12 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     override self.ToString () =
         if self.Unit <> UnitOfMeasure.None then
             if self.Unit.BaseUnits.Count < 3 then
-                string(self.X.Float) + " " + self.Unit.Symbol
+                string(self.X.Decimal) + " " + self.Unit.Symbol
             else
                 let f : Fraction = self.Float
-                string(f.Float) + " " + self.Unit.Symbol
+                string(f.Decimal) + " " + self.Unit.Symbol
         else
-            string(self.X.Float)
+            string(self.X.Decimal)
     
     member self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
 
@@ -495,8 +495,8 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
 
     override self.ToString () =
         match self.Unit <> UnitOfMeasure.None with
-        | true -> string(self.X.Float) + " " + self.Unit.Symbol
-        | false -> string(self.X.Float)
+        | true -> string(self.X.Decimal) + " " + self.Unit.Symbol
+        | false -> string(self.X.Decimal)
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 

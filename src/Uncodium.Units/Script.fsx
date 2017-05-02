@@ -24,6 +24,8 @@ open International
 
 Photometry.Lux |> string
 Photometry.Lumen |> string
+Lumen/Watt
+Lumen
 
 Joule / (Mole * Kelvin) |> string
 (Meter.Pow(3)) / (Kilogram * Second.Pow(2)) |> string

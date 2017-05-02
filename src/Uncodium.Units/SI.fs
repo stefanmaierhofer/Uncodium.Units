@@ -6,43 +6,46 @@ open System.Numerics
 module internal Prefix =
     
     open Fun
+    let prefix (name : string) (symbol : string) (a : int) (b : int)
+        = UnitPrefix(name, symbol, F.Pow(a, b))
 
-    let Deca  = UnitPrefix("deca",  "da",  F.Pow(  10,  1) )
-    let Hecto = UnitPrefix("hecto", "h",   F.Pow(  10,  2) )
-    let Kilo  = UnitPrefix("kilo",  "k",   F.Pow(  10,  3) )
-    let Mega  = UnitPrefix("mega",  "M",   F.Pow(1000,  2) )
-    let Giga  = UnitPrefix("giga",  "G",   F.Pow(1000,  3) )
-    let Tera  = UnitPrefix("tera",  "T",   F.Pow(1000,  4) )
-    let Peta  = UnitPrefix("peta",  "P",   F.Pow(1000,  5) )
-    let Exa   = UnitPrefix("exa",   "E",   F.Pow(1000,  6) )
-    let Zetta = UnitPrefix("zetta", "Z",   F.Pow(1000,  7) )
-    let Yotta = UnitPrefix("yotta", "Y",   F.Pow(1000,  8) )
-
-    let Deci  = UnitPrefix("deci",  "d",   F.Pow(  10, -1) )
-    let Centi = UnitPrefix("centi", "c",   F.Pow(  10, -2) )
-    let Milli = UnitPrefix("milli", "m",   F.Pow(1000, -1) )
-    let Micro = UnitPrefix("micro", "µ",   F.Pow(1000, -2) )
-    let Nano  = UnitPrefix("nano",  "n",   F.Pow(1000, -3) )
-    let Pico  = UnitPrefix("pico",  "p",   F.Pow(1000, -4) )
-    let Femto = UnitPrefix("femto", "f",   F.Pow(1000, -5) )
-    let Atto  = UnitPrefix("atto",  "a",   F.Pow(1000, -6) )
-    let Zepto = UnitPrefix("zepto", "z",   F.Pow(1000, -7) )
-    let Yocto = UnitPrefix("yocto", "y",   F.Pow(1000, -8) )
-
-    let Kibi  = UnitPrefix("kibi",  "Ki",  F.Pow(1024,  1) )
-    let Mebi  = UnitPrefix("mebi",  "Mi",  F.Pow(1024,  2) )
-    let Gibi  = UnitPrefix("gibi",  "Gi",  F.Pow(1024,  3) )
-    let Tebi  = UnitPrefix("tebi",  "Ti",  F.Pow(1024,  4) )
-    let Pebi  = UnitPrefix("pebi",  "Pi",  F.Pow(1024,  5) )
-    let Exbi  = UnitPrefix("exbi",  "Ei",  F.Pow(1024,  6) )
-    let Zebi  = UnitPrefix("zebi",  "Zi",  F.Pow(1024,  7) )
-    let Yobi  = UnitPrefix("yobi",  "Yi",  F.Pow(1024,  8) )
+    let Deca  = prefix "deca"   "da"     10   1
+    let Hecto = prefix "hecto"  "h"      10   2
+    let Kilo  = prefix "kilo"   "k"      10   3
+    let Mega  = prefix "mega"   "M"    1000   2
+    let Giga  = prefix "giga"   "G"    1000   3
+    let Tera  = prefix "tera"   "T"    1000   4
+    let Peta  = prefix "peta"   "P"    1000   5
+    let Exa   = prefix "exa"    "E"    1000   6
+    let Zetta = prefix "zetta"  "Z"    1000   7
+    let Yotta = prefix "yotta"  "Y"    1000   8
+                                            
+    let Deci  = prefix "deci"   "d"      10  -1
+    let Centi = prefix "centi"  "c"      10  -2
+    let Milli = prefix "milli"  "m"    1000  -1
+    let Micro = prefix "micro"  "µ"    1000  -2
+    let Nano  = prefix "nano"   "n"    1000  -3
+    let Pico  = prefix "pico"   "p"    1000  -4
+    let Femto = prefix "femto"  "f"    1000  -5
+    let Atto  = prefix "atto"   "a"    1000  -6
+    let Zepto = prefix "zepto"  "z"    1000  -7
+    let Yocto = prefix "yocto"  "y"    1000  -8
+                                            
+    let Kibi  = prefix "kibi"   "Ki"   1024   1
+    let Mebi  = prefix "mebi"   "Mi"   1024   2
+    let Gibi  = prefix "gibi"   "Gi"   1024   3
+    let Tebi  = prefix "tebi"   "Ti"   1024   4
+    let Pebi  = prefix "pebi"   "Pi"   1024   5
+    let Exbi  = prefix "exbi"   "Ei"   1024   6
+    let Zebi  = prefix "zebi"   "Zi"   1024   7
+    let Yobi  = prefix "yobi"   "Yi"   1024   8
      
 module SI =
 
     open Fun
     open Prefix
     
+
     /// Length (SI base unit).
     let Meter       = U("meter", "m")
     /// Mass (SI base unit).
@@ -58,6 +61,7 @@ module SI =
     /// Luminous intensity (SI base unit).
     let Candela     = U("candela", "cd")
     
+
     /// Angle (SI derived unit).
     let Radian      = U("radian",       "rad",  Meter / Meter                               )
     /// Solid angle (SI derived unit).
@@ -151,6 +155,8 @@ module SI =
     /// The volume of a cube whose sides measure exactly one millimeter.                                                    
     let CubicMillimeter                 = UnitOfMeasure("cubic millimeter",     "mm³",      Millimeter^3                    )
     /// Unit of volume equal to 1 cubic decimeter.
+    
+    
     let Liter                           = UnitOfMeasure("liter",                "l",        CubicDecimeter                  )
     /// 1/10 of a liter.
     let Deciliter                       = Deci * Liter

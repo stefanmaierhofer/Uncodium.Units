@@ -13,61 +13,62 @@ type Fraction =
             if denominator = 0I then raise (DivideByZeroException())
             match denominator > 0I with
                 | true -> { Numerator = numerator; Denominator = denominator }
-                | false -> { Numerator = -numerator; Denominator = -denominator }
-                
-        new(numerator: bigint, denominator: int64) = Fraction(numerator, bigint denominator)
-        new(numerator: bigint, denominator: int) = Fraction(numerator, bigint denominator)
-        new(numerator : bigint, denominator : float) =
+                | false -> { Numerator = -numerator; Denominator = -denominator }      
+        new(numerator: bigint, denominator: decimal)    = Fraction(numerator, bigint denominator)
+        new(numerator: bigint, denominator: int64)      = Fraction(numerator, bigint denominator)
+        new(numerator: bigint, denominator: int)        = Fraction(numerator, bigint denominator)
+        new(numerator : bigint, denominator : float)    =
             let f = Fraction.scale denominator
             Fraction(numerator * f, bigint(denominator * float(f)))
-        new(numerator : bigint, denominator : float32) = Fraction(numerator, float denominator)
-        new(numerator: bigint) = Fraction(numerator, bigint 1)
+        new(numerator : bigint, denominator : float32)  = Fraction(numerator, float denominator)
+        new(numerator: bigint)                          = Fraction(numerator, 1I)
         
-        new(numerator: int64, denominator: bigint) = Fraction(bigint numerator, denominator)
-        new(numerator: int64, denominator: int64) = Fraction(bigint numerator, bigint denominator)
-        new(numerator: int64, denominator: int) = Fraction(bigint numerator, bigint denominator)
-        new(numerator: int64, denominator: float) = Fraction(bigint numerator, denominator)
-        new(numerator: int64, denominator: float32) = Fraction(bigint numerator, denominator)
-        new(numerator: int64) = Fraction(bigint numerator, bigint 1)
+        new(numerator: int64, denominator: bigint)      = Fraction(bigint numerator, denominator)
+        new(numerator: int64, denominator: decimal)     = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: int64)       = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: int)         = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: float)       = Fraction(bigint numerator, denominator)
+        new(numerator: int64, denominator: float32)     = Fraction(bigint numerator, denominator)
+        new(numerator: int64)                           = Fraction(bigint numerator, 1I)
 
-        new(numerator: int, denominator: bigint) = Fraction(bigint numerator, denominator)
-        new(numerator: int, denominator: int64) = Fraction(bigint numerator, bigint denominator)
-        new(numerator: int, denominator: int) = Fraction(bigint numerator, bigint denominator)
-        new(numerator: int, denominator: float) = Fraction(bigint numerator, denominator)
-        new(numerator: int, denominator: float32) = Fraction(bigint numerator, denominator)
-        new(numerator: int) = Fraction(bigint numerator, bigint 1)
+        new(numerator: decimal, denominator: bigint)    = Fraction(bigint numerator, denominator)
+        new(numerator: decimal, denominator: decimal)   = Fraction(bigint numerator, bigint denominator)
+        new(numerator: decimal, denominator: int64)     = Fraction(bigint numerator, bigint denominator)
+        new(numerator: decimal, denominator: int)       = Fraction(bigint numerator, bigint denominator)
+        new(numerator: decimal, denominator: float)     = Fraction(bigint numerator, denominator)
+        new(numerator: decimal, denominator: float32)   = Fraction(bigint numerator, denominator)
+        new(numerator: decimal)                         = Fraction(bigint numerator, 1I)
+
+        new(numerator: int, denominator: bigint)        = Fraction(bigint numerator, denominator)
+        new(numerator: int, denominator: decimal)       = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: int64)         = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: int)           = Fraction(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: float)         = Fraction(bigint numerator, denominator)
+        new(numerator: int, denominator: float32)       = Fraction(bigint numerator, denominator)
+        new(numerator: int)                             = Fraction(bigint numerator, 1I)
         
-        new(numerator : float, denominator : bigint) =
+        new(numerator : float, denominator : bigint)    =
             let f = Fraction.scale numerator
             Fraction(bigint(numerator * float(f)), denominator * f)
-        new(numerator : float, denominator : int64) = Fraction(numerator, bigint denominator)
-        new(numerator : float, denominator : int) = Fraction(numerator, bigint denominator)
-        new(numerator : float, denominator : float) =
+        new(numerator : float, denominator : decimal)   = Fraction(numerator, bigint denominator)
+        new(numerator : float, denominator : int64)     = Fraction(numerator, bigint denominator)
+        new(numerator : float, denominator : int)       = Fraction(numerator, bigint denominator)
+        new(numerator : float, denominator : float)     =
             let f = float(bigint.Max(Fraction.scale numerator, Fraction.scale denominator))
             Fraction(bigint(numerator * f), bigint(denominator * f))
-        new(numerator : float, denominator : float32) = Fraction(numerator, float denominator)
-        new(numerator : float) =
+        new(numerator : float, denominator : float32)   = Fraction(numerator, float denominator)
+        new(numerator : float)                          =
             let d = Fraction.scale numerator
             let n = bigint(numerator * float(d))
             Fraction(n, d)
             
-        new(numerator : float32, denominator : bigint) = Fraction(float numerator, denominator)
-        new(numerator : float32, denominator : int64) = Fraction(float numerator, bigint denominator)
-        new(numerator : float32, denominator : int) = Fraction(float numerator, bigint denominator)
-        new(numerator : float32, denominator : float) = Fraction(float numerator, denominator)
+        new(numerator : float32, denominator : bigint)  = Fraction(float numerator, denominator)
+        new(numerator : float32, denominator : decimal) = Fraction(float numerator, bigint denominator)
+        new(numerator : float32, denominator : int64)   = Fraction(float numerator, bigint denominator)
+        new(numerator : float32, denominator : int)     = Fraction(float numerator, bigint denominator)
+        new(numerator : float32, denominator : float)   = Fraction(float numerator, denominator)
         new(numerator : float32, denominator : float32) = Fraction(float numerator, float denominator)
-        new(numerator : float32) = Fraction(float numerator)
-
-        member self.Simplified
-            with get () =
-                let d = bigint.GreatestCommonDivisor(self.Numerator, self.Denominator)
-                if d = bigint(1) then self
-                else Fraction(self.Numerator / d, self.Denominator / d)
-
-        member self.Float
-            with get () =
-                let x = self.Simplified
-                float x.Numerator / float x.Denominator
+        new(numerator : float32)                        = Fraction(float numerator)
 
         member self.Inverse with get () = Fraction(self.Denominator, self.Numerator)
 
@@ -76,46 +77,89 @@ type Fraction =
             | true -> Fraction(bigint.Pow(self.Numerator, b), bigint.Pow(self.Denominator, b))
             | false -> Fraction(bigint.Pow(self.Denominator, -b), bigint.Pow(self.Numerator, -b))
 
-        member self.IsIdentical(other : Fraction) = self.Numerator = other.Numerator && self.Denominator = other.Denominator
+        member self.Abs with get () = Fraction(abs(self.Numerator), abs(self.Denominator))
 
+        member self.Simplified
+            with get () =
+                let d = bigint.GreatestCommonDivisor(self.Numerator, self.Denominator)
+                if d = 1I then self
+                else Fraction(self.Numerator / d, self.Denominator / d)
+
+        member self.Decimal
+            with get () =
+                let x = self.Simplified
+                decimal x.Numerator / decimal x.Denominator
+                
         override self.ToString() = sprintf "(%A/%A)" self.Numerator self.Denominator
 
-        static member (*) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Numerator, a.Denominator * b.Denominator)
-        static member (*) (a : Fraction, b : bigint) = Fraction(a.Numerator * b, a.Denominator)
-        static member (*) (a : bigint, b : Fraction) = Fraction(a * b.Numerator, b.Denominator)
-        static member (*) (a : Fraction, b : int) = Fraction(a.Numerator * bigint b, a.Denominator)
-        static member (*) (a : int, b : Fraction) = Fraction(bigint a * b.Numerator, b.Denominator)
-        static member (*) (a : Fraction, b : int64) = Fraction(a.Numerator * bigint b, a.Denominator)
-        static member (*) (a : int64, b : Fraction) = Fraction(bigint a * b.Numerator, b.Denominator)
+        static member (*) (a : Fraction, b : Fraction)  = Fraction(a.Numerator * b.Numerator,   a.Denominator * b.Denominator)
+        static member (*) (a : Fraction, b : bigint)    = Fraction(a.Numerator * b,             a.Denominator)
+        static member (*) (a : Fraction, b : decimal)   = Fraction(a.Numerator * bigint b,      a.Denominator)
+        static member (*) (a : Fraction, b : int64)     = Fraction(a.Numerator * bigint b,      a.Denominator)
+        static member (*) (a : Fraction, b : int)       = Fraction(a.Numerator * bigint b,      a.Denominator)
+        static member (*) (a : Fraction, b : float)     = a * Fraction b
+        static member (*) (a : Fraction, b : float32)   = a * Fraction b
+        static member (*) (a : bigint,   b : Fraction)  = Fraction(a * b.Numerator,             b.Denominator)
+        static member (*) (a : decimal,  b : Fraction)  = Fraction(bigint a * b.Numerator,      b.Denominator)
+        static member (*) (a : int64,    b : Fraction)  = Fraction(bigint a * b.Numerator,      b.Denominator)
+        static member (*) (a : int,      b : Fraction)  = Fraction(bigint a * b.Numerator,      b.Denominator)
+        static member (*) (a : float,    b : Fraction)  = (Fraction a) * b
+        static member (*) (a : float32,  b : Fraction)  = (Fraction a) * b
 
-        static member (/) (a : Fraction, b : Fraction) = Fraction(a.Numerator * b.Denominator, a.Denominator * b.Numerator)
-        static member (/) (a : Fraction, b : bigint) = Fraction(a.Numerator / b, a.Denominator)
-        static member (/) (a : bigint, b : Fraction) = Fraction(a / b.Numerator, b.Denominator)
-        static member (/) (a : Fraction, b : int) = Fraction(a.Numerator, a.Denominator * bigint b)
-        static member (/) (a : int, b : Fraction) = Fraction(bigint a / b.Numerator, b.Denominator)
-        static member (/) (a : Fraction, b : int64) = Fraction(a.Numerator, a.Denominator * bigint b)
-        static member (/) (a : int64, b : Fraction) = Fraction(bigint a / b.Numerator, b.Denominator)
+        static member (/) (a : Fraction, b : Fraction)  = Fraction(a.Numerator * b.Denominator, a.Denominator * b.Numerator)
+        static member (/) (a : Fraction, b : bigint)    = Fraction(a.Numerator / b,             a.Denominator)
+        static member (/) (a : Fraction, b : decimal)   = Fraction(a.Numerator,                 a.Denominator * bigint b)
+        static member (/) (a : Fraction, b : int64)     = Fraction(a.Numerator,                 a.Denominator * bigint b)
+        static member (/) (a : Fraction, b : int)       = Fraction(a.Numerator,                 a.Denominator * bigint b)
+        static member (/) (a : Fraction, b : float)     = a / Fraction b
+        static member (/) (a : Fraction, b : float32)   = a / Fraction b
+        static member (/) (a : bigint,   b : Fraction)  = Fraction(a / b.Numerator,             b.Denominator)
+        static member (/) (a : decimal,  b : Fraction)  = Fraction(bigint a / b.Numerator,      b.Denominator)
+        static member (/) (a : int64,    b : Fraction)  = Fraction(bigint a / b.Numerator,      b.Denominator)
+        static member (/) (a : int,      b : Fraction)  = Fraction(bigint a / b.Numerator,      b.Denominator)
+        static member (/) (a : float,    b : Fraction)  = (Fraction a) / b
+        static member (/) (a : float32,  b : Fraction)  = (Fraction a) / b
 
-        static member (+) (a : Fraction, b : Fraction) =
-            if a.Denominator = b.Denominator then
-                Fraction(a.Numerator + b.Numerator, a.Denominator).Simplified
-            else
-                Fraction(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator).Simplified
-
-        static member (+) (a : int, b : Fraction) = Fraction(bigint a * b.Denominator + b.Numerator, b.Denominator).Simplified
+        static member (+) (a : Fraction, b : Fraction)  =
+            match a.Denominator = b.Denominator with
+            | true  -> Fraction(a.Numerator + b.Numerator, a.Denominator).Simplified
+            | false -> Fraction(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator).Simplified
+        static member (+) (a : Fraction, b : bigint  )  = Fraction(a.Numerator +        b * a.Denominator, a.Denominator).Simplified
+        static member (+) (a : Fraction, b : decimal )  = Fraction(a.Numerator + bigint b * a.Denominator, a.Denominator).Simplified
+        static member (+) (a : Fraction, b : int64   )  = Fraction(a.Numerator + bigint b * a.Denominator, a.Denominator).Simplified
+        static member (+) (a : Fraction, b : int     )  = Fraction(a.Numerator + bigint b * a.Denominator, a.Denominator).Simplified
+        static member (+) (a : Fraction, b : float   )  = a + Fraction b
+        static member (+) (a : Fraction, b : float32 )  = a + Fraction b
+        static member (+) (a : bigint,   b : Fraction)  = Fraction(       a * b.Denominator + b.Numerator, b.Denominator).Simplified
+        static member (+) (a : decimal,  b : Fraction)  = Fraction(bigint a * b.Denominator + b.Numerator, b.Denominator).Simplified
+        static member (+) (a : int64,    b : Fraction)  = Fraction(bigint a * b.Denominator + b.Numerator, b.Denominator).Simplified
+        static member (+) (a : int,      b : Fraction)  = Fraction(bigint a * b.Denominator + b.Numerator, b.Denominator).Simplified
+        static member (+) (a : float,    b : Fraction)  = (Fraction a) + b
+        static member (+) (a : float32,  b : Fraction)  = (Fraction a) + b
                 
-        static member (-) (a : Fraction, b : Fraction) =
-            if a.Denominator = b.Denominator then
-                Fraction(a.Numerator - b.Numerator, a.Denominator).Simplified
-            else
-                Fraction(a.Numerator * b.Denominator - b.Numerator * a.Denominator, a.Denominator * b.Denominator).Simplified
+        static member (-) (a : Fraction, b : Fraction)  =
+            match a.Denominator = b.Denominator with
+            | true  -> Fraction(a.Numerator - b.Numerator, a.Denominator).Simplified
+            | false -> Fraction(a.Numerator * b.Denominator - b.Numerator * a.Denominator, a.Denominator * b.Denominator).Simplified
+        static member (-) (a : Fraction, b : bigint  )  = Fraction(a.Numerator -        b * a.Denominator, a.Denominator).Simplified
+        static member (-) (a : Fraction, b : decimal )  = Fraction(a.Numerator - bigint b * a.Denominator, a.Denominator).Simplified
+        static member (-) (a : Fraction, b : int64   )  = Fraction(a.Numerator - bigint b * a.Denominator, a.Denominator).Simplified
+        static member (-) (a : Fraction, b : int     )  = Fraction(a.Numerator - bigint b * a.Denominator, a.Denominator).Simplified
+        static member (-) (a : Fraction, b : float   )  = a - Fraction b
+        static member (-) (a : Fraction, b : float32 )  = a - Fraction b
+        static member (-) (a : bigint,   b : Fraction)  = Fraction(       a * b.Denominator - b.Numerator, b.Denominator).Simplified
+        static member (-) (a : decimal,  b : Fraction)  = Fraction(bigint a * b.Denominator - b.Numerator, b.Denominator).Simplified
+        static member (-) (a : int64,    b : Fraction)  = Fraction(bigint a * b.Denominator - b.Numerator, b.Denominator).Simplified
+        static member (-) (a : int,      b : Fraction)  = Fraction(bigint a * b.Denominator - b.Numerator, b.Denominator).Simplified
+        static member (-) (a : float,    b : Fraction)  = (Fraction a) - b
+        static member (-) (a : float32,  b : Fraction)  = (Fraction a) - b
 
-        static member (~-) (a : Fraction) =
-            Fraction(-a.Numerator, a.Denominator)
+        static member (~-) (a : Fraction) = Fraction(-a.Numerator, a.Denominator)
         
         static member inline relation (a : Fraction) (b : Fraction) f =
-            if a.Denominator = b.Denominator then f a.Numerator  b.Numerator
-            else f (a.Numerator * b.Denominator) (b.Numerator * a.Denominator)
+            match a.Denominator = b.Denominator with
+            | true  -> f a.Numerator  b.Numerator
+            | false -> f (a.Numerator * b.Denominator) (b.Numerator * a.Denominator)
         static member op_LessThan (a, b) = Fraction.relation a b (<)
         static member op_LessThanOrEqual (a, b) = Fraction.relation a b (<=)
         static member op_Equality (a, b) = Fraction.relation a b (=)

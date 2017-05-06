@@ -15,14 +15,19 @@ namespace Uncodium.Units.Tests
     [TestFixture]
     public class UnitOfMeasureTests
     {
+        [Test] public void NullNameWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure(null, "foo"));
+        [Test] public void NullSymbolWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure("foo", null));
+        [Test] public void EmptyNameWillNotThrow() => new UnitOfMeasure("", "foo");
+        [Test] public void EmptySymbolWillNotThrow() => new UnitOfMeasure("foo", "");
+
         [Test]
         public void CanCreateBaseUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
             Assert.IsTrue(m.Name == "meter");
             Assert.IsTrue(m.Symbol == "m");
-            Assert.IsTrue(m.Factor == Fraction.One);
-            Assert.IsTrue(m.IsBaseUnit == true);
+            Assert.IsTrue(m.Scale == Fraction.One);
+            Assert.IsTrue(m.IsDimensionLess == true);
             Assert.IsTrue(m.BaseUnits.Count == 0);
         }
 
@@ -33,17 +38,12 @@ namespace Uncodium.Units.Tests
             var cm = new UnitOfMeasure("centimeter", "cm", m, new Fraction(1, 100));
             Assert.IsTrue(cm.Name == "centimeter");
             Assert.IsTrue(cm.Symbol == "cm");
-            Assert.IsTrue(cm.Factor == new Fraction(1, 100));
-            Assert.IsTrue(cm.IsBaseUnit == false);
+            Assert.IsTrue(cm.Scale == new Fraction(1, 100));
+            Assert.IsTrue(cm.IsDimensionLess == false);
             Assert.IsTrue(cm.BaseUnits.Count == 1);
             Assert.IsTrue(cm.BaseUnits.Powers[0].Unit == m);
             Assert.IsTrue(cm.BaseUnits.Powers[0].Power == 1);
         }
-
-        [Test] public void NullNameWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure(null, "foo"));
-        [Test] public void NullSymbolWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure("foo", null));
-        [Test] public void EmptyNameWillNotThrow() => new UnitOfMeasure("", "foo");
-        [Test] public void EmptySymbolWillNotThrow() => new UnitOfMeasure("foo", "");
 
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
@@ -53,9 +53,22 @@ namespace Uncodium.Units.Tests
 
             Assert.IsTrue(u.Name == "");
             Assert.IsTrue(u.Symbol == "");
-            Assert.IsTrue(u.Factor == new Fraction(1, 1));
-            Assert.IsTrue(u.IsBaseUnit == true);
+            Assert.IsTrue(u.Scale == Fraction.One);
+            Assert.IsTrue(u.IsDimensionLess == true);
+            Assert.IsTrue(u.BaseUnits.Count == 0);
+        }
 
+        [Test]
+        public void UnitPerSameScaledUnitYieldsScaledDimensionlessUnit()
+        {
+            var m = new UnitOfMeasure("meter", "m");
+            var cm = new UnitOfMeasure("centimeter", "cm", m, new Fraction(1, 100));
+            var u = m / cm;
+
+            Assert.IsTrue(u.Name == "");
+            Assert.IsTrue(u.Symbol == "");
+            Assert.IsTrue(u.Scale == new Fraction(100, 1));
+            Assert.IsTrue(u.IsDimensionLess == true);
             Assert.IsTrue(u.BaseUnits.Count == 0);
         }
 
@@ -66,8 +79,8 @@ namespace Uncodium.Units.Tests
             var s = new UnitOfMeasure("second", "s");
             var x = m / s;
 
-            Assert.IsTrue(x.Factor == new Fraction(1, 1));
-            Assert.IsTrue(x.IsBaseUnit == false);
+            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 2);
             Assert.IsTrue(x.BaseUnits.Powers[0].Unit == m);
@@ -81,10 +94,22 @@ namespace Uncodium.Units.Tests
         {
             var x = Meter / Meter;
 
-            Assert.IsTrue(x.Factor == new Fraction(1, 1));
-            Assert.IsTrue(x.IsBaseUnit == true);
-
+            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
+        }
+
+        [Test]
+        public void CanCombineBaseUnits2b()
+        {
+            var x = Meter * Meter;
+
+            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.IsDimensionLess == false);
+
+            Assert.IsTrue(x.BaseUnits.Count == 1);
+            Assert.IsTrue(x.BaseUnits.Powers[0].Unit == m);
+            Assert.IsTrue(x.BaseUnits.Powers[0].Power == 2);
         }
 
         [Test]
@@ -94,9 +119,8 @@ namespace Uncodium.Units.Tests
             var b = Meter / Meter;
             var x = a / b;
 
-            Assert.IsTrue(x.Factor == new Fraction(1, 1));
-            Assert.IsTrue(x.IsBaseUnit == true);
-
+            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
         }
 
@@ -107,9 +131,8 @@ namespace Uncodium.Units.Tests
             var b = Meter / Meter;
             var x = a * b;
 
-            Assert.IsTrue(x.Factor == new Fraction(1, 1));
-            Assert.IsTrue(x.IsBaseUnit == true);
-
+            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
         }
 
@@ -118,8 +141,8 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer / Hour;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 3600));
-            Assert.IsTrue(x.IsBaseUnit == false);
+            Assert.IsTrue(x.Scale == new Fraction(1000, 3600));
+            Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 2);
             Assert.IsTrue(x.BaseUnits.Powers[0].Unit == Meter);
@@ -133,8 +156,8 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Centimeter;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 100));
-            Assert.IsTrue(x.IsBaseUnit == false);
+            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
             Assert.IsTrue(x.BaseUnits.Powers[0].Unit == Meter);
@@ -146,8 +169,8 @@ namespace Uncodium.Units.Tests
         {
             var x = Centimeter * Kilometer;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 100));
-            Assert.IsTrue(x.IsBaseUnit == false);
+            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
             Assert.IsTrue(x.BaseUnits.Powers[0].Unit == Meter);
@@ -159,7 +182,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Meter / Second;
 
-            Assert.IsTrue(x.Name == "[m^1][s^-1]");
+            Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "m/s");
         }
 
@@ -168,7 +191,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Meter * Second;
 
-            Assert.IsTrue(x.Name == "[m^1][s^1]");
+            Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "m*s");
         }
 
@@ -177,8 +200,8 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer / Hour;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 3600));
-            Assert.IsTrue(x.Name == "[m^1][s^-1]");
+            Assert.IsTrue(x.Scale == new Fraction(1000, 3600));
+            Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "km/h");
         }
 
@@ -187,8 +210,8 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Hour;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000 * 3600));
-            Assert.IsTrue(x.Name == "[m^1][s^1]");
+            Assert.IsTrue(x.Scale == new Fraction(1000 * 3600));
+            Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "km*h");
         }
 
@@ -197,9 +220,9 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Centimeter;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 100));
-            Assert.IsTrue(x.Name == "[m^2]");
-            Assert.IsTrue(x.Symbol == "[m^2]");
+            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -207,9 +230,9 @@ namespace Uncodium.Units.Tests
         {
             var x = Centimeter * Kilometer;
 
-            Assert.IsTrue(x.Factor == new Fraction(1000, 100));
-            Assert.IsTrue(x.Name == "[m^2]");
-            Assert.IsTrue(x.Symbol == "[m^2]");
+            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -217,7 +240,7 @@ namespace Uncodium.Units.Tests
         {
             var x = International.Foot / Second;
 
-            Assert.IsTrue(x.Name == "[m^1][s^-1]");
+            Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "ft/s");
         }
 
@@ -226,8 +249,8 @@ namespace Uncodium.Units.Tests
         {
             var x = MilesPerHour * Kilogram;
 
-            Assert.IsTrue(x.Name == "[kg^1][m^1][s^-1]");
-            Assert.IsTrue(x.Symbol == "[kg^1][m^1][s^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "mph*kg");
         }
 
         [Test]
@@ -236,8 +259,8 @@ namespace Uncodium.Units.Tests
             var a = Kilogram * Meter / Second;
             var x = a / Kilogram;
 
-            Assert.IsTrue(x.Name == "[m^1][s^-1]");
-            Assert.IsTrue(x.Symbol == "[m^1][s^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -281,8 +304,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / Meter;
 
-            Assert.IsTrue(x.Name == "[m^-1]");
-            Assert.IsTrue(x.Symbol == "[m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -290,8 +313,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / Kilometer;
 
-            Assert.IsTrue(x.Name == "[m^-1]");
-            Assert.IsTrue(x.Symbol == "[m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -299,8 +322,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / MetersPerSecond;
 
-            Assert.IsTrue(x.Name == "[s^1][m^-1]");
-            Assert.IsTrue(x.Symbol == "[s^1][m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -308,8 +331,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / (Meter / Second);
 
-            Assert.IsTrue(x.Name == "[s^1][m^-1]");
-            Assert.IsTrue(x.Symbol == "[s^1][m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -317,8 +340,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / KilometersPerHour;
 
-            Assert.IsTrue(x.Name == "[s^1][m^-1]");
-            Assert.IsTrue(x.Symbol == "[s^1][m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -326,8 +349,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / (Kilometer / Hour);
 
-            Assert.IsTrue(x.Name == "[s^1][m^-1]");
-            Assert.IsTrue(x.Symbol == "[s^1][m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
 
         [Test]
@@ -335,8 +358,8 @@ namespace Uncodium.Units.Tests
         {
             var x = 1 / MetersPerSecond;
 
-            Assert.IsTrue(x.Name == "[s^1][m^-1]");
-            Assert.IsTrue(x.Symbol == "[s^1][m^-1]");
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "");
         }
     }
 }

@@ -14,11 +14,44 @@ namespace Uncodium.Units.Tests
     public class UnitPowersTests
     {
         [Test]
-        public void UnitWithPowerZeroWillThrow_1() => Assert.Throws<ArgumentException>(() => new UnitPowers(Meter, 0));
-        [Test]
-        public void UnitWithPowerZeroWillThrow_2() => Assert.Throws<ArgumentException>(() => new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 0) }));
-        [Test]
         public void NonBaseUnitWillThrow() => Assert.Throws<ArgumentException>(() => new UnitPowers(Gram, 1));
+
+        [Test]
+        public void Equality1() => Assert.IsTrue(new UnitPowers() == new UnitPowers());
+        [Test]
+        public void Equality2() => Assert.IsTrue(new UnitPowers(Meter, 1) == new UnitPowers(Meter, 1));
+        [Test]
+        public void Equality3() => Assert.IsTrue(new UnitPowers(Meter, 2) != new UnitPowers(Meter, 1));
+        [Test]
+        public void Equality4() => Assert.IsTrue(new UnitPowers(Meter, 1) != new UnitPowers(Meter, 2));
+        [Test]
+        public void Equality5() => Assert.IsTrue(new UnitPowers(Meter, 1) != new UnitPowers(Second, 1));
+        [Test]
+        public void Equality6()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 1) });
+            var b = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 1) });
+            
+            Assert.IsTrue(a != b);
+        }
+        [Test]
+        public void Equality7()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 1) });
+            var b = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 1) });
+
+            Assert.IsTrue(a == b);
+        }
+        [Test]
+        public void Equality8()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 1) });
+            var b = new UnitPowers(new[] { new UnitPower(Second, 1), new UnitPower(Meter, 1) });
+
+            Assert.IsTrue(a == b);
+        }
+
+
 
         [Test]
         public void Dimensionless()

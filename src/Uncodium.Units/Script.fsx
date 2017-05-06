@@ -22,6 +22,21 @@ open Time
 open Information
 open International
 
+3.6 * Kilogram * KilometersPerHour |> string
+
+50 * Decimeter * Meter
+
+1 / (2 * Meter)
+3.6 * Kilogram * KilometersPerHour
+Kilogram * KilometersPerHour
+17 * Kilometer => Millimeter |> string
+
+((1 * Meter) / (1 * Meter)).Unit
+
+
+88 * Kilowatt => PS
+120 * PS => Kilowatt
+
 Photometry.Lux |> string
 Photometry.Lumen |> string
 Lumen/Watt
@@ -78,7 +93,7 @@ ImpedanceOfFreeSpace |> string
 StandardGravity |> string
 
 (6 * International.Foot => Meter) |> string
-(6 * Us.Survey.Foot => Meter) |> string
+(6 * US.Survey.Foot => Meter) |> string
 (0.95 * International.Grain) |> string
 
 1 / (2 * Meter) |> string
@@ -86,8 +101,6 @@ StandardGravity |> string
 Fraction(254, 10_000) * Fraction(3_937, 100)
 
 1 * Newton
-
-1 * ImperialHorsepower => MetricHorsepower
 
 1 * SquareMillimeter + 2 * SquareCentimeter + 3 * SquareDecimeter + 4 * SquareMeter
 
@@ -97,6 +110,9 @@ Fraction(254, 10_000) * Fraction(3_937, 100)
 
 //1 * SquareKilometer + 1 * SquareMile
 
+50 * Decimeter + 30 * Decimeter
+
+50 * Decimeter * Decimeter
 50 * Decimeter * Decimeter + 1 * Meter * Meter
 
 1 * SquareMeter + 50 * SquareDecimeter

@@ -226,7 +226,7 @@ module Physics =
     let Slug                    = U("slug",                     "slug",     PoundForce * (Second ^ 2) / International.Foot                          )
 
     /// One newton meter is equal to the torque resulting from a force of one newton applied perpendicularly to a moment arm which is one meter long.
-    let NewtonMeter             = U("newton meter",             "N·m",      Newton * Meter                              )
+    let NewtonMeter             = U("newton meter",             "Nm",       Newton * Meter                              )
 
     /// Angular frequency ω (in radians per second), is larger than frequency (in cycles per second, also called Hz),
     /// by a factor of 2π, because 2π rad/s corresponds to 1 Hz.
@@ -241,15 +241,15 @@ module Physics =
 
     /// The dyne per centimeter is a unit traditionally used to measure surface tension.
     /// For example, the surface tension of distilled water is 72 dyn/cm at 25 °C.
-    let DynePerCentimeter       = U("dyne per centimeter",      "dyn/cm",   Dyne/Centimeter                               )
+    let DynePerCentimeter       = Dyne/Centimeter
 
     (* Speed *)
 
-    let MetersPerSecond         = U("meters per second",        "m/s",   Meter/Second                                   )
-    let FeetPerSecond           = U("feet per second",          "ft/s",  US.Survey.Foot/Second                          )
-    let KilometersPerHour       = U("kilometers per hour",      "km/h",  Kilometer/Hour                                 )
-    let KilometersPerSecond     = U("kilometers per second",    "km/s",  Kilometer/Second                               )
-    let MilesPerHour            = U("miles per hour",           "mph",   US.Survey.Mile/Hour                            )
+    let MetersPerSecond         = Meter/Second
+    let KilometersPerHour       = Kilometer/Hour
+    let KilometersPerSecond     = Kilometer/Second
+    let FeetPerSecond           = International.Foot/Second
+    let MilesPerHour            = U("miles per hour",           "mph",   International.Mile/Hour                        )
 
     (* Energy *)
 
@@ -268,8 +268,13 @@ module Physics =
 
     /// 1 horsepower (hp) is equal to 745.7 watts.
     let HorsepowerImperial      = U("imperial horsepower",      "hp",   Watt,                   F(7457, 10)             )
+    /// 1 horsepower (hp) is equal to 745.7 watts.
+    let HP                      = HorsepowerImperial
+
     /// 1 horsepower (PS) is equal to 735.5 watts.
     let HorsepowerMetric        = U("metric horsepower",        "PS",   Watt,                   F(7_355, 10)            )
+    /// 1 horsepower (PS) is equal to 735.5 watts.
+    let PS                      = HorsepowerMetric
 
     /// 1 BTU (British Thermal Unit) is equal to 1055.06 joules.
     /// See ISO 31-4 on Quantities and units—Part 4: Heat (https://books.google.com/books?id=-ZveBwAAQBAJ&pg=PA19-IA35).
@@ -279,6 +284,7 @@ module Physics =
 
     let Kilopascal              = Kilo * Pascal
     let Bar                     = U("bar",                      "bar",  Pascal,                 10_000                  )
-    let PoundsPerSquareInch     = U("pounds per square inch",   "psi",  International.Pound / International.SquareInch  )
     let Barye                   = U("barye",                    "Ba",   Pascal,                 F(1, 10)                )
+    let PoundsPerSquareInch     = U("pounds per square inch",   "psi",  International.Pound / International.SquareInch  )
+    let PSI                     = PoundsPerSquareInch
  

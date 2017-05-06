@@ -14,6 +14,64 @@ namespace Uncodium.Units.Tests
     [TestFixture]
     public class ValueTests
     {
+        #region Add
+
+        [Test]
+        public void CanAddSameUnits()
+        {
+            var a = 1 * Meter;
+            var b = 1 * Meter;
+            var r = a + b;
+
+            Assert.IsTrue(r.Decimal == 2);
+        }
+
+        [Test]
+        public void CanAddSameDimensionlessUnits()
+        {
+            var a = 1 * Radian;
+            var b = 1 * Radian;
+            var r = a + b;
+
+            Assert.IsTrue(r.Decimal == 2);
+        }
+
+        [Test]
+        public void CanAddSameUnitsWithDifferentScales()
+        {
+            var a = 1 * Meter;
+            var b = 1 * Centimeter;
+            var r = a + b;
+
+            Assert.IsTrue(r.Decimal == 1.01m);
+        }
+
+        [Test]
+        public void CannotAddDifferentUnits()
+        {
+            var a = 1 * Meter;
+            var b = 1 * Second;
+
+            Assert.Catch<Exception>(() =>
+            {
+                var r = a + b;
+            });
+        }
+
+        [Test]
+        public void CannotAddDifferentDimensionlessUnits()
+        {
+            var a = 1 * Radian;
+            var b = 1 * Steradian;
+
+            Assert.Catch<Exception>(() =>
+            {
+                var r = a + b;
+            });
+        }
+
+        #endregion
+
         [Test]
         public void ReciprocalValue_1()
         {
@@ -58,15 +116,32 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(a.X.Denominator == 1);
         }
 
-        [Test]public void Formatting_1() => Assert.IsTrue((80 * Centimeter + 2 * Decimeter).ToString() == "100 cm");
-        [Test]public void Formatting_2() => Assert.IsTrue((2 * Decimeter + 80 * Centimeter).ToString() == "10 dm");
-        [Test]public void Formatting_3() => Assert.IsTrue((1 * Meter / Second).ToString() == "1 m/s");
-        [Test]public void Formatting_4() => Assert.IsTrue((1 * Meter / Second).ToString() == "1 m/s");
-        [Test] public void Formatting_5() => Assert.IsTrue((3.6 * Kilometer / Hour).ToString() == "3.6 km/h");
-        [Test] public void Formatting_6() => Assert.IsTrue((1 * International.Foot / Second).ToString() == "1 ft/s");
-        [Test] public void Formatting_7() => Assert.IsTrue((new Fraction(3600, 1000) * Kilogram * KilometersPerHour).ToString() == "1 [kg^1][m^1][s^-1]");
-        [Test] public void Formatting_8() => Assert.IsTrue((1 * SquareMeter + 50 * SquareDecimeter).ToString() == "1.5 m²");
-        [Test] public void Formatting_9() => Assert.IsTrue((50 * SquareDecimeter + 1 * SquareMeter).ToString() == "150 dm²");
-        [Test] public void Formatting_10() => Assert.IsTrue((50 * Decimeter * Decimeter + 1 * Meter * Meter).ToString() == "1.5 [m^2]");
+        [Test] public void Formatting_1() => Assert.IsTrue((80 * Centimeter + 2 * Decimeter).ToString() == "100 cm");
+        [Test] public void Formatting_2() => Assert.IsTrue((2 * Decimeter + 80 * Centimeter).ToString() == "10 dm");
+        [Test] public void Formatting_3() => Assert.IsTrue((1 * Meter / Second).ToString() == "1 m/s");
+        [Test] public void Formatting_4() => Assert.IsTrue((1 * Centimeter / Second).ToString() == "1 cm/s");
+        [Test] public void Formatting_5() => Assert.IsTrue((1 * MetersPerSecond).ToString() == "1 m/s");
+        [Test] public void Formatting_6() => Assert.IsTrue((3.6 * KilometersPerHour).ToString() == "3.6 km/h");
+        [Test] public void Formatting_7() => Assert.IsTrue((3.6 * Kilometer / Hour).ToString() == "3.6 km/h");
+        [Test] public void Formatting_8() => Assert.IsTrue((1 * International.Foot / Second).ToString() == "1 ft/s");
+        [Test] public void Formatting_9() => Assert.IsTrue((3.6 * Kilogram * KilometersPerHour).ToString() == "1 [kg^1][m^1][s^-1]");
+        [Test] public void Formatting_10() => Assert.IsTrue((1 * SquareMeter + 50 * SquareDecimeter).ToString() == "1.5 m²");
+        [Test] public void Formatting_11() => Assert.IsTrue((50 * SquareDecimeter + 1 * SquareMeter).ToString() == "150 dm²");
+
+        [Test]
+        public void Formatting_12()
+        {
+            var x = Decimeter * Decimeter;
+            var a = 50 * Decimeter * Decimeter;
+            var s = a.ToString();
+            Assert.IsTrue(s == "50 dm²");
+        }
+
+        [Test]
+        public void Formatting_13()
+        {
+            var a = (88 * Kilowatt).ConvertTo(PS);
+            Assert.IsTrue(a.X.Decimal > 119 && a.X.Decimal < 120);
+        }
     }
 }

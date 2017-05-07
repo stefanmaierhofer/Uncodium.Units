@@ -361,5 +361,14 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "");
         }
+
+        [Test]
+        public void Aasdsgsf()
+        {
+            var x = 1 * US.Survey.Mile.Pow(2);
+            
+            Assert.IsTrue(x.Unit.Name == "");
+            Assert.IsTrue(x.Unit.Symbol == "mi²");
+        }
     }
 }

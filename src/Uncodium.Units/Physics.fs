@@ -125,10 +125,10 @@ module Physics =
     (* Electromagnetic constants *)
 
     /// Magnetic constant or vacuum permeability.
-    /// https://en.wikipedia.org/wiki/Vacuum_permeability
+    /// https://en.wikipedia.org/wiki/Vacuum_permeability.
     let VacuumPermeability      = Constant("vacuum permeability",           "μₒ",       4 * π * E 1.0 -7,   Newton / (Ampere^2)                    )
     /// Magnetic constant or vacuum permeability.
-    /// https://en.wikipedia.org/wiki/Vacuum_permeability
+    /// https://en.wikipedia.org/wiki/Vacuum_permeability.
     let μₒ = VacuumPermeability
     
     /// Electric constant or vacuum permittivity.
@@ -153,10 +153,10 @@ module Physics =
     let e = ElementaryCharge
 
     /// Fine-structure constant (also known as Sommerfeld's constant).
-    /// https://en.wikipedia.org/wiki/Fine-structure_constant
+    /// https://en.wikipedia.org/wiki/Fine-structure_constant.
     let FineStructureConstant   = Constant("fine-structure constant",       "α",        (e.Pow(2) * Zₒ) / (4 * π * ħ)             )
     /// Fine-structure constant (also known as Sommerfeld's constant).
-    /// https://en.wikipedia.org/wiki/Fine-structure_constant
+    /// https://en.wikipedia.org/wiki/Fine-structure_constant.
     let α = FineStructureConstant
 
     /// Coulomb's constant, the electric force constant, or the electrostatic constant (denoted kₑ)

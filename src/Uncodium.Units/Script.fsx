@@ -24,9 +24,19 @@ open International
 open Uncodium.Units.UK.LiquidVolume
 open Uncodium.Units.US.LiquidVolume
 
-SquareMeter / SquareDecimeter
+Decimeter.Pow(2)
+1 * SquareMeter + 50 * SquareDecimeter
 
-Pint
+1 * Mile.Pow(2)
+
+1.0 * Pint + 1.0 * UsPint => Liter |> string
+
+1 * SquareMile / (1 * Acre) |> string
+
+1 * SquareYard => SquareFoot |> string
+
+1 * (US.Survey.Mile * US.Survey.Mile) |> string
+
 UsPint
 (Pint / UsPint).Scale
 
@@ -41,12 +51,8 @@ Kilogram * KilometersPerHour
 
 ((1 * Meter) / (1 * Meter)).Unit
 
-(88 * Kilowatt => PS)
-(88 * Kilowatt => PS) |> string
-(88 * Kilowatt => PS).X
-(88 * Kilowatt => PS).ToFloat()
-
-120 * PS => Kilowatt
+88 * Kilowatt => PS |> string
+120 * PS => Kilowatt |> string
 
 Photometry.Lux |> string
 Photometry.Lumen |> string

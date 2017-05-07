@@ -130,14 +130,22 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
         if b = 0 then
             UnitOfMeasure("", "", UnitPowers.None, Fraction.One)
         else
-            let ps =
+            let powers =
                 match self.IsDimensionLess with
                 | true -> UnitPowers { Unit = self; Power = b }
                 | false -> self.BaseUnits.Pow(b)
-            let s = string ps
-            match ps.Count with
-            | 0 -> UnitOfMeasure(s, s, UnitPowers.None, self.Scale.Pow(b))
-            | _ -> UnitOfMeasure(s, s, ps, self.Scale.Pow(b))
+            let symbol =
+                if powers.Count = 1 && self.HasName && self.HasSymbol then
+                    let p = powers.Powers.[0]
+                    match p.Power with
+                    | 0 -> ""
+                    | 1 -> self.Symbol
+                    | 2 -> self.Symbol + "²"
+                    | 3 -> self.Symbol + "³"
+                    | i -> self.Symbol + "^" + string(i)
+                else
+                    ""
+            UnitOfMeasure("", symbol, powers.Pow(b), self.Scale.Pow(b))
 
     member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         if obj.ReferenceEquals(self, other) then
@@ -287,10 +295,14 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
         Value(f, x.Unit)
     
     override self.ToString () =
-        if self.Unit.HasSymbol then
-            string(self.X.Simplified.ToFloat()) + " " + self.Unit.Symbol
-        else
-            string((self.X * self.Unit.Scale).Simplified.ToFloat()) + " " + self.Unit.BaseUnits.ToString()
+        match self.Unit.HasSymbol with
+        | true -> string(self.X.Simplified.ToFloat()) + " " + self.Unit.Symbol
+        | false ->
+            let x = string((self.X * self.Unit.Scale).Simplified.ToFloat())
+            let bu = self.Unit.BaseUnits
+            match bu.Count with
+            | 0 -> x
+            | _ -> x + " " + self.Unit.BaseUnits.ToString()
     
     member self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
 
@@ -522,7 +534,12 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
     override self.ToString () =
         match self.Unit.HasSymbol with
         | true -> string(self.X.Simplified.ToFloat()) + " " + self.Unit.Symbol
-        | false -> string(self.X.Simplified.ToFloat())
+        | false ->
+            let x = string((self.X * self.Unit.Scale).Simplified.ToFloat())
+            let bu = self.Unit.BaseUnits
+            match bu.Count with
+            | 0 -> x
+            | _ -> x + " " + self.Unit.BaseUnits.ToString()
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 

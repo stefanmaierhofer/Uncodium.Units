@@ -125,7 +125,16 @@ namespace Uncodium.Units.Tests
         [Test] public void Formatting_7() => Assert.IsTrue((3.6 * Kilometer / Hour).ToString() == "3.6 km/h");
         [Test] public void Formatting_8() => Assert.IsTrue((1 * International.Foot / Second).ToString() == "1 ft/s");
         [Test] public void Formatting_9() => Assert.IsTrue((3.6 * Kilogram * KilometersPerHour).ToString() == "1 [kg^1][m^1][s^-1]");
-        [Test] public void Formatting_10() => Assert.IsTrue((1 * SquareMeter + 50 * SquareDecimeter).ToString() == "1.5 m²");
+
+        [Test]
+        public void Formatting_10()
+        {
+            var a = 1 * SquareMeter;
+            var b = 50 * SquareDecimeter;
+            var r = a + b;
+            Assert.IsTrue(r.ToString() == "1.5 m²");
+        }
+
         [Test] public void Formatting_11() => Assert.IsTrue((50 * SquareDecimeter + 1 * SquareMeter).ToString() == "150 dm²");
 
         [Test]

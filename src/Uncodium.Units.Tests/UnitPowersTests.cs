@@ -16,6 +16,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void NonBaseUnitWillThrow() => Assert.Throws<ArgumentException>(() => new UnitPowers(Gram, 1));
 
+        #region Equality
+
         [Test]
         public void Equality1() => Assert.IsTrue(new UnitPowers() == new UnitPowers());
         [Test]
@@ -51,7 +53,41 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(a == b);
         }
 
+        #endregion
 
+        #region Pow
+
+        [Test]
+        public void Pow1()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 2) });
+            Assert.IsTrue(a * a == a.Pow(2));
+            Assert.IsTrue(a * a * a == a.Pow(3));
+            Assert.IsTrue(a * a * a * a == a.Pow(4));
+        }
+
+        [Test]
+        public void Pow2()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 1), new UnitPower(Second, 2) });
+            var r = a.Pow(2);
+
+            Assert.IsTrue(r.Powers[0].Unit == Meter && r.Powers[0].Power == 2);
+            Assert.IsTrue(r.Powers[1].Unit == Second && r.Powers[1].Power == 4);
+        }
+
+        [Test]
+        public void Pow3()
+        {
+            var a = new UnitPowers(new[] { new UnitPower(Meter, 2), new UnitPower(Second, -5) });
+            var r = a.Pow(-3);
+
+            // different order! (positive powers first, then negative)
+            Assert.IsTrue(r.Powers[0].Unit == Second && r.Powers[0].Power == 15);
+            Assert.IsTrue(r.Powers[1].Unit == Meter && r.Powers[1].Power == -6);
+        }
+
+        #endregion
 
         [Test]
         public void Dimensionless()

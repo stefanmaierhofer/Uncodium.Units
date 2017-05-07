@@ -72,6 +72,8 @@ namespace Uncodium.Units.Tests
 
         #endregion
 
+        #region Reciprocal
+
         [Test]
         public void ReciprocalValue_1()
         {
@@ -80,7 +82,7 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(a.ToString() == "2 m");
             Assert.IsTrue(b.ToString() == "0.5 [m^-1]");
         }
-
+        
         [Test]
         public void ReciprocalValue_2()
         {
@@ -90,6 +92,9 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(b.ToString() == "0.5 [m^-1]");
         }
 
+        #endregion
+
+        
         [Test]
         public void Dimensions_1()
         {
@@ -135,7 +140,14 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(r.ToString() == "1.5 m²");
         }
 
-        [Test] public void Formatting_11() => Assert.IsTrue((50 * SquareDecimeter + 1 * SquareMeter).ToString() == "150 dm²");
+        [Test]
+        public void Formatting_11()
+        {
+            var a = 50 * SquareDecimeter; 
+            var b = 1 * SquareMeter;
+            var r = a + b;
+            Assert.IsTrue(r.ToString() == "150 dm²");
+        }
 
         [Test]
         public void Formatting_12()

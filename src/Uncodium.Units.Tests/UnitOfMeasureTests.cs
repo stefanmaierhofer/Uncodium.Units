@@ -362,13 +362,56 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(x.Symbol == "");
         }
 
+        #region Pow
+
         [Test]
-        public void Aasdsgsf()
+        public void Pow_1()
         {
             var x = 1 * US.Survey.Mile.Pow(2);
             
             Assert.IsTrue(x.Unit.Name == "");
             Assert.IsTrue(x.Unit.Symbol == "mi²");
         }
+
+        [Test]
+        public void Pow_2()
+        {
+            var x = Decimeter.Pow(2);
+
+            Assert.IsTrue(x.Name == "");
+            Assert.IsTrue(x.Symbol == "dm²");
+        }
+
+        [Test]
+        public void Pow_3a()
+        {
+            var x = Decimeter.Pow(2);
+            Assert.IsTrue(x.BaseUnits.Count == 1);
+        }
+
+        [Test]
+        public void Pow_3b()
+        {
+            var x = Decimeter.Pow(2);
+            Assert.IsTrue(x.Scale == new Fraction(1, 100));
+        }
+
+        [Test]
+        public void Pow_3c()
+        {
+            var x = Decimeter.Pow(2);
+            var p = x.BaseUnits.Powers[0];
+            Assert.IsTrue(p.Unit == Meter);
+        }
+
+        [Test]
+        public void Pow_3d()
+        {
+            var x = Decimeter.Pow(2);
+            var p = x.BaseUnits.Powers[0];
+            Assert.IsTrue(p.Power == 2);
+        }
+
+        #endregion
     }
 }

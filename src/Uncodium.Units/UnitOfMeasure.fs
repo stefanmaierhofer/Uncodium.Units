@@ -145,9 +145,9 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
                     | i -> self.Symbol + "^" + string(i)
                 else
                     ""
-            UnitOfMeasure("", symbol, powers.Pow(b), self.Scale.Pow(b))
+            UnitOfMeasure("", symbol, powers, self.Scale.Pow(b))
 
-    member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
+    member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         if obj.ReferenceEquals(self, other) then
             true
         else
@@ -235,12 +235,12 @@ and UnitPowers =
         |> Seq.toArray
         |> UnitPowers
         
-    member self.HasUnitsEquivalentTo (other : UnitPowers) =
+    member internal self.HasUnitsEquivalentTo (other : UnitPowers) =
         match self.Count = other.Count with
         | true -> Seq.zip self.Powers other.Powers |> Seq.forall (fun (x,y) -> x.Unit = y.Unit && x.Power = y.Power) 
         | false -> false
 
-    member self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
+    member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         match self.Count with
         | 1 ->
             let x = self.Powers.[0]
@@ -304,8 +304,6 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             | 0 -> x
             | _ -> x + " " + self.Unit.BaseUnits.ToString()
     
-    member self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
-
     member self.ConvertTo(unit : UnitOfMeasure) =
         if self.Unit.HasUnitsEquivalentTo unit then
                 Value(self.X * self.Unit.Scale / unit.Scale, unit)
@@ -448,7 +446,8 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     static member (-) (a : Value, b : float)    = Value(a.X - Fraction b, a.Unit)
     static member (-) (a : Value, b : float32)  = Value(a.X - Fraction b, a.Unit)
     
-    static member inline op (a : Value) (b : Value) f =
+    member internal self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
+    static member inline internal op (a : Value) (b : Value) f =
         if a.HasUnitsEquivalentTo b then
             match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
             | (true, true) -> f (a.X * a.Unit.Scale) (b.X * b.Unit.Scale)

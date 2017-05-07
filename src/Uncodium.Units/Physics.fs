@@ -125,16 +125,26 @@ module Physics =
     (* Electromagnetic constants *)
 
     /// Magnetic constant or vacuum permeability.
-    let VacuumPermeability      = Constant("vacuum permeability",           "μₒ",       4 * π * E 10.0 -7,   Newton / (Ampere^2)                    )
-
+    /// https://en.wikipedia.org/wiki/Vacuum_permeability
+    let VacuumPermeability      = Constant("vacuum permeability",           "μₒ",       4 * π * E 1.0 -7,   Newton / (Ampere^2)                    )
+    /// Magnetic constant or vacuum permeability.
+    /// https://en.wikipedia.org/wiki/Vacuum_permeability
+    let μₒ = VacuumPermeability
+    
     /// Electric constant or vacuum permittivity.
-    let VacuumPermittivity      = Constant("vacuum permittivity",           "εₒ",       1 / (VacuumPermeability * c.Pow(2))                         )
+    /// https://en.wikipedia.org/wiki/Vacuum_permittivity.
+    let VacuumPermittivity      = Constant("vacuum permittivity",           "εₒ",       1 / (μₒ * c.Pow(2))                         )
+    /// Electric constant or vacuum permittivity.
+    /// https://en.wikipedia.org/wiki/Vacuum_permittivity.
     let εₒ = VacuumPermittivity
 
     /// The impedance of free space, Zₒ, (more correctly, the wave-impedance of a plane wave in free space)
     /// equals the product of the vacuum permeability μ0 and the speed of light in vacuum cₒ.
-    let ImpedanceOfFreeSpace    = Constant("impedance of free space",       "Zₒ",       VacuumPermeability * c                                      )
-    
+    let ImpedanceOfFreeSpace    = Constant("impedance of free space",       "Zₒ",       μₒ * c)
+    /// The impedance of free space, Zₒ, (more correctly, the wave-impedance of a plane wave in free space)
+    /// equals the product of the vacuum permeability μ0 and the speed of light in vacuum cₒ.
+    let Zₒ = ImpedanceOfFreeSpace
+
     /// The elementary charge, usually denoted as e or sometimes q, is the electric charge carried by a single proton, or equivalently,
     /// the magnitude of the electric charge carried by a single electron, which has charge −e.
     /// To avoid confusion over its sign, e is sometimes called the elementary positive charge.
@@ -143,15 +153,28 @@ module Physics =
     let e = ElementaryCharge
 
     /// Fine-structure constant (also known as Sommerfeld's constant).
-    let FineStructureConstant   = Constant("fine-structure constant",       "α",        (e.Pow(2) * ImpedanceOfFreeSpace) / (4 * π * ħ)             )
+    /// https://en.wikipedia.org/wiki/Fine-structure_constant
+    let FineStructureConstant   = Constant("fine-structure constant",       "α",        (e.Pow(2) * Zₒ) / (4 * π * ħ)             )
+    /// Fine-structure constant (also known as Sommerfeld's constant).
+    /// https://en.wikipedia.org/wiki/Fine-structure_constant
+    let α = FineStructureConstant
 
-    /// Coulomb's constant, the electric force constant, or the electrostatic constant (denoted kₑ) is a proportionality constant in electrodynamics equations.
+    /// Coulomb's constant, the electric force constant, or the electrostatic constant (denoted kₑ)
+    /// is a proportionality constant in electrodynamics equations.
     let CoulombConstant         = Constant("Coulomb constant",              "kₑ",       1 / (4 * π * εₒ)                                            )
+    /// Coulomb's constant, the electric force constant, or the electrostatic constant (denoted kₑ)
+    /// is a proportionality constant in electrodynamics equations.
+    let kₑ = CoulombConstant
 
     /// The unified atomic mass unit (symbol: u) or dalton (symbol: Da) is a standard unit of mass that quantifies mass on an atomic or molecular scale.
     /// It is defined as one twelfth of the mass of an unbound neutral atom of carbon-12 in its nuclear and electronic ground state and at rest,
     /// and has a value of 1.660539040(20)×10−27 kg, or approximately 1.66 yoctograms.
     let UnifiedAtomicMassUnit   = Constant("unified atomic mass unit",      "u",        E 1.660539040 -27,    Kilogram                              )
+    /// The unified atomic mass unit (symbol: u) or dalton (symbol: Da) is a standard unit of mass that quantifies mass on an atomic or molecular scale.
+    /// It is defined as one twelfth of the mass of an unbound neutral atom of carbon-12 in its nuclear and electronic ground state and at rest,
+    /// and has a value of 1.660539040(20)×10−27 kg, or approximately 1.66 yoctograms.
+    let u = UnifiedAtomicMassUnit
+    
     /// The dalton (symbol: Da) or unified atomic mass unit (symbol: u) is a standard unit of mass that quantifies mass on an atomic or molecular scale.
     /// It is defined as one twelfth of the mass of an unbound neutral atom of carbon-12 in its nuclear and electronic ground state and at rest,
     /// and has a value of 1.660539040(20)×10−27 kg, or approximately 1.66 yoctograms.
@@ -198,7 +221,7 @@ module Physics =
 
     /// The ångström (or angstrom) is a unit of length equal to 10^−10 m (one ten-billionth of a meter) or 0.1 nanometer.
     /// Its symbol is Å, a letter in the Swedish alphabet.
-    let Angstrom                = Constant("ångström",                      "Å",        E 10.0 -10,         Meter                                   )
+    let Angstrom                = Constant("ångström",                      "Å",        E 1.0 -10,              Meter                                   )
     
     /// The hartree (symbol: Eh or Ha), also known as the Hartree energy,
     /// is the atomic unit of energy, named after the British physicist Douglas Hartree.

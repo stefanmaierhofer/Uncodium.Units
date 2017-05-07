@@ -21,6 +21,14 @@ open Astronomy
 open Time
 open Information
 open International
+open Uncodium.Units.UK.LiquidVolume
+open Uncodium.Units.US.LiquidVolume
+
+SquareMeter / SquareDecimeter
+
+Pint
+UsPint
+(Pint / UsPint).Scale
 
 3.6 * Kilogram * KilometersPerHour |> string
 
@@ -33,8 +41,11 @@ Kilogram * KilometersPerHour
 
 ((1 * Meter) / (1 * Meter)).Unit
 
+(88 * Kilowatt => PS)
+(88 * Kilowatt => PS) |> string
+(88 * Kilowatt => PS).X
+(88 * Kilowatt => PS).ToFloat()
 
-88 * Kilowatt => PS
 120 * PS => Kilowatt
 
 Photometry.Lux |> string
@@ -46,6 +57,12 @@ Joule / (Mole * Kelvin) |> string
 (Meter.Pow(3)) / (Kilogram * Second.Pow(2)) |> string
 CubicMeter / (Kilogram * Second.Pow(2)) |> string
 
+Angstrom |> string
+ElectronMass |> string
+VacuumPermeability |> string
+VacuumPermittivity |> string
+SpeedOfLight |> string
+ReducedPlanckConstant |> string
 FineStructureConstant |> string
 CoulombConstant |> string
 ElementaryCharge |> string

@@ -85,10 +85,9 @@ type Fraction =
                 if d = 1I then self
                 else Fraction(self.Numerator / d, self.Denominator / d)
 
-        member self.Decimal
-            with get () =
-                let x = self.Simplified
-                decimal x.Numerator / decimal x.Denominator
+        member self.ToFloat () =
+            let x = self.Simplified
+            float x.Numerator / float x.Denominator
                 
         override self.ToString() = sprintf "(%A/%A)" self.Numerator self.Denominator
 

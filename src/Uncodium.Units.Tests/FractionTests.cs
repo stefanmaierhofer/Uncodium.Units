@@ -24,7 +24,7 @@ namespace Uncodium.Units.Tests
         public void CanCreateFraction_double()
         {
             var x = new Fraction(3.1415);
-            Assert.IsTrue(x.Decimal == 3.1415m);
+            Assert.IsTrue(x.ToFloat() == 3.1415);
             Assert.IsTrue(x.Numerator == 31415 && x.Denominator == 10000);
         }
 

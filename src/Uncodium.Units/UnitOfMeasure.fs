@@ -288,9 +288,9 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
     
     override self.ToString () =
         if self.Unit.HasSymbol then
-            string(self.X.Decimal) + " " + self.Unit.Symbol
+            string(self.X.Simplified.ToFloat()) + " " + self.Unit.Symbol
         else
-            string((self.X * self.Unit.Scale).Decimal) + " " + self.Unit.BaseUnits.ToString()
+            string((self.X * self.Unit.Scale).Simplified.ToFloat()) + " " + self.Unit.BaseUnits.ToString()
     
     member self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
 
@@ -306,7 +306,7 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
-    member self.Decimal with get () = (self.X * self.Unit.Scale).Decimal
+    member self.ToFloat () = (self.X * self.Unit.Scale).ToFloat()
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
     
@@ -521,12 +521,14 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
 
     override self.ToString () =
         match self.Unit.HasSymbol with
-        | true -> string(self.X.Decimal) + " " + self.Unit.Symbol
-        | false -> string(self.X.Decimal)
+        | true -> string(self.X.Simplified.ToFloat()) + " " + self.Unit.Symbol
+        | false -> string(self.X.Simplified.ToFloat())
     
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 
     member self.Pow (b : int) = Value(self.X.Pow(b), self.Unit.Pow(b))
+
+    member self.ToFloat () = (self.X * self.Unit.Scale).ToFloat()
 
     static member (=>) (self : Constant, unit : UnitOfMeasure) = Value(self.X, self.Unit) => unit
 

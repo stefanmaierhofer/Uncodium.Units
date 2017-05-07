@@ -23,7 +23,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Meter;
             var r = a + b;
 
-            Assert.IsTrue(r.Decimal == 2);
+            Assert.IsTrue(r.ToFloat() == 2);
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Radian;
             var r = a + b;
 
-            Assert.IsTrue(r.Decimal == 2);
+            Assert.IsTrue(r.ToFloat() == 2);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Centimeter;
             var r = a + b;
 
-            Assert.IsTrue(r.Decimal == 1.01m);
+            Assert.IsTrue(r.ToFloat() == 1.01);
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace Uncodium.Units.Tests
         public void Formatting_13()
         {
             var a = (88 * Kilowatt).ConvertTo(PS);
-            Assert.IsTrue(a.X.Decimal > 119 && a.X.Decimal < 120);
+            Assert.IsTrue(a.X.ToFloat() > 119 && a.X.ToFloat() < 120);
         }
     }
 }

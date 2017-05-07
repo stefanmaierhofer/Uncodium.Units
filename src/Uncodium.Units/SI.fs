@@ -77,7 +77,7 @@ module SI =
     /// Power, radiant flux (SI derived unit).
     let Watt        = U("watt",         "W",    Joule / Second                              )
     /// Electric charge or quantity of electricity (SI derived unit).
-    let Coulomb     = U("coulomb",      "C",    Second * Ampere                             )
+    let Coulomb     = U("coulomb",      "C",    Ampere * Second                             )
     /// Voltage (electrical potential difference), electromotive force (SI derived unit).
     let Volt        = U("volt",         "V",    Watt / Ampere                               )
     /// Capacitance (SI derived unit).

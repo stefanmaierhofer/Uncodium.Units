@@ -167,7 +167,7 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
                 sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale)
             else
                 sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale)
-                
+
     static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
         let neg = powers |> Seq.filter (fun kv -> kv.Value < 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
@@ -249,8 +249,11 @@ and UnitPowers =
 
     static member op_Equality (a : UnitPowers, b : UnitPowers) =
         if a.Count = b.Count then
-            Seq.zip a.Powers b.Powers
-            |> Seq.forall (fun (x, y) -> x.Unit = y.Unit && x.Power = y.Power)
+            if a.Count = 0 then
+                true
+            else
+                Seq.zip a.Powers b.Powers
+                |> Seq.forall (fun (x, y) -> x.Unit = y.Unit && x.Power = y.Power)
         else
             false
 
@@ -259,7 +262,7 @@ and UnitPowers =
     
     override self.Equals(obj) =
         match obj with
-        | :? Value as other -> (self :> IEquatable<_>).Equals(other)
+        | :? UnitPowers as other -> (self :> IEquatable<_>).Equals(other)
         | _ -> false
 
     override self.GetHashCode() = hash (self.Powers)

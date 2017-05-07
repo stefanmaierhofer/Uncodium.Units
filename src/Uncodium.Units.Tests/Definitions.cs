@@ -34,6 +34,17 @@ namespace Uncodium.Units.Tests
         [Test] public void Apothecaries_1()         => Assert.IsTrue(   1 * International.Pound     ==  International.Grain         * 7_000                                 );
         [Test] public void Apothecaries_2()         => Assert.IsTrue(   1 * International.Pound     ==  International.Scruple       * 350                                   );
         [Test] public void Apothecaries_3()         => Assert.IsTrue(   1 * International.Pound     ==  International.Dram          * 256                                   );
+        
+        [Test] public void Kilopond_1()             => Assert.IsTrue(   1 * Kilopond                ==  9.80665 * Newton);
+
+        [Test] public void Poundal_1()              => Assert.IsTrue(   1 * Poundal                 ==  0.138254954376 * Newton);
+
+        [Test] public void PoundForce_1()           => Assert.IsTrue(   1 * PoundForce              ==  4.4482216152605 * Newton);
+
+        // https://en.wikipedia.org/wiki/Newton_metre
+        [Test] public void NewtonMeter_0() => Assert.IsTrue(1 * NewtonMeter == 1 * Newton * Meter);
+        [Test] public void NewtonMeter_1() => Assert.IsTrue(1 * Joule == 1 * Newton * Meter);
+        [Test] public void NewtonMeter_2() => Assert.IsTrue((1 * Dyne * Centimeter).ToFloat() == Fraction.Pow(10, -7).ToFloat());
 
         /*
          * TODO:

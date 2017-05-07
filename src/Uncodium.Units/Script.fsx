@@ -24,8 +24,24 @@ open International
 open Uncodium.Units.UK.LiquidVolume
 open Uncodium.Units.US.LiquidVolume
 
-Decimeter.Pow(2)
-1 * SquareMeter + 50 * SquareDecimeter
+(1 * Dyne * Centimeter).ToFloat() = Fraction.Pow(10, -7).ToFloat()
+
+VacuumPermeability |> string
+
+c
+c * c
+c.Pow(2)
+
+Meter
+Meter*Meter
+Meter.Pow(2)
+
+e
+e.Pow(2)
+Zₒ
+ħ
+FineStructureConstant
+
 
 1 * Mile.Pow(2)
 
@@ -86,7 +102,7 @@ ClassicalElectronRadius |> string
 RydbergConstant |> string
 WBosonMass 
 ZBosonMass |> string
-HartreeEnergy |> string
+Hartree |> string
 
 Electronvolt/SpeedOfLight.Pow(2)
 

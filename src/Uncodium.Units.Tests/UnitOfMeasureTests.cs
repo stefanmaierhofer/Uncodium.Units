@@ -15,6 +15,8 @@ namespace Uncodium.Units.Tests
     [TestFixture]
     public class UnitOfMeasureTests
     {
+        #region Construction
+
         [Test] public void NullNameWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure(null, "foo"));
         [Test] public void NullSymbolWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure("foo", null));
         [Test] public void EmptyNameWillNotThrow() => new UnitOfMeasure("", "foo");
@@ -45,6 +47,8 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(cm.BaseUnits.Powers[0].Power == 1);
         }
 
+        #endregion
+        
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
         {
@@ -108,7 +112,7 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
-            Assert.IsTrue(x.BaseUnits.Powers[0].Unit == m);
+            Assert.IsTrue(x.BaseUnits.Powers[0].Unit == Meter);
             Assert.IsTrue(x.BaseUnits.Powers[0].Power == 2);
         }
 
@@ -408,6 +412,14 @@ namespace Uncodium.Units.Tests
         public void Pow_3d()
         {
             var x = Decimeter.Pow(2);
+            var p = x.BaseUnits.Powers[0];
+            Assert.IsTrue(p.Power == 2);
+        }
+
+        [Test]
+        public void Pow_3e()
+        {
+            var x = Meter.Pow(2);
             var p = x.BaseUnits.Powers[0];
             Assert.IsTrue(p.Power == 2);
         }

@@ -3,17 +3,18 @@
 open System
 open System.Collections.Generic
 
-type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale : Fraction) =
+type UnitOfMeasure =
 
-    do
+    val Name : string
+    val Symbol : string
+    val BaseUnits : UnitPowers
+    val Scale : Fraction
+    
+    new(name : string, symbol : string, baseUnits : UnitPowers, scale : Fraction) =
         if name = null then invalidArg "name" "UnitOfMeasure.Name must not be null."
         if symbol = null then invalidArg "symbol" "UnitOfMeasure.Symbol must not be null."
+        { Name = name; Symbol = symbol; BaseUnits = baseUnits; Scale = scale.Simplified }
 
-    member self.Name = name
-    member self.Symbol = symbol
-    member self.BaseUnits = baseUnits
-    member self.Scale = scale
-    
     new(name : string, symbol : string, unit : UnitOfMeasure, scale : Fraction) =
         match unit.IsDimensionLess with
 
@@ -50,8 +51,8 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
         UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)
         
     member self.IsDimensionLess with get () = self.BaseUnits.IsDimensionLess
-    member self.HasName with get() = self.Name <> ""
-    member self.HasSymbol with get() = self.Symbol <> ""
+    member internal self.HasName with get() = self.Name <> ""
+    member internal self.HasSymbol with get() = self.Symbol <> ""
 
     static member None = UnitOfMeasure("dimensionless", "-")
     
@@ -117,7 +118,7 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
                 a.Symbol + "/" + b.Symbol
             else
                 ""
-        UnitOfMeasure("", symbol, powers, a.Scale / b.Scale)
+        UnitOfMeasure("", symbol, powers, (a.Scale / b.Scale).Simplified)
 
     static member (/) (a : int, b : UnitOfMeasure) =
         let powers =
@@ -146,6 +147,8 @@ type UnitOfMeasure(name : string, symbol : string, baseUnits : UnitPowers, scale
                 else
                     ""
             UnitOfMeasure("", symbol, powers, self.Scale.Pow(b))
+
+    member self.Float with get () = self.Scale.ToFloat()
 
     member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         if obj.ReferenceEquals(self, other) then

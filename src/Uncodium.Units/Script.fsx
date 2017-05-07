@@ -48,6 +48,8 @@ FineStructureConstant
 1.0 * Pint + 1.0 * UsPint => Liter |> string
 
 1 * SquareMile / (1 * Acre) |> string
+SquareMile / Acre
+Acre
 
 1 * SquareYard => SquareFoot |> string
 

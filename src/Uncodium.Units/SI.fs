@@ -4,7 +4,7 @@
 module SI =
 
     open Fun
-    
+
     let internal prefix (name : string) (symbol : string) (a : int) (b : int)
         = UnitPrefix(name, symbol, F.Pow(a, b))
 

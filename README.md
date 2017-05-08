@@ -1,6 +1,6 @@
 # Get started
 
-* How many acres are in a square mile?
+### How many acres are in a square mile?
 
 ```F#
 // F# Interactive
@@ -12,7 +12,7 @@ val it : float = 640.0
 > Print(SquareMile / Acre);
 [640]
 ```
-* The difference between a pint in the UK and in the US, in liters?
+### The difference between a pint in the UK and in the US, in liters?
 
 ```F#
 // F# Interactive

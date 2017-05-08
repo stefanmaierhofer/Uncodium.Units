@@ -161,15 +161,24 @@ type UnitOfMeasure =
             | _ -> false
 
     override self.ToString () = 
-        match self.IsDimensionLess with
-        | true -> sprintf "%s (%s) %s" self.Name self.Symbol (string self.Scale)
-        | false -> 
-            let ps : UnitPower[] = self.BaseUnits.Powers
-            if self.BaseUnits.Count = 1 && (ps.[0].Power = 1) then
-                let p = ps.[0].Unit
-                sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale)
-            else
-                sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale)
+        let ps : UnitPower[] = self.BaseUnits.Powers
+        if self.BaseUnits.Count = 1 && (ps.[0].Power = 1) then
+            let p = ps.[0].Unit
+            match (p.HasName, p.HasSymbol, p.Scale.Denominator <> 1I) with
+            | (true, true, false) -> sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale.Numerator)
+            | (false, true, true) -> sprintf "%s %s" p.Symbol (string p.Scale)
+            | (false, true, false) -> sprintf "%s %s" p.Symbol (string p.Scale.Numerator)
+            | (false, false, true) -> sprintf "%s" (string p.Scale)
+            | (false, false, false) -> sprintf "%s" (string p.Scale.Numerator)
+            | _ -> sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale)
+        else
+            match (self.HasName, self.HasSymbol, self.Scale.Denominator <> 1I) with
+            | (true, true, false) -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale.Numerator)
+            | (false, true, true) -> sprintf "%s %s %s" self.Symbol (string self.BaseUnits) (string self)
+            | (false, true, false) -> sprintf "%s %s %s" self.Symbol (string self.BaseUnits) (string self.Scale.Numerator)
+            | (false, false, true) -> sprintf "%s %s" (string self.BaseUnits) (string self.Scale)
+            | (false, false, false) -> sprintf "%s %s" (string self.BaseUnits) (string self.Scale.Numerator)
+            | _ -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale)
 
     static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)

@@ -49,6 +49,7 @@ FineStructureConstant
 
 1 * SquareMile / (1 * Acre) |> string
 SquareMile / Acre
+1 * SquareMile => SquareKilometer
 Acre
 
 1 * SquareYard => SquareFoot |> string

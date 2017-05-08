@@ -24,7 +24,7 @@ open International
 open Uncodium.Units.UK.LiquidVolume
 open Uncodium.Units.US.LiquidVolume
 
-(1 * Dyne * Centimeter).ToFloat() = Fraction.Pow(10, -7).ToFloat()
+float(1 * Dyne * Centimeter) = Fraction.Pow(10, -7).ToFloat()
 
 VacuumPermeability |> string
 

@@ -56,6 +56,26 @@ namespace Uncodium.Units.Tests
 
         #endregion
 
+        #region Float
+
+        [Test]
+        public void Float1()
+        {
+            var x = new UnitOfMeasure("foo", "foo", Meter, 7.5);
+            var f = (float)x;
+            Assert.IsTrue(f == 7.5);
+        }
+        
+        [Test]
+        public void Float2()
+        {
+            var x = new UnitOfMeasure("foo", "foo", Centimeter, 2);
+            var f = (double)x;
+            Assert.IsTrue(f == 0.02);
+        }
+        
+        #endregion
+
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
         {

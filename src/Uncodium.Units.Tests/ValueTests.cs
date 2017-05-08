@@ -23,7 +23,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Meter;
             var r = a + b;
 
-            Assert.IsTrue(r.ToFloat() == 2);
+            Assert.IsTrue((float)r == 2);
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Radian;
             var r = a + b;
 
-            Assert.IsTrue(r.ToFloat() == 2);
+            Assert.IsTrue((float)r == 2);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Uncodium.Units.Tests
             var b = 1 * Centimeter;
             var r = a + b;
 
-            Assert.IsTrue(r.ToFloat() == 1.01);
+            Assert.IsTrue((double)r == 1.01);
         }
 
         [Test]
@@ -94,7 +94,44 @@ namespace Uncodium.Units.Tests
 
         #endregion
 
-        
+        #region Float
+
+        [Test]
+        public void Float1()
+        {
+            var x = 7.5 * Meter;
+            var f = (float)x;
+            Assert.IsTrue(f == 7.5);
+        }
+
+        [Test]
+        public void Float1const()
+        {
+            var x = new Constant("foo", "foo", 7.5, Meter);
+            var f = (float)x;
+            Assert.IsTrue(f == 7.5);
+        }
+
+        [Test]
+        public void Float2()
+        {
+            var x = 7.5 * Centimeter;
+            var f = (float)x;
+            Assert.IsTrue(f == 7.5);
+        }
+
+        [Test]
+        public void Float2const()
+        {
+            var x = new Constant("foo", "foo", 7.5, Centimeter);
+            var f = (float)x;
+            Assert.IsTrue(f == 7.5);
+        }
+
+        #endregion
+
+        #region Dimensions
+
         [Test]
         public void Dimensions_1()
         {
@@ -120,6 +157,10 @@ namespace Uncodium.Units.Tests
             Assert.IsTrue(a.X.Numerator == 10);
             Assert.IsTrue(a.X.Denominator == 1);
         }
+
+        #endregion
+
+        #region Formatting
 
         [Test] public void Formatting_1() => Assert.IsTrue((80 * Centimeter + 2 * Decimeter).ToString() == "100 cm");
         [Test] public void Formatting_2() => Assert.IsTrue((2 * Decimeter + 80 * Centimeter).ToString() == "10 dm");
@@ -164,5 +205,7 @@ namespace Uncodium.Units.Tests
             var a = (88 * Kilowatt).ConvertTo(PS);
             Assert.IsTrue(a.X.ToFloat() > 119 && a.X.ToFloat() < 120);
         }
+
+        #endregion
     }
 }

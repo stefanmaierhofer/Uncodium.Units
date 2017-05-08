@@ -44,7 +44,15 @@ namespace Uncodium.Units.Tests
         // https://en.wikipedia.org/wiki/Newton_metre
         [Test] public void NewtonMeter_0() => Assert.IsTrue(1 * NewtonMeter == 1 * Newton * Meter);
         [Test] public void NewtonMeter_1() => Assert.IsTrue(1 * Joule == 1 * Newton * Meter);
-        [Test] public void NewtonMeter_2() => Assert.IsTrue((1 * Dyne * Centimeter).ToFloat() == Fraction.Pow(10, -7).ToFloat());
+
+        [Test]
+        public void NewtonMeter_2()
+        {
+            var a = 1 * Dyne * Centimeter;
+            var af = (double)(a.X * a.Unit.Scale);
+            var b = Fraction.Pow(10, -7).ToFloat();
+            Assert.IsTrue(af == b);
+        }
 
         /*
          * TODO:

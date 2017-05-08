@@ -334,7 +334,10 @@ and Value(x : Fraction, unit : UnitOfMeasure) =
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
-    member self.ToFloat () = (self.X * self.Unit.Scale).ToFloat()
+    static member op_Explicit(source: Value) : float =
+        match source.Unit.HasSymbol with
+        | true -> source.X.ToFloat()
+        | false -> (source.X * source.Unit.Scale).ToFloat()
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
     
@@ -561,8 +564,11 @@ and Constant(name : string, symbol : string, x : Fraction, unit : UnitOfMeasure)
     member self.HasUnitsEquivalentTo (other : Constant) = Value(self.X, self.Unit).HasUnitsEquivalentTo(Value(other.X, other.Unit))
 
     member self.Pow (b : int) = Value(self.X.Pow(b), self.Unit.Pow(b))
-
-    member self.ToFloat () = (self.X * self.Unit.Scale).ToFloat()
+    
+    static member op_Explicit(source: Constant) : float =
+        match source.Unit.HasSymbol with
+        | true -> source.X.ToFloat()
+        | false -> (source.X * source.Unit.Scale).ToFloat()
 
     static member (=>) (self : Constant, unit : UnitOfMeasure) = Value(self.X, self.Unit) => unit
 

@@ -7,7 +7,6 @@ module Photometry =
     
     open SI
     open Physics
-    open Time
 
     /// Luminous flux Φᵥ or luminous power [lm]. Luminous energy per unit time.
     let LuminousFlux            = UnitOfMeasure("lumen",                    "lm",       Candela * Steradian         )       

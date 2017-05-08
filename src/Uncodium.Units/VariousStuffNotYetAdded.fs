@@ -1,14 +1,8 @@
 ﻿namespace Uncodium.Units
 
-open System
-open System.Numerics
- 
 module internal VariousStuffNotYetAdded =
     
-    open Fun
-    open Prefix
     open SI
-    open Time
          
     // Lengths
     let Point               = U("point",                    "p",        Meter,              352_777_778 * F.Pow(10, -12)      )

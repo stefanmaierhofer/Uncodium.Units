@@ -6,7 +6,6 @@
 #load "US.fs"
 #load "Typography.fs"
 #load "Math.fs"
-#load "Time.fs"
 #load "Physics.fs"
 #load "Photometry.fs"
 #load "Astronomy.fs"
@@ -18,7 +17,6 @@ open Uncodium.Units
 open SI
 open Physics
 open Astronomy
-open Time
 open Information
 open International
 open Uncodium.Units.UK.LiquidVolume

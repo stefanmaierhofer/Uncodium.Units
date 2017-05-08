@@ -1,14 +1,9 @@
 ﻿namespace Uncodium.Units
 
-open System
-open System.Numerics
-  
 module Physics =
 
     open Fun
-    open Prefix
     open SI
-    open Time
     
     let private kg = Kilogram
     let private m = Meter

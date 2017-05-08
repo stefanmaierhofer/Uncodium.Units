@@ -1,15 +1,11 @@
 ﻿namespace Uncodium.Units
 
-open System
-open System.Numerics
-  
 module Nautical =
 
-    open Fun
-    open Time
+    open SI
 
     /// 1 nautical mile (NM or nmi) is equal to 1 852 meters.
-    let NauticalMile        = U("nautical mile",            "nmi",  SI.Meter,             1_852         )
+    let NauticalMile        = U("nautical mile",            "nmi",  Meter,             1_852         )
     
     /// 1 knot is equal to 1 nautical mile per hour.
     let Knot                = U("international knot",       "kn",   NauticalMile/Hour                   ) 

@@ -5,8 +5,19 @@ open System.Numerics
   
 module Information =
     
-    open Prefix
     open SI
+    
+    (*
+        Base-2 multiples
+     *) 
+    let Kibi  = prefix "kibi"   "Ki"   1024   1
+    let Mebi  = prefix "mebi"   "Mi"   1024   2
+    let Gibi  = prefix "gibi"   "Gi"   1024   3
+    let Tebi  = prefix "tebi"   "Ti"   1024   4
+    let Pebi  = prefix "pebi"   "Pi"   1024   5
+    let Exbi  = prefix "exbi"   "Ei"   1024   6
+    let Zebi  = prefix "zebi"   "Zi"   1024   7
+    let Yobi  = prefix "yobi"   "Yi"   1024   8
 
     /// The basic unit of information in computing and digital communications.
     /// A bit can have only one of two values, most commonly represented as either a 0 or 1.

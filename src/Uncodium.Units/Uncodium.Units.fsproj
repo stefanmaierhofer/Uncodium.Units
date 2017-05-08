@@ -59,7 +59,6 @@
     <Compile Include="US.fs" />
     <Compile Include="Typography.fs" />
     <Compile Include="Math.fs" />
-    <Compile Include="Time.fs" />
     <Compile Include="Physics.fs" />
     <Compile Include="Photometry.fs" />
     <Compile Include="Astronomy.fs" />

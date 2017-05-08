@@ -3,7 +3,6 @@ using System;
 using static Uncodium.Units.International;
 using static Uncodium.Units.Physics;
 using static Uncodium.Units.SI;
-using static Uncodium.Units.Time;
 
 namespace Uncodium.Units.Tests
 {

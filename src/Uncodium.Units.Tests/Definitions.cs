@@ -1,13 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static Uncodium.Units.SI;
-using static Uncodium.Units.Time;
 using static Uncodium.Units.Physics;
+using static Uncodium.Units.SI;
 
 namespace Uncodium.Units.Tests
 {

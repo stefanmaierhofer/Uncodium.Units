@@ -1,10 +1,10 @@
-namespace Uncodium.Units
+﻿namespace Uncodium.Units
 
 /// http://www.bipm.org/utils/common/pdf/si_brochure_8_en.pdf
 module SI =
 
     open Fun
-	
+
     let internal prefix (name : string) (symbol : string) (a : int) (b : int)
         = UnitPrefix(name, symbol, F.Pow(a, b))
 
@@ -22,8 +22,7 @@ module SI =
     let Exa   = prefix "exa"    "E"    1000   6
     let Zetta = prefix "zetta"  "Z"    1000   7
     let Yotta = prefix "yotta"  "Y"    1000   8
-
-	
+    
     let Deci  = prefix "deci"   "d"      10  -1
     let Centi = prefix "centi"  "c"      10  -2
     let Milli = prefix "milli"  "m"    1000  -1

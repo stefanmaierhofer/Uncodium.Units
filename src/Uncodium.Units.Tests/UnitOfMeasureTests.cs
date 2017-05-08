@@ -1,14 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Uncodium.Units;
+using static Uncodium.Units.International;
+using static Uncodium.Units.Physics;
 using static Uncodium.Units.SI;
 using static Uncodium.Units.Time;
-using static Uncodium.Units.Physics;
 
 namespace Uncodium.Units.Tests
 {
@@ -48,7 +43,19 @@ namespace Uncodium.Units.Tests
         }
 
         #endregion
-        
+
+        #region ToString
+
+        [Test]
+        public void ToString1()
+        {
+            var x = SquareMile / Acre;
+            var s = x.ToString();
+            Assert.IsTrue(s == "640");
+        }
+
+        #endregion
+
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
         {

@@ -88,7 +88,9 @@ type Fraction =
         member self.ToFloat () =
             let x = self.Simplified
             float x.Numerator / float x.Denominator
-                
+        
+        static member inline op_Explicit(source: Fraction) : float = source.ToFloat()
+
         override self.ToString() = sprintf "(%A/%A)" self.Numerator self.Denominator
 
         static member (*) (a : Fraction, b : Fraction)  = Fraction(a.Numerator * b.Numerator,   a.Denominator * b.Denominator)

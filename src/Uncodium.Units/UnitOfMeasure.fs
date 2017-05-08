@@ -148,7 +148,9 @@ type UnitOfMeasure =
                     ""
             UnitOfMeasure("", symbol, powers, self.Scale.Pow(b))
 
-    member self.Float with get () = self.Scale.ToFloat()
+    member inline self.Float with get () = float self.Scale
+
+    static member inline op_Explicit(source: UnitOfMeasure) : float = source.Float
 
     member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
         if obj.ReferenceEquals(self, other) then
@@ -172,13 +174,14 @@ type UnitOfMeasure =
             | (false, false, false) -> sprintf "%s" (string p.Scale.Numerator)
             | _ -> sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale)
         else
+            let bu = if self.IsDimensionLess then "" else " " + (string self.BaseUnits)
             match (self.HasName, self.HasSymbol, self.Scale.Denominator <> 1I) with
-            | (true, true, false) -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale.Numerator)
-            | (false, true, true) -> sprintf "%s %s %s" self.Symbol (string self.BaseUnits) (string self)
-            | (false, true, false) -> sprintf "%s %s %s" self.Symbol (string self.BaseUnits) (string self.Scale.Numerator)
-            | (false, false, true) -> sprintf "%s %s" (string self.BaseUnits) (string self.Scale)
-            | (false, false, false) -> sprintf "%s %s" (string self.BaseUnits) (string self.Scale.Numerator)
-            | _ -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.BaseUnits) (string self.Scale)
+            | (true, true, false) -> sprintf "%s (%s) %s%s" self.Name self.Symbol (string self.Scale.Numerator) bu
+            | (false, true, true) -> sprintf "%s %s%s" self.Symbol (string self) bu
+            | (false, true, false) -> sprintf "%s %s %s" self.Symbol (string self.Scale.Numerator) bu
+            | (false, false, true) -> sprintf "%s%s" (string self.Scale) bu
+            | (false, false, false) -> sprintf "%s%s" (string self.Scale.Numerator) bu
+            | _ -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.Scale) bu
 
     static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)

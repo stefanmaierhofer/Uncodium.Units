@@ -1,5 +1,15 @@
 # Get started
 
+## Build
+
+First of all, run `build` command to install dependencies.
+
+In *Visual Studio Code* open repository directory. Use *Ctrl-Shift-B* to build.
+
+In *Visual Studio 2017* open `src/Uncodium.Units.sln`.
+
+## Examples
+
 ### How many acres are in a square mile?
 
 ```F#

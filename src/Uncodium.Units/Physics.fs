@@ -6,9 +6,9 @@ module Physics =
     open SI
     
     let private kg = Kilogram
-    let private m = Meter
-    let private s = Second
-    let private π = F.Pi
+    let private m  = Meter
+    let private s  = Second
+    let private π  = Rational.Pi
     
     /// The speed of light in vacuum (c).
     let SpeedOfLight            = Constant("speed of light",                "c",        299_792_458,            Meter / Second                      )
@@ -433,7 +433,7 @@ module Physics =
     /// The number of rotations around a fixed axis in one minute.
     /// It is used as a measure of rotational speed of a mechanical component.
     /// https://en.wikipedia.org/wiki/Revolutions_per_minute
-    let RevolutionsPerMinute    = U("revolutions per minute",   "rpm",      Hertz,              F(1, 60)                )
+    let RevolutionsPerMinute    = U("revolutions per minute",   "rpm",      Hertz,              Rational(1, 60)         )
     
     /// One dyne is equal to 10 micronewtons.
     /// https://en.wikipedia.org/wiki/Dyne
@@ -464,14 +464,14 @@ module Physics =
 
     /// 1 horsepower (hp) is equal to 745.7 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
-    let HorsepowerImperial      = U("imperial horsepower",      "hp",   Watt,                   F(7457, 10)             )
+    let HorsepowerImperial      = U("imperial horsepower",      "hp",   Watt,                   Rational(7457, 10)      )
     /// 1 horsepower (hp) is equal to 745.7 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
     let HP                      = HorsepowerImperial
 
     /// 1 horsepower (PS) is equal to 735.5 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
-    let HorsepowerMetric        = U("metric horsepower",        "PS",   Watt,                   F(7_355, 10)            )
+    let HorsepowerMetric        = U("metric horsepower",        "PS",   Watt,                   Rational(7_355, 10)     )
     /// 1 horsepower (PS) is equal to 735.5 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
     let PS                      = HorsepowerMetric
@@ -479,7 +479,7 @@ module Physics =
     /// 1 BTU (British Thermal Unit) is equal to 1055.06 joules.
     /// See ISO 31-4 on Quantities and units—Part 4: Heat (https://books.google.com/books?id=-ZveBwAAQBAJ&pg=PA19-IA35).
     /// https://en.wikipedia.org/wiki/British_thermal_unit
-    let BTU                     = U("british thermal unit",     "BTU",  Joule,                  F(105506, 100)          )
+    let BTU                     = U("british thermal unit",     "BTU",  Joule,                  Rational(105506, 100)   )
     
     /// Pressure, stress (SI derived unit).
     let Kilopascal              = Kilo * Pascal
@@ -502,7 +502,7 @@ module Physics =
     /// The barye (symbol: Ba), or sometimes barad, barrie, bary, baryd, baryed, or barie,
     /// is the centimetre–gram–second (CGS) unit of pressure. It is equal to 1 dyne per square centimetre.
     /// https://en.wikipedia.org/wiki/Barye
-    let Barye                   = U("barye",                    "Ba",   Pascal,                 F(1, 10)                )
+    let Barye                   = U("barye",                    "Ba",   Pascal,                 Rational(1, 10)         )
     
     /// The pound per square inch or, more accurately, pound-force per square inch (symbol: lbf/in2; abbreviation: psi)
     /// is a unit of pressure or of stress based on avoirdupois units.

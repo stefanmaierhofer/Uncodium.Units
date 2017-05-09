@@ -51,8 +51,8 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Fraction.fs" />
-    <Compile Include="UnitOfMeasure.fs" />
+    <Compile Include="Rational.fs" />
+    <Compile Include="Unit.fs" />
     <Compile Include="SI.fs" />
     <Compile Include="International.fs" />
     <Compile Include="UK.fs" />

@@ -8,10 +8,10 @@ module Math =
     open Fun
 
     /// The ratio of a circle's circumference to its diameter.
-    let Pi                      = Constant("Pi", "π", Fraction.Pi)
+    let Pi                      = Constant("Pi", "π", Rational.Pi)
 
     /// The base of the natural logarithm.
-    let e                       = Constant("e", "e", Fraction.e)
+    let e                       = Constant("e", "e", Rational.e)
     
     
    

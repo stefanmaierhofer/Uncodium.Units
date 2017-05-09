@@ -13,7 +13,7 @@ module International =
     *)
 
     /// 1 inch is equal to 1/12 of a foot, and standardised as exactly 2.54 centimeters.
-    let Inch                = U("inch",                 "in",       Meter,                  F(254, 10_000)                  )
+    let Inch                = U("inch",                 "in",       Meter,                  Rational(254, 10_000)           )
     /// 1 foot is equal to 12 inches, and standardised as exactly 0.3048 meters.
     let Foot                = U("foot",                 "ft",       Inch,                   12                              )
     /// 1 yard is equal to 3 feet, or 36 inches, and standardised as exactly 0.9144 meters.
@@ -21,13 +21,13 @@ module International =
     /// 1 chain (UK) is equal to 22 yards. For US customary unit see Us.Survey.Chain.
     let Chain               = U("chain",                "ch",       Yard,                   22I                             )
     /// 1 furlong (UK) is equal 220 yards. For US customary unit see Us.Survey.Furlong.
-    let Furlong             = U("furlong",              "fur",      Yard,                  220I                             )
+    let Furlong             = U("furlong",              "fur",      Yard,                   220I                            )
     /// 1 mile is equal to 5 280 feet, or 1 760 yards, and standardised as exactly 1,609.344 meters.
     let Mile                = U("mile",                 "ml",       Yard,                   1_760                           )
     /// 1 thou (or mil) is equal to 1/1000 of an inch.
-    let Thou                = U("thou",                 "th",       Inch,                   F(1, 1_000)                     )
+    let Thou                = U("thou",                 "th",       Inch,                   Rational(1, 1_000)              )
     /// 1 mil (or thou) is equal to 1/1000 of an inch.
-    let Mil                 = U("mil",                  "mil",      Inch,                   F(1, 1_000)                     )
+    let Mil                 = U("mil",                  "mil",      Inch,                   Rational(1, 1_000)              )
 
     (*
         Units of area
@@ -43,9 +43,9 @@ module International =
     let SquareMile          = U("square mile",          "mi²",      Mile ^ 2                                                )
     
     /// 1 perch (UK) is equal to the area of 1 rod by 1 rod.
-    let Perch               = U("perch",                "perch",    Furlong ^ 2,            F(1, 16)                        )
+    let Perch               = U("perch",                "perch",    Furlong ^ 2,            Rational(1, 16)                 )
     /// 1 rood (UK) is equal to the area of 1 furlong by 1 rod.
-    let Rood                = U("rood",                 "rood",     Furlong ^ 2,            F(1, 4)                         )
+    let Rood                = U("rood",                 "rood",     Furlong ^ 2,            Rational(1, 4)                  )
     /// 1 acre (UK) is equal to 4 840 sq yd. For US customary unit see Us.Survey.Acre.
     let Acre                = U("acre",                 "ac",       Furlong * Chain                                         )
 
@@ -69,13 +69,13 @@ module International =
     (* Avoirdupois weights (general use) *)
 
     /// One pound (avoirdupois) is equal to 16 ounces (avoirdupois), and standardised as exactly 0.45359237 kilograms.
-    let Pound               = U("pound (avoirdupois)",  "lb",       Kilogram,               F(45_359_237, 100_000_000)      )
+    let Pound               = U("pound (avoirdupois)",  "lb",       Kilogram,               Rational(45_359_237, 100_000_000))
     /// One grain (avoirdupois) is equal to 1/7000 of an pound (avoirdupois).
-    let Grain               = U("grain (avoirdupois)",  "gr",       Pound,                  F(1, 7_000)                     )
+    let Grain               = U("grain (avoirdupois)",  "gr",       Pound,                  Rational(1, 7_000)              )
     /// One dram (avoirdupois) is equal to 27 11/32 grains (avoirdupois), or 1/16 of an ounce (avoirdupois).
-    let Dram                = U("dram (avoirdupois)",   "dr",       Grain,                  27 + F(11, 32)                  )
+    let Dram                = U("dram (avoirdupois)",   "dr",       Grain,                  27 + Rational(11, 32)           )
     /// One ounce (avoirdupois) is equal to 1/16 of a pound (avoirdupois).
-    let Ounce               = U("ounce (avoirdupois)",  "oz",       Pound,                  F(1, 16)                        )
+    let Ounce               = U("ounce (avoirdupois)",  "oz",       Pound,                  Rational(1, 16)                 )
     /// One stone (UK) is equal to 14 pounds (avoirdupois).
     let Stone               = U("stone",                "st",       Pound,                  14                              )
     /// One quarter (UK) is equal to 28 pounds (avoirdupois).

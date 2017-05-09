@@ -22,7 +22,7 @@ namespace Uncodium.Units.Tests
             var m = new UnitOfMeasure("meter", "m");
             Assert.IsTrue(m.Name == "meter");
             Assert.IsTrue(m.Symbol == "m");
-            Assert.IsTrue(m.Scale == Fraction.One);
+            Assert.IsTrue(m.Scale == Rational.One);
             Assert.IsTrue(m.IsDimensionLess == true);
             Assert.IsTrue(m.BaseUnits.Count == 0);
         }
@@ -31,10 +31,10 @@ namespace Uncodium.Units.Tests
         public void CanCreateScaledUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
-            var cm = new UnitOfMeasure("centimeter", "cm", m, new Fraction(1, 100));
+            var cm = new UnitOfMeasure("centimeter", "cm", m, new Rational(1, 100));
             Assert.IsTrue(cm.Name == "centimeter");
             Assert.IsTrue(cm.Symbol == "cm");
-            Assert.IsTrue(cm.Scale == new Fraction(1, 100));
+            Assert.IsTrue(cm.Scale == new Rational(1, 100));
             Assert.IsTrue(cm.IsDimensionLess == false);
             Assert.IsTrue(cm.BaseUnits.Count == 1);
             Assert.IsTrue(cm.BaseUnits.Powers[0].Unit == m);
@@ -83,7 +83,7 @@ namespace Uncodium.Units.Tests
 
             Assert.IsTrue(u.Name == "");
             Assert.IsTrue(u.Symbol == "");
-            Assert.IsTrue(u.Scale == Fraction.One);
+            Assert.IsTrue(u.Scale == Rational.One);
             Assert.IsTrue(u.IsDimensionLess == true);
             Assert.IsTrue(u.BaseUnits.Count == 0);
         }
@@ -92,12 +92,12 @@ namespace Uncodium.Units.Tests
         public void UnitPerSameScaledUnitYieldsScaledDimensionlessUnit()
         {
             var m = new UnitOfMeasure("meter", "m");
-            var cm = new UnitOfMeasure("centimeter", "cm", m, new Fraction(1, 100));
+            var cm = new UnitOfMeasure("centimeter", "cm", m, new Rational(1, 100));
             var u = m / cm;
 
             Assert.IsTrue(u.Name == "");
             Assert.IsTrue(u.Symbol == "");
-            Assert.IsTrue(u.Scale == new Fraction(100, 1));
+            Assert.IsTrue(u.Scale == new Rational(100, 1));
             Assert.IsTrue(u.IsDimensionLess == true);
             Assert.IsTrue(u.BaseUnits.Count == 0);
         }
@@ -109,7 +109,7 @@ namespace Uncodium.Units.Tests
             var s = new UnitOfMeasure("second", "s");
             var x = m / s;
 
-            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.Scale == Rational.One);
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 2);
@@ -124,7 +124,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Meter / Meter;
 
-            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.Scale == Rational.One);
             Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
         }
@@ -134,7 +134,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Meter * Meter;
 
-            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.Scale == Rational.One);
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
@@ -149,7 +149,7 @@ namespace Uncodium.Units.Tests
             var b = Meter / Meter;
             var x = a / b;
 
-            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.Scale == Rational.One);
             Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
         }
@@ -161,7 +161,7 @@ namespace Uncodium.Units.Tests
             var b = Meter / Meter;
             var x = a * b;
 
-            Assert.IsTrue(x.Scale == Fraction.One);
+            Assert.IsTrue(x.Scale == Rational.One);
             Assert.IsTrue(x.IsDimensionLess == true);
             Assert.IsTrue(x.BaseUnits.Count == 0);
         }
@@ -171,7 +171,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer / Hour;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 3600));
+            Assert.IsTrue(x.Scale == new Rational(1000, 3600));
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 2);
@@ -186,7 +186,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Centimeter;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Scale == new Rational(1000, 100));
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
@@ -199,7 +199,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Centimeter * Kilometer;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Scale == new Rational(1000, 100));
             Assert.IsTrue(x.IsDimensionLess == false);
 
             Assert.IsTrue(x.BaseUnits.Count == 1);
@@ -230,7 +230,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer / Hour;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 3600));
+            Assert.IsTrue(x.Scale == new Rational(1000, 3600));
             Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "km/h");
         }
@@ -240,7 +240,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Hour;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000 * 3600));
+            Assert.IsTrue(x.Scale == new Rational(1000 * 3600));
             Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "km*h");
         }
@@ -250,7 +250,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Kilometer * Centimeter;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Scale == new Rational(1000, 100));
             Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "");
         }
@@ -260,7 +260,7 @@ namespace Uncodium.Units.Tests
         {
             var x = Centimeter * Kilometer;
 
-            Assert.IsTrue(x.Scale == new Fraction(1000, 100));
+            Assert.IsTrue(x.Scale == new Rational(1000, 100));
             Assert.IsTrue(x.Name == "");
             Assert.IsTrue(x.Symbol == "");
         }
@@ -423,7 +423,7 @@ namespace Uncodium.Units.Tests
         public void Pow_3b()
         {
             var x = Decimeter.Pow(2);
-            Assert.IsTrue(x.Scale == new Fraction(1, 100));
+            Assert.IsTrue(x.Scale == new Rational(1, 100));
         }
 
         [Test]

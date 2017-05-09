@@ -1,5 +1,5 @@
-﻿#load "Fraction.fs"
-#load "UnitOfMeasure.fs"
+﻿#load "Rational.fs"
+#load "Unit.fs"
 #load "SI.fs"
 #load "International.fs"
 #load "UK.fs"
@@ -22,7 +22,7 @@ open International
 open Uncodium.Units.UK.LiquidVolume
 open Uncodium.Units.US.LiquidVolume
 
-float(1 * Dyne * Centimeter) = Fraction.Pow(10, -7).ToFloat()
+float(1 * Dyne * Centimeter) = Rational.Pow(10, -7).ToFloat()
 
 VacuumPermeability |> string
 
@@ -138,7 +138,7 @@ StandardGravity |> string
 
 1 / (2 * Meter) |> string
 
-Fraction(254, 10_000) * Fraction(3_937, 100)
+Rational(254, 10_000) * Rational(3_937, 100)
 
 1 * Newton
 

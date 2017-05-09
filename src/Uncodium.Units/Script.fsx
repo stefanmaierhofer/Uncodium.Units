@@ -5,8 +5,8 @@ open Physics
 open Astronomy
 open Information
 open International
-open Uncodium.Units.UK.LiquidVolume
-open Uncodium.Units.US.LiquidVolume
+open UK.LiquidVolume
+open US.LiquidVolume
 
 float(1 * Dyne * Centimeter) = 10R.Pow(-7).ToFloat()
 

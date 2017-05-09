@@ -248,13 +248,13 @@ module SI =
     /// 1 degree = 1/180 radian = 1/360 of a full circle.                                                    
     let Degree                  = U("degree",                   "°",        Radian,         Rational.Pi / 180   )
     /// 1 minute = 1/60 degree.                                                                              
-    let ArcMinute               = U("arcminute",                "′",        Degree,         Rational(1, 60)     )
+    let ArcMinute               = U("arcminute",                "′",        Degree,         1R / 60             )
     /// 1 second = 1/60 minute = 1/3600 degree.                                                              
-    let ArcSecond               = U("arcsecond",                "″",        ArcMinute,      Rational(1, 60)     )
+    let ArcSecond               = U("arcsecond",                "″",        ArcMinute,      1R / 60             )
     /// 1 ha = 1 hm² = 10⁴ m2.
     let Hectare                 = U("hectare",                  "ha",       Meter.Pow(2),   10_000              )
     /// 1 L = 1 l = 1 dm³ = 10³ cm³ = 10⁻³ m³.
-    let Liter                   = U("liter",                    "l",        Meter.Pow(3),   Rational(1, 1_000)  )
+    let Liter                   = U("liter",                    "l",        Meter.Pow(3),   1R / 1_000          )
     /// 1 t = 10³ kg.
     let Tonne                   = U("tonne",                    "t",        Kilogram,       1_000               )
 
@@ -274,7 +274,7 @@ module SI =
     
 
     /// 1/1000 of a kilogram.
-    let Gram                            = Unit("gram",                 "g",        Kilogram,   Rational.Pow(10, -3))
+    let Gram                            = Unit("gram",                 "g",        Kilogram,   0.001                )
     /// 1/1000 of a gram.
     let Milligram                       = Milli * Gram
     /// 1/1000 of a milligram.

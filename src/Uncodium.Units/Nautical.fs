@@ -11,7 +11,7 @@ module Nautical =
     let Knot                = U("international knot",       "kn",   NauticalMile/Hour               ) 
     
     /// 1 cable is equal to 1/10 of a nautical mile.
-    let Cable               = U("cable",                    "cb",   NauticalMile,   Rational(1,10)  )
+    let Cable               = U("cable",                    "cb",   NauticalMile,   0.1             )
     
     module UsCustomary =
 

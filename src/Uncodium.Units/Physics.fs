@@ -347,7 +347,7 @@ module Physics =
     
     /// The ångström (or angstrom) is a unit of length equal to 10^−10 m (one ten-billionth of a meter) or 0.1 nanometer.
     /// Its symbol is Å, a letter in the Swedish alphabet.
-    let Angstrom                = Constant("ångström",                      "Å",        E 1.0 -10,              Meter                                   )
+    let Angstrom                = Constant("ångström",                      "Å",        E 1.0 -10,              Meter                               )
     
     /// The hartree (symbol: Eₕ or Ha), also known as the Hartree energy,
     /// is the atomic unit of energy, named after the British physicist Douglas Hartree.
@@ -405,39 +405,39 @@ module Physics =
     /// at 1 foot per second per second.
     /// 1 pdl = 0.138254954376 N exactly.
     /// https://en.wikipedia.org/wiki/Poundal
-    let Poundal                 = U("poundal",                  "pdl",      International.Pound * International.Foot / (Second.Pow(2))     )
+    let Poundal                 = U("poundal",                  "pdl",      International.Pound * International.Foot / (Second.Pow(2))  )
 
     /// The pound-force (lbf) is equal to the gravitational force exerted on
     /// a mass of one avoirdupois pound on the surface of Earth.
     /// The acceleration of the standard gravitational field (gn) and the
     /// international avoirdupois pound (lb) define the pound-force as 4.4482216152605 N
     /// https://en.wikipedia.org/wiki/Pound_(force)
-    let PoundForce              = U("pound-force",              "lbf",      (International.Pound * StandardGravity) |> U                            )
+    let PoundForce              = U("pound-force",              "lbf",      (International.Pound * StandardGravity) |> U                )
     
     /// A slug is defined as the mass that is accelerated by 1 ft/s2 when
     /// a force of one pound (lbf) is exerted on it.
     /// https://en.wikipedia.org/wiki/Slug_(mass)
-    let Slug                    = U("slug",                     "slug",     PoundForce * (Second.Pow(2)) / International.Foot                          )
+    let Slug                    = U("slug",                     "slug",     PoundForce * (Second.Pow(2)) / International.Foot           )
 
     /// One newton meter is equal to the torque resulting from a force of
     /// one newton applied perpendicularly to a moment arm which is one meter long.
     /// https://en.wikipedia.org/wiki/Newton_metre
-    let NewtonMeter             = U("newton meter",             "Nm",       Newton * Meter                                                          )
+    let NewtonMeter             = U("newton meter",             "Nm",       Newton * Meter                                              )
 
     /// Angular frequency ω (in radians per second), is larger than frequency
     /// (in cycles per second, also called Hz),
     /// by a factor of 2π, because 2π rad/s corresponds to 1 Hz.
     /// https://en.wikipedia.org/wiki/Radian_per_second
-    let RadiansPerSecond        = U("radians per second",       "ω",        Radian/Second                                                           )
+    let RadiansPerSecond        = U("radians per second",       "ω",        Radian/Second                                               )
 
     /// The number of rotations around a fixed axis in one minute.
     /// It is used as a measure of rotational speed of a mechanical component.
     /// https://en.wikipedia.org/wiki/Revolutions_per_minute
-    let RevolutionsPerMinute    = U("revolutions per minute",   "rpm",      Hertz,              Rational(1, 60)         )
+    let RevolutionsPerMinute    = U("revolutions per minute",   "rpm",      Hertz,              1R / 60                                 )
     
     /// One dyne is equal to 10 micronewtons.
     /// https://en.wikipedia.org/wiki/Dyne
-    let Dyne                    = U("dyne",                     "dyn",      Newton,             E 1.0 -5                )
+    let Dyne                    = U("dyne",                     "dyn",      Newton,             E 1.0 -5                                )
 
     /// The dyne per centimeter is a unit traditionally used to measure surface tension.
     /// For example, the surface tension of distilled water is 72 dyn/cm at 25 °C.
@@ -464,14 +464,14 @@ module Physics =
 
     /// 1 horsepower (hp) is equal to 745.7 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
-    let HorsepowerImperial      = U("imperial horsepower",      "hp",   Watt,                   Rational(7457, 10)      )
+    let HorsepowerImperial      = U("imperial horsepower",      "hp",   Watt,                   745.7                   )
     /// 1 horsepower (hp) is equal to 745.7 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
     let HP                      = HorsepowerImperial
 
     /// 1 horsepower (PS) is equal to 735.5 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
-    let HorsepowerMetric        = U("metric horsepower",        "PS",   Watt,                   Rational(7_355, 10)     )
+    let HorsepowerMetric        = U("metric horsepower",        "PS",   Watt,                   735.5                   )
     /// 1 horsepower (PS) is equal to 735.5 watts.
     /// https://en.wikipedia.org/wiki/Horsepower
     let PS                      = HorsepowerMetric
@@ -479,7 +479,7 @@ module Physics =
     /// 1 BTU (British Thermal Unit) is equal to 1055.06 joules.
     /// See ISO 31-4 on Quantities and units—Part 4: Heat (https://books.google.com/books?id=-ZveBwAAQBAJ&pg=PA19-IA35).
     /// https://en.wikipedia.org/wiki/British_thermal_unit
-    let BTU                     = U("british thermal unit",     "BTU",  Joule,                  Rational(105506, 100)   )
+    let BTU                     = U("british thermal unit",     "BTU",  Joule,                  1055.06                 )
     
     /// Pressure, stress (SI derived unit).
     let Kilopascal              = Kilo * Pascal
@@ -502,7 +502,7 @@ module Physics =
     /// The barye (symbol: Ba), or sometimes barad, barrie, bary, baryd, baryed, or barie,
     /// is the centimetre–gram–second (CGS) unit of pressure. It is equal to 1 dyne per square centimetre.
     /// https://en.wikipedia.org/wiki/Barye
-    let Barye                   = U("barye",                    "Ba",   Pascal,                 Rational(1, 10)         )
+    let Barye                   = U("barye",                    "Ba",   Pascal,                 0.1                     )
     
     /// The pound per square inch or, more accurately, pound-force per square inch (symbol: lbf/in2; abbreviation: psi)
     /// is a unit of pressure or of stress based on avoirdupois units.

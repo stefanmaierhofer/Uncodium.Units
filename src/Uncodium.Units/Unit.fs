@@ -617,5 +617,5 @@ type internal U = Unit
 
 module internal Fun =
 
-    let E (m : float) (e : int) = Rational(m) * Rational.Pow(10, e)
+    let E (m : float) (e : int) = Rational(m) * 10R.Pow(e)
 

@@ -9,7 +9,7 @@ module Astronomy =
     open Physics
 
     /// A Julian year (symbol: a) is a unit of measurement of time defined as exactly 365.25 days of 86400 SI seconds each.
-    let JulianYear              = Constant("Julian year",               "a",    Rational(36_525, 100), Day              )
+    let JulianYear              = Constant("Julian year",               "a",    365.25,     Day                         )
 
     /// ly
     let Lightyear               = Constant("lightyear",                 "ly",   SpeedOfLight * JulianYear               )

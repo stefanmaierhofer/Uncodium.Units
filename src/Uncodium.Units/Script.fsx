@@ -1,18 +1,4 @@
-﻿#load "Rational.fs"
-#load "Unit.fs"
-#load "SI.fs"
-#load "International.fs"
-#load "UK.fs"
-#load "US.fs"
-#load "Typography.fs"
-#load "Math.fs"
-#load "Physics.fs"
-#load "Photometry.fs"
-#load "Astronomy.fs"
-#load "Information.fs"
-#load "Nautical.fs"
-#load "Historic.fs"
-#load "VariousStuffNotYetAdded.fs"
+﻿#r "../../bin/Debug/Uncodium.Units.dll"
 open Uncodium.Units
 open SI
 open Physics
@@ -22,7 +8,7 @@ open International
 open Uncodium.Units.UK.LiquidVolume
 open Uncodium.Units.US.LiquidVolume
 
-float(1 * Dyne * Centimeter) = Rational.Pow(10, -7).ToFloat()
+float(1 * Dyne * Centimeter) = 10R.Pow(-7).ToFloat()
 
 VacuumPermeability |> string
 
@@ -138,7 +124,10 @@ StandardGravity |> string
 
 1 / (2 * Meter) |> string
 
-Rational(254, 10_000) * Rational(3_937, 100)
+254R / 10_000 * 3_937R / 100
+
+Rational.Pow(10, -3)
+10R.Pow(-3)
 
 1 * Newton
 

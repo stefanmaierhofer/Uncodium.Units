@@ -11,9 +11,9 @@ module US =
     module Survey =
     
         /// 1 foot (US survey) is equal to 12 inches (US survey).
-        let Foot        = U("foot (US survey)",             "ft",       Meter,              Rational(1_200, 3_937)              )
+        let Foot        = U("foot (US survey)",             "ft",       Meter,              1_200R / 3_937                      )
         /// 1 link (US survey) is equal to 1/100 of chain (US survey).
-        let Link        = U("link (US survey)",             "li",       Foot,               Rational(66, 100)                   )
+        let Link        = U("link (US survey)",             "li",       Foot,               66R / 100                           )
         /// 1 rod (or pole, or perch) is equal to 25 links (US survey), or one quarter of a chain (US survey).
         let Rod         = U("rod (US survey)",              "rod",      Link,               25                                  )
         /// 1 US survey pole (or rod, or perch) is equal to 25 links (US survey), or one quarter of a chain (US survey).
@@ -47,27 +47,27 @@ module US =
         open International
 
         /// 1 dry pint is equal to exactly 33.6003125 cubic inches.
-        let DryPint             = U("pint (dry)",           "pt",       CubicInch,          Rational(336_003_125, 10_000_000)   )
+        let DryPint             = U("pint (dry)",           "pt",       CubicInch,          336_003_125R / 10_000_000           )
 
         /// 1 dry quart is equal to 2 dry pints.
-        let DryQuart            = U("quart (dry)",          "qt",       DryPint,            2I                                  )
+        let DryQuart            = U("quart (dry)",          "qt",       DryPint,            2                                   )
 
         /// 1 dry gallon is equal to 4 dry quarts.
-        let DryGallon           = U("gallon (dry)",         "gal",      DryQuart,           4I                                  )
+        let DryGallon           = U("gallon (dry)",         "gal",      DryQuart,           4                                   )
 
         /// 1 peck is equal to 8 dry quarts.
-        let Peck                = U("peck",                 "pk",       DryQuart,           8I                                  )
+        let Peck                = U("peck",                 "pk",       DryQuart,           8                                   )
         
         /// 1 bushel is equal to 4 pecks.
-        let Bushel              = U("bushel",               "bu",       Peck,               4I                                  )
+        let Bushel              = U("bushel",               "bu",       Peck,               4                                   )
 
         /// 1 dry barrel is equal to exactly 7 056 cubic inches.
-        let DryBarrel           = U("barrel (dry)",         "bbl",      CubicInch,          7_056I                              )
+        let DryBarrel           = U("barrel (dry)",         "bbl",      CubicInch,          7_056                               )
 
     module LiquidVolume =
     
         /// A minim is equal to ~1 drop of water, and is defined as exactly 61.611519921875 μL.
-        let Minim               = U("minim",                "min",      Microliter,         61_611_519_921_875I * Rational.Pow(10, -12))
+        let Minim               = U("minim",                "min",      Microliter,         61_611_519_921_875I * 10R.Pow(-12)  )
 
         /// A US fluid dram is equal to 60 minim.
         let UsFluidDram         = U("U.S. fluid dram",      "fl dr",    Minim,              60                                  )
@@ -100,7 +100,7 @@ module US =
         let UsGallon            = U("U.S. gallon (liquid)", "gal",      UsQuart,            4                                   )
 
         /// A (liquid) barrel is equal to 31.5 U.S. gallons, or 1/2 hogshead.
-        let Barrel              = U("barrel (liquid)",      "bbl",      UsGallon,           Rational(315, 10)                   )
+        let Barrel              = U("barrel (liquid)",      "bbl",      UsGallon,           31.5                                )
 
         /// An oil barrel is equal to 1 1/3 liquid barrels, or 42 U.S. gallons, or 2/3 hogshead.
         let OilBarrel           = U("oil barrel",           "bbl",      UsGallon,           42                                  )

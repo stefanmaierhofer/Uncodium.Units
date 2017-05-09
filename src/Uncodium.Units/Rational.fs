@@ -208,7 +208,8 @@ type Rational =
             | x when x > 0 -> Rational(bigint.Pow(a, x), 1I)
             | x when x < 0 -> Rational(1I, bigint.Pow(a, -x))
             | _ -> invalidOp "must not happen"
-
+            
+        static member Zero              = Rational(0L, 1L)
         static member One               = Rational(1L, 1L)
         static member OneHalf           = Rational(1L, 2L)
         static member OneThird          = Rational(1L, 3L)
@@ -227,3 +228,12 @@ type Rational =
             
     end
     
+module NumericLiteralR = 
+    let FromZero ()                 = Rational.Zero
+    let FromOne  ()                 = Rational.One
+    let FromBigint (a : bigint)     = Rational a
+    let FromDecimal (a : decimal)   = Rational a
+    let FromInt64 (a : int64)       = Rational a
+    let FromInt32 (a : int32)       = Rational a
+    let FromFloat32 (a : float32)   = Rational a
+    let FromFloat (a : float)       = Rational a

@@ -19,7 +19,7 @@ module Physics =
     /// denoted by the letter G, is an empirical physical constant involved in the calculation of gravitational effects
     /// in Sir Isaac Newton's law of universal gravitation and in Albert Einstein's general theory of relativity.
     /// https://en.wikipedia.org/wiki/Gravitational_constant.
-    let GravitationalConstant   = Constant("gravitational constant",        "G",        E 6.674_08 -11,         (Meter^3) / (Kilogram * (Second^2)) )
+    let GravitationalConstant   = Constant("gravitational constant",        "G",        E 6.674_08 -11,         (Meter.Pow(3)) / (Kilogram * (Second.Pow(2))) )
         
     /// Planck constant, h.
     /// https://en.wikipedia.org/wiki/Planck_constant.
@@ -222,7 +222,7 @@ module Physics =
     /// Magnetic constant or vacuum permeability.
     /// https://en.wikipedia.org/wiki/Vacuum_permeability
     /// http://physics.nist.gov/cgi-bin/cuu/Value?mu0
-    let MagneticConstant        = Constant("magnetic constant",     "μₒ",   4 * π * E 1.0 -7,   Newton / (Ampere^2)                    )
+    let MagneticConstant        = Constant("magnetic constant",             "μₒ",       4 * π * E 1.0 -7,   Newton / (Ampere.Pow(2))                )
     /// Magnetic constant or vacuum permeability.
     /// https://en.wikipedia.org/wiki/Vacuum_permeability
     /// http://physics.nist.gov/cgi-bin/cuu/Value?mu0
@@ -235,7 +235,7 @@ module Physics =
     /// Electric constant or vacuum permittivity.
     /// https://en.wikipedia.org/wiki/Vacuum_permittivity
     /// http://physics.nist.gov/cgi-bin/cuu/Value?ep0
-    let ElectricConstant      = Constant("electric constant",       "εₒ",   1 / (μₒ * c.Pow(2))       )
+    let ElectricConstant      = Constant("electric constant",               "εₒ",       1 / (μₒ * c.Pow(2))                                         )
     /// Electric constant or vacuum permittivity.
     /// https://en.wikipedia.org/wiki/Vacuum_permittivity
     /// http://physics.nist.gov/cgi-bin/cuu/Value?ep0
@@ -405,7 +405,7 @@ module Physics =
     /// at 1 foot per second per second.
     /// 1 pdl = 0.138254954376 N exactly.
     /// https://en.wikipedia.org/wiki/Poundal
-    let Poundal                 = U("poundal",                  "pdl",      International.Pound * International.Foot / (Second ^ 2)     )
+    let Poundal                 = U("poundal",                  "pdl",      International.Pound * International.Foot / (Second.Pow(2))     )
 
     /// The pound-force (lbf) is equal to the gravitational force exerted on
     /// a mass of one avoirdupois pound on the surface of Earth.
@@ -417,7 +417,7 @@ module Physics =
     /// A slug is defined as the mass that is accelerated by 1 ft/s2 when
     /// a force of one pound (lbf) is exerted on it.
     /// https://en.wikipedia.org/wiki/Slug_(mass)
-    let Slug                    = U("slug",                     "slug",     PoundForce * (Second ^ 2) / International.Foot                          )
+    let Slug                    = U("slug",                     "slug",     PoundForce * (Second.Pow(2)) / International.Foot                          )
 
     /// One newton meter is equal to the torque resulting from a force of
     /// one newton applied perpendicularly to a moment arm which is one meter long.

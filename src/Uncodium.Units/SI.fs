@@ -274,7 +274,7 @@ module SI =
     
 
     /// 1/1000 of a kilogram.
-    let Gram                            = UnitOfMeasure("gram",                 "g",        Kilogram,   Rational.Pow(10, -3))
+    let Gram                            = Unit("gram",                 "g",        Kilogram,   Rational.Pow(10, -3))
     /// 1/1000 of a gram.
     let Milligram                       = Milli * Gram
     /// 1/1000 of a milligram.
@@ -282,31 +282,31 @@ module SI =
 
 
     /// The area of a square whose sides measure exactly one kilometer.
-    let SquareKilometer                 = UnitOfMeasure("square kilometer",     "km²",      Kilometer^2                     )
+    let SquareKilometer                 = Unit("square kilometer",     "km²",      Kilometer.Pow(2)                 )
     /// The area of a square whose sides measure exactly one meter.
-    let SquareMeter                     = UnitOfMeasure("square meter",         "m²",       Meter^2                         )
+    let SquareMeter                     = Unit("square meter",         "m²",       Meter.Pow(2)                     )
     /// The area of a square whose sides measure exactly one decimeter.
-    let SquareDecimeter                 = UnitOfMeasure("square decimeter",     "dm²",      Decimeter^2                     )
+    let SquareDecimeter                 = Unit("square decimeter",     "dm²",      Decimeter.Pow(2)                 )
     /// The area of a square whose sides measure exactly one centimeter.
-    let SquareCentimeter                = UnitOfMeasure("square centimeter",    "cm²",      Centimeter^2                    )
+    let SquareCentimeter                = Unit("square centimeter",    "cm²",      Centimeter.Pow(2)                )
     /// The area of a square whose sides measure exactly one millimeter.
-    let SquareMillimeter                = UnitOfMeasure("square millimeter",    "mm²",      Millimeter^2                    )
+    let SquareMillimeter                = Unit("square millimeter",    "mm²",      Millimeter.Pow(2)                )
     /// 100 m² (10m · 10m).
-    let Are                             = UnitOfMeasure("are",                  "a",        SquareMeter,            100     )
+    let Are                             = Unit("are",                  "a",        SquareMeter,            100      )
     /// 10 000 m² (100m · 100m), or 100 are.
     
 
 
     /// The volume of a cube whose sides measure exactly one kilometer.
-    let CubicKilometer                  = UnitOfMeasure("cubic kilometer",      "km³",      Kilometer^3                     )
-    /// The volume of a cube whose sides measure exactly one meter.                                                         
-    let CubicMeter                      = UnitOfMeasure("cubic meter",          "m³",       Meter^3                         )
-    /// The volume of a cube whose sides measure exactly one decimeter.                                                     
-    let CubicDecimeter                  = UnitOfMeasure("cubic decimeter",      "dm³",      Decimeter^3                     )
-    /// The volume of a cube whose sides measure exactly one centimeter.                                                    
-    let CubicCentimeter                 = UnitOfMeasure("cubic centimeter",     "cm³",      Centimeter^3                    )
-    /// The volume of a cube whose sides measure exactly one millimeter.                                                    
-    let CubicMillimeter                 = UnitOfMeasure("cubic millimeter",     "mm³",      Millimeter^3                    )
+    let CubicKilometer                  = Unit("cubic kilometer",      "km³",      Kilometer.Pow(3)                 )
+    /// The volume of a cube whose sides measure exactly one meter.                                                     
+    let CubicMeter                      = Unit("cubic meter",          "m³",       Meter.Pow(3)                     )
+    /// The volume of a cube whose sides measure exactly one decimeter.                                                 
+    let CubicDecimeter                  = Unit("cubic decimeter",      "dm³",      Decimeter.Pow(3)                 )
+    /// The volume of a cube whose sides measure exactly one centimeter.                                                
+    let CubicCentimeter                 = Unit("cubic centimeter",     "cm³",      Centimeter.Pow(3)                )
+    /// The volume of a cube whose sides measure exactly one millimeter.                                                
+    let CubicMillimeter                 = Unit("cubic millimeter",     "mm³",      Millimeter.Pow(3)                )
     /// Unit of volume equal to 1 cubic decimeter.
     
     

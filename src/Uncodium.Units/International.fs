@@ -34,18 +34,18 @@ module International =
     *)
 
     /// The area of a square whose sides measure exactly one inch.
-    let SquareInch          = U("square inch",          "in²",      Inch ^ 2                                                )
+    let SquareInch          = U("square inch",          "in²",      Inch.Pow(2)                                             )
     /// The area of a square whose sides measure exactly one foot.
-    let SquareFoot          = U("square foot",          "ft²",      Foot ^ 2                                                )
+    let SquareFoot          = U("square foot",          "ft²",      Foot.Pow(2)                                             )
     /// The area of a square whose sides measure exactly one yard.
-    let SquareYard          = U("square yard",          "yd²",      Yard ^ 2                                                )
+    let SquareYard          = U("square yard",          "yd²",      Yard.Pow(2)                                             )
     /// The area of a square whose sides measure exactly one mile.
-    let SquareMile          = U("square mile",          "mi²",      Mile ^ 2                                                )
+    let SquareMile          = U("square mile",          "mi²",      Mile.Pow(2)                                             )
     
     /// 1 perch (UK) is equal to the area of 1 rod by 1 rod.
-    let Perch               = U("perch",                "perch",    Furlong ^ 2,            Rational(1, 16)                 )
+    let Perch               = U("perch",                "perch",    Furlong.Pow(2),            Rational(1, 16)              )
     /// 1 rood (UK) is equal to the area of 1 furlong by 1 rod.
-    let Rood                = U("rood",                 "rood",     Furlong ^ 2,            Rational(1, 4)                  )
+    let Rood                = U("rood",                 "rood",     Furlong.Pow(2),            Rational(1, 4)               )
     /// 1 acre (UK) is equal to 4 840 sq yd. For US customary unit see Us.Survey.Acre.
     let Acre                = U("acre",                 "ac",       Furlong * Chain                                         )
 
@@ -54,13 +54,13 @@ module International =
     *)
 
     /// The volume of a cube whose sides measure exactly one inch.
-    let CubicInch           = U("cubic inch",           "in³",      Inch ^ 3                                               )
+    let CubicInch           = U("cubic inch",           "in³",      Inch.Pow(3)                                             )
     /// The volume of a cube whose sides measure exactly one foot.
-    let CubicFoot           = U("cubic foot",           "ft³",      Foot ^ 3                                               )
+    let CubicFoot           = U("cubic foot",           "ft³",      Foot.Pow(3)                                             )
     /// The volume of a cube whose sides measure exactly one yard.
-    let CubicYard           = U("cubic yard",           "yd³",      Yard ^ 3                                               )
+    let CubicYard           = U("cubic yard",           "yd³",      Yard.Pow(3)                                             )
     /// The volume of a cube whose sides measure exactly one mile.
-    let CubicMile           = U("cubic mile",           "mi³",      Mile ^ 3                                               )
+    let CubicMile           = U("cubic mile",           "mi³",      Mile.Pow(3)                                             )
     
     (*
         Units of weight

@@ -34,11 +34,11 @@ module US =
         let League      = U("league (US survey, land)",     "lea",      Mile,               3                                   )
         
         /// The area of a square whose sides measure exactly one rod (US survey). 
-        let SquareRod   = U("square rod (US survey)",       "rd²",      Rod ^ 2                                                 )
+        let SquareRod   = U("square rod (US survey)",       "rd²",      Rod.Pow(2)                                              )
         /// 1 acre (US survey) is the area of 1 chain (US survey) by 1 furlong (66 by 660 US survey feet), which is exactly equal to 1⁄640 of a square statute mile, or 43 560 square feet (US survey).
         let Acre        = U("acre (US survey)",             "ac",       Furlong * Chain                                         )
         /// The area of a square whose sides measure exactly one US survey (or statute) mile. 
-        let SquareMile  = U("square rod (US survey)",       "mi²",      StatuteMile ^ 2                                         )
+        let SquareMile  = U("square rod (US survey)",       "mi²",      StatuteMile.Pow(2)                                      )
         /// 1 township (US survey) is equal to 36 square miles (US survey). 
         let Township    = U("township (US survey)",         "?",        SquareMile,         36                                  )
 

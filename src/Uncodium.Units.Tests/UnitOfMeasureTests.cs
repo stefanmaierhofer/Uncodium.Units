@@ -11,15 +11,15 @@ namespace Uncodium.Units.Tests
     {
         #region Construction
 
-        [Test] public void NullNameWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure(null, "foo"));
-        [Test] public void NullSymbolWillThrow() => Assert.Throws<ArgumentException>(() => new UnitOfMeasure("foo", null));
-        [Test] public void EmptyNameWillNotThrow() => new UnitOfMeasure("", "foo");
-        [Test] public void EmptySymbolWillNotThrow() => new UnitOfMeasure("foo", "");
+        [Test] public void NullNameWillThrow() => Assert.Throws<ArgumentException>(() => new Unit(null, "foo"));
+        [Test] public void NullSymbolWillThrow() => Assert.Throws<ArgumentException>(() => new Unit("foo", null));
+        [Test] public void EmptyNameWillNotThrow() => new Unit("", "foo");
+        [Test] public void EmptySymbolWillNotThrow() => new Unit("foo", "");
 
         [Test]
         public void CanCreateBaseUnit()
         {
-            var m = new UnitOfMeasure("meter", "m");
+            var m = new Unit("meter", "m");
             Assert.IsTrue(m.Name == "meter");
             Assert.IsTrue(m.Symbol == "m");
             Assert.IsTrue(m.Scale == Rational.One);
@@ -30,8 +30,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CanCreateScaledUnit()
         {
-            var m = new UnitOfMeasure("meter", "m");
-            var cm = new UnitOfMeasure("centimeter", "cm", m, new Rational(1, 100));
+            var m = new Unit("meter", "m");
+            var cm = new Unit("centimeter", "cm", m, new Rational(1, 100));
             Assert.IsTrue(cm.Name == "centimeter");
             Assert.IsTrue(cm.Symbol == "cm");
             Assert.IsTrue(cm.Scale == new Rational(1, 100));
@@ -60,7 +60,7 @@ namespace Uncodium.Units.Tests
         [Test]
         public void Float1()
         {
-            var x = new UnitOfMeasure("foo", "foo", Meter, 7.5);
+            var x = new Unit("foo", "foo", Meter, 7.5);
             var f = (float)x;
             Assert.IsTrue(f == 7.5);
         }
@@ -68,7 +68,7 @@ namespace Uncodium.Units.Tests
         [Test]
         public void Float2()
         {
-            var x = new UnitOfMeasure("foo", "foo", Centimeter, 2);
+            var x = new Unit("foo", "foo", Centimeter, 2);
             var f = (double)x;
             Assert.IsTrue(f == 0.02);
         }
@@ -78,7 +78,7 @@ namespace Uncodium.Units.Tests
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
         {
-            var m = new UnitOfMeasure("meter", "m");
+            var m = new Unit("meter", "m");
             var u = m / m;
 
             Assert.IsTrue(u.Name == "");
@@ -91,8 +91,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void UnitPerSameScaledUnitYieldsScaledDimensionlessUnit()
         {
-            var m = new UnitOfMeasure("meter", "m");
-            var cm = new UnitOfMeasure("centimeter", "cm", m, new Rational(1, 100));
+            var m = new Unit("meter", "m");
+            var cm = new Unit("centimeter", "cm", m, new Rational(1, 100));
             var u = m / cm;
 
             Assert.IsTrue(u.Name == "");
@@ -105,8 +105,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CanCombineBaseUnits1()
         {
-            var m = new UnitOfMeasure("meter", "m");
-            var s = new UnitOfMeasure("second", "s");
+            var m = new Unit("meter", "m");
+            var s = new Unit("second", "s");
             var x = m / s;
 
             Assert.IsTrue(x.Scale == Rational.One);

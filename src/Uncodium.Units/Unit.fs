@@ -3,7 +3,7 @@
 open System
 open System.Collections.Generic
 
-type UnitOfMeasure =
+type Unit =
 
     val Name : string
     val Symbol : string
@@ -15,48 +15,48 @@ type UnitOfMeasure =
         if symbol = null then invalidArg "symbol" "UnitOfMeasure.Symbol must not be null."
         { Name = name; Symbol = symbol; BaseUnits = baseUnits; Scale = scale.Simplified }
 
-    new(name : string, symbol : string, unit : UnitOfMeasure, scale : Rational) =
+    new(name : string, symbol : string, unit : Unit, scale : Rational) =
         match unit.IsDimensionLess with
 
         | true ->
             if unit.Name = "" then
-                UnitOfMeasure(name, symbol, unit.BaseUnits, scale * unit.Scale)
+                Unit(name, symbol, unit.BaseUnits, scale * unit.Scale)
             else
-                UnitOfMeasure(name, symbol, UnitPowers {Unit = unit; Power = 1}, scale * unit.Scale)
+                Unit(name, symbol, UnitPowers {Unit = unit; Power = 1}, scale * unit.Scale)
         
         | false ->
-            UnitOfMeasure(name, symbol, unit.BaseUnits, scale * unit.Scale)
+            Unit(name, symbol, unit.BaseUnits, scale * unit.Scale)
                 
-    new(name : string, symbol : string, unit : UnitOfMeasure, scale : bigint) =
-        UnitOfMeasure(name, symbol, unit, Rational scale)
+    new(name : string, symbol : string, unit : Unit, scale : bigint) =
+        Unit(name, symbol, unit, Rational scale)
         
-    new(name : string, symbol : string, unit : UnitOfMeasure, scale : int) =
-        UnitOfMeasure(name, symbol, unit, Rational scale)
+    new(name : string, symbol : string, unit : Unit, scale : int) =
+        Unit(name, symbol, unit, Rational scale)
 
-    new(name : string, symbol : string, unit : UnitOfMeasure, scale : float) =
-        UnitOfMeasure(name, symbol, unit, Rational scale)
+    new(name : string, symbol : string, unit : Unit, scale : float) =
+        Unit(name, symbol, unit, Rational scale)
 
-    new(name : string, symbol : string, unit : UnitOfMeasure) =
-        UnitOfMeasure(name, symbol, unit, Rational.One)
+    new(name : string, symbol : string, unit : Unit) =
+        Unit(name, symbol, unit, Rational.One)
 
     new(name : string, symbol : string) =
-        UnitOfMeasure(name, symbol, UnitPowers.None, Rational.One)
+        Unit(name, symbol, UnitPowers.None, Rational.One)
     
     new(value : Value) =
-        let u : UnitOfMeasure = value.Unit
-        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)
+        let u : Unit = value.Unit
+        Unit(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)
 
     new(value : Constant) =
-        let u : UnitOfMeasure = value.Unit
-        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)
+        let u : Unit = value.Unit
+        Unit(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)
         
     member self.IsDimensionLess with get () = self.BaseUnits.IsDimensionLess
     member internal self.HasName with get() = self.Name <> ""
     member internal self.HasSymbol with get() = self.Symbol <> ""
 
-    static member None = UnitOfMeasure("dimensionless", "-")
+    static member None = Unit("dimensionless", "-")
     
-    static member (*) (a : UnitOfMeasure, b : UnitOfMeasure) =
+    static member (*) (a : Unit, b : Unit) =
         let psa =
             match a.IsDimensionLess && a.Symbol <> "" with
             | true -> UnitPowers { Unit = a; Power = 1 }
@@ -81,21 +81,21 @@ type UnitOfMeasure =
                 a.Symbol + "*" + b.Symbol
             else
                 ""
-        UnitOfMeasure("", symbol, powers, a.Scale * b.Scale)
-    static member (*) (a : UnitOfMeasure, b : Rational)      = Value(b, a)
-    static member (*) (a : UnitOfMeasure, b : bigint)        = Value(Rational b, a)
-    static member (*) (a : UnitOfMeasure, b : int64)         = Value(Rational b, a)
-    static member (*) (a : UnitOfMeasure, b : int)           = Value(Rational b, a)
-    static member (*) (a : UnitOfMeasure, b : float)         = Value(Rational b, a)
-    static member (*) (a : UnitOfMeasure, b : float32)       = Value(Rational b, a)
-    static member (*) (a : Rational, b : UnitOfMeasure)      = Value(a, b)
-    static member (*) (a : bigint, b : UnitOfMeasure)        = Value(Rational a, b)
-    static member (*) (a : int64, b : UnitOfMeasure)         = Value(Rational a, b)
-    static member (*) (a : int, b : UnitOfMeasure)           = Value(Rational a, b)
-    static member (*) (a : float, b : UnitOfMeasure)         = Value(Rational a, b)
-    static member (*) (a : float32, b : UnitOfMeasure)       = Value(Rational a, b)
+        Unit("", symbol, powers, a.Scale * b.Scale)
+    static member (*) (a : Unit, b : Rational)      = Value(b, a)
+    static member (*) (a : Unit, b : bigint)        = Value(Rational b, a)
+    static member (*) (a : Unit, b : int64)         = Value(Rational b, a)
+    static member (*) (a : Unit, b : int)           = Value(Rational b, a)
+    static member (*) (a : Unit, b : float)         = Value(Rational b, a)
+    static member (*) (a : Unit, b : float32)       = Value(Rational b, a)
+    static member (*) (a : Rational, b : Unit)      = Value(a, b)
+    static member (*) (a : bigint, b : Unit)        = Value(Rational a, b)
+    static member (*) (a : int64, b : Unit)         = Value(Rational a, b)
+    static member (*) (a : int, b : Unit)           = Value(Rational a, b)
+    static member (*) (a : float, b : Unit)         = Value(Rational a, b)
+    static member (*) (a : float32, b : Unit)       = Value(Rational a, b)
 
-    static member (/) (a : UnitOfMeasure, b : UnitOfMeasure) =
+    static member (/) (a : Unit, b : Unit) =
         let psa =
             match a.IsDimensionLess && a.Symbol <> "" with
             | true -> UnitPowers { Unit = a; Power = 1 }
@@ -118,18 +118,18 @@ type UnitOfMeasure =
                 a.Symbol + "/" + b.Symbol
             else
                 ""
-        UnitOfMeasure("", symbol, powers, (a.Scale / b.Scale).Simplified)
+        Unit("", symbol, powers, (a.Scale / b.Scale).Simplified)
 
-    static member (/) (a : int, b : UnitOfMeasure) =
+    static member (/) (a : int, b : Unit) =
         let powers =
             match b.IsDimensionLess with
             | true -> UnitPowers { Unit = b; Power = -1 }
             | false -> b.BaseUnits.Inverse
-        UnitOfMeasure("", "", powers, a / b.Scale)
+        Unit("", "", powers, a / b.Scale)
 
     member self.Pow (b : int) =
         if b = 0 then
-            UnitOfMeasure("", "", UnitPowers.None, Rational.One)
+            Unit("", "", UnitPowers.None, Rational.One)
         else
             let powers =
                 match self.IsDimensionLess with
@@ -146,13 +146,13 @@ type UnitOfMeasure =
                     | i -> self.Symbol + "^" + string(i)
                 else
                     ""
-            UnitOfMeasure("", symbol, powers, self.Scale.Pow(b))
+            Unit("", symbol, powers, self.Scale.Pow(b))
 
     member inline self.Float with get () = float self.Scale
 
-    static member inline op_Explicit(source: UnitOfMeasure) : float = source.Float
+    static member inline op_Explicit(source: Unit) : float = source.Float
 
-    member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
+    member internal self.HasUnitsEquivalentTo (other : Unit) =
         if obj.ReferenceEquals(self, other) then
             true
         else
@@ -183,12 +183,12 @@ type UnitOfMeasure =
             | (false, false, false) -> sprintf "%s%s" (string self.Scale.Numerator) bu
             | _ -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.Scale) bu
 
-    static member private normalize (powers : Dictionary<UnitOfMeasure,int>) : UnitPower[] =
+    static member private normalize (powers : Dictionary<Unit,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
         let neg = powers |> Seq.filter (fun kv -> kv.Value < 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
         Seq.append pos neg |> Seq.map (fun kv -> {Unit = kv.Key; Power = kv.Value}) |> Seq.toArray
 
-and UnitPower = { Unit : UnitOfMeasure; Power : int }
+and UnitPower = { Unit : Unit; Power : int }
 
 and UnitPowers =
 
@@ -204,7 +204,7 @@ and UnitPowers =
         { Powers = powers |> UnitPowers.normalize }
 
     new() = UnitPowers [| |]
-    new(unit : UnitOfMeasure, power : int) = UnitPowers [| { Unit = unit; Power = power } |];
+    new(unit : Unit, power : int) = UnitPowers [| { Unit = unit; Power = power } |];
     new(power : UnitPower) = UnitPowers [| power |]
     new(powers : seq<UnitPower>) = UnitPowers (powers |> Array.ofSeq)
 
@@ -221,7 +221,7 @@ and UnitPowers =
         if a.Powers.Length = 0 then b
         elif b.Powers.Length = 0 then a
         else
-            let d = Dictionary<UnitOfMeasure, int>()
+            let d = Dictionary<Unit, int>()
             for x in a.Powers do d.Add(x.Unit, x.Power)
             for x in b.Powers do
                 match d.ContainsKey x.Unit with
@@ -234,7 +234,7 @@ and UnitPowers =
         if a.Powers.Length = 0 then b.Inverse
         elif b.Powers.Length = 0 then a
         else
-            let d = Dictionary<UnitOfMeasure, int>()
+            let d = Dictionary<Unit, int>()
             for x in a.Powers do d.Add(x.Unit, x.Power)
             for x in b.Powers do
                 match d.ContainsKey x.Unit with
@@ -255,7 +255,7 @@ and UnitPowers =
         | true -> Seq.zip self.Powers other.Powers |> Seq.forall (fun (x,y) -> x.Unit = y.Unit && x.Power = y.Power) 
         | false -> false
 
-    member internal self.HasUnitsEquivalentTo (other : UnitOfMeasure) =
+    member internal self.HasUnitsEquivalentTo (other : Unit) =
         match self.Count with
         | 1 ->
             let x = self.Powers.[0]
@@ -287,26 +287,26 @@ and UnitPowers =
         let neg = powers |> Seq.filter (fun x -> x.Power < 0) |> Seq.sortBy (fun x -> x.Unit.Name)
         Seq.append pos neg |> Seq.toArray
      
-and Value(x : Rational, unit : UnitOfMeasure) =
+and Value(x : Rational, unit : Unit) =
     member self.X = x
     member self.Unit = unit
     
-    new(x : Rational) = Value(x, UnitOfMeasure.None)
+    new(x : Rational) = Value(x, Unit.None)
     
-    new(x : bigint, unit : UnitOfMeasure) = Value(Rational x, unit)
-    new(x : bigint) = Value(Rational x, UnitOfMeasure.None)
+    new(x : bigint, unit : Unit) = Value(Rational x, unit)
+    new(x : bigint) = Value(Rational x, Unit.None)
     
-    new(x : int64, unit : UnitOfMeasure) = Value(Rational x, unit)
-    new(x : int64) = Value(Rational x, UnitOfMeasure.None)
+    new(x : int64, unit : Unit) = Value(Rational x, unit)
+    new(x : int64) = Value(Rational x, Unit.None)
     
-    new(x : int, unit : UnitOfMeasure) = Value(Rational x, unit)
-    new(x : int) = Value(Rational x, UnitOfMeasure.None)
+    new(x : int, unit : Unit) = Value(Rational x, unit)
+    new(x : int) = Value(Rational x, Unit.None)
     
-    new(x : float, unit : UnitOfMeasure) = Value(Rational x, unit)
-    new(x : float) = Value(Rational x, UnitOfMeasure.None)
+    new(x : float, unit : Unit) = Value(Rational x, unit)
+    new(x : float) = Value(Rational x, Unit.None)
     
-    new(x : float32, unit : UnitOfMeasure) = Value(Rational x, unit)
-    new(x : float32) = Value(Rational x, UnitOfMeasure.None)
+    new(x : float32, unit : Unit) = Value(Rational x, unit)
+    new(x : float32) = Value(Rational x, Unit.None)
 
     new(x : Constant) =
         let f : Rational = x.X
@@ -322,13 +322,13 @@ and Value(x : Rational, unit : UnitOfMeasure) =
             | 0 -> x
             | _ -> x + " " + self.Unit.BaseUnits.ToString()
     
-    member self.ConvertTo(unit : UnitOfMeasure) =
+    member self.ConvertTo(unit : Unit) =
         if self.Unit.HasUnitsEquivalentTo unit then
                 Value(self.X * self.Unit.Scale / unit.Scale, unit)
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
-    static member (=>) (self : Value, unit : UnitOfMeasure) =
+    static member (=>) (self : Value, unit : Unit) =
         if self.Unit.HasUnitsEquivalentTo unit then
                 Value(self.X * self.Unit.Scale / unit.Scale, unit)
             else
@@ -344,54 +344,54 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     member self.ToUnitOfMeasure () =
         let u = self.Unit
         let f = self.X * u.Scale
-        UnitOfMeasure(u.Name, u.Symbol, u.BaseUnits, f) 
+        Unit(u.Name, u.Symbol, u.BaseUnits, f) 
     
     member self.Pow (b : int) = Value(self.X.Pow(b), self.Unit.Pow(b))
          
     static member (*) (a : Value, b : Value)         =
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
         | (true, true) -> Value(a.X * b.X, a.Unit * b.Unit)
         | (true, false) -> Value(a.X * b.X, a.Unit)
         | (false, true) -> Value(a.X * b.X, b.Unit)
-        | (false, false) -> Value(a.X * b.X, UnitOfMeasure.None)
-    static member (*) (a : Value, b : UnitOfMeasure) =
-        match a.Unit <> UnitOfMeasure.None with
+        | (false, false) -> Value(a.X * b.X, Unit.None)
+    static member (*) (a : Value, b : Unit) =
+        match a.Unit <> Unit.None with
         | true -> Value(a.X, a.Unit * b)
         | false -> Value(a.X, b)
     static member (*) (a : Value, b : UnitPrefix)    =
-        match a.Unit <> UnitOfMeasure.None with
+        match a.Unit <> Unit.None with
         | true -> Value(a.X, a.Unit * b)
         | false ->
             let x : Rational = a.X * b.Scale
-            Value(x, UnitOfMeasure.None)
+            Value(x, Unit.None)
     static member (*) (a : Value, b : Constant)      =
         let f : Rational = a.X * b.X
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
         | (true, true) -> Value(f, a.Unit * b.Unit)
         | (true, false) -> Value(f, a.Unit)
         | (false, true) -> Value(f, b.Unit)
-        | (false, false) -> Value(f, UnitOfMeasure.None)
+        | (false, false) -> Value(f, Unit.None)
     static member (*) (a : Value, b : Rational)      = Value(a.X * b, a.Unit)
     static member (*) (a : Value, b : bigint)        = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : int64)         = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : int)           = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : float)         = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : float32)       = Value(a.X * Rational b, a.Unit)
-    static member (*) (a : UnitOfMeasure, b : Value) =
-        match b.Unit <> UnitOfMeasure.None with
+    static member (*) (a : Unit, b : Value) =
+        match b.Unit <> Unit.None with
         | true -> Value(b.X, a * b.Unit)
         | false -> Value(b.X, a)
     static member (*) (a : UnitPrefix, b : Value)    =
-        match b.Unit <> UnitOfMeasure.None with
+        match b.Unit <> Unit.None with
         | true -> Value(b.X, a * b.Unit)
-        | false -> Value(b.X * a.Scale, UnitOfMeasure.None)
+        | false -> Value(b.X * a.Scale, Unit.None)
     static member (*) (a : Constant, b : Value)      =
         let f : Rational = a.X * b.X
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
         | (true, true) -> Value(f, a.Unit * b.Unit)
         | (true, false) -> Value(f, a.Unit)
         | (false, true) -> Value(f, b.Unit)
-        | (false, false) -> Value(f, UnitOfMeasure.None)
+        | (false, false) -> Value(f, Unit.None)
     static member (*) (a : Rational, b : Value)      = Value(a * b.X, b.Unit)
     static member (*) (a : int64, b : Value)         = Value(Rational a * b.X, b.Unit)
     static member (*) (a : int, b : Value)           = Value(Rational a * b.X, b.Unit)
@@ -399,21 +399,21 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     static member (*) (a : float32, b : Value)       = Value(Rational a * b.X, b.Unit)
         
     static member (/) (a : Value, b : Value)         =
-        match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+        match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
         | (true, true) -> Value(a.X / b.X, a.Unit / b.Unit)
         | (true, false) -> Value(a.X / b.X, a.Unit)
         | (false, true) -> Value(a.X / b.X, b.Unit)
-        | (false, false) -> Value(a.X / b.X, UnitOfMeasure.None)
-    static member (/) (a : Value, b : UnitOfMeasure) =
-        match a.Unit <> UnitOfMeasure.None with
+        | (false, false) -> Value(a.X / b.X, Unit.None)
+    static member (/) (a : Value, b : Unit) =
+        match a.Unit <> Unit.None with
         | true -> Value(a.X, a.Unit / b)
         | false -> Value(a.X, b)
     static member (/) (a : Value, b : UnitPrefix)    =
-        match a.Unit <> UnitOfMeasure.None with
+        match a.Unit <> Unit.None with
         | true -> Value(a.X, a.Unit / b)
         | false -> 
             let x : Rational = a.X / b.Scale
-            Value(x, UnitOfMeasure.None)
+            Value(x, Unit.None)
     static member (/) (a : Value, b : Constant)      = a / Value(b)
     static member (/) (a : Value, b : Rational)      = Value(a.X / b, a.Unit)
     static member (/) (a : Value, b : bigint)        = Value(a.X / Rational b, a.Unit)
@@ -421,14 +421,14 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     static member (/) (a : Value, b : int)           = Value(a.X / Rational b, a.Unit)
     static member (/) (a : Value, b : float)         = Value(a.X / Rational b, a.Unit)
     static member (/) (a : Value, b : float32)       = Value(a.X / Rational b, a.Unit)
-    static member (/) (a : UnitOfMeasure, b : Value) =
-        match b.Unit <> UnitOfMeasure.None with
+    static member (/) (a : Unit, b : Value) =
+        match b.Unit <> Unit.None with
         | true -> Value(b.X, a / b.Unit)
         | false -> Value(b.X, a)
     static member (/) (a : UnitPrefix, b : Value)    =
-        match b.Unit <> UnitOfMeasure.None with
+        match b.Unit <> Unit.None with
         | true -> Value(b.X, a / b.Unit)
-        | false -> Value(b.X / a.Scale, UnitOfMeasure.None)
+        | false -> Value(b.X / a.Scale, Unit.None)
     static member (/) (a : Constant, b : Value)      = Value(a) / b
     static member (/) (a : int64, b : Value)         = Value(Rational a / b.X, 1 / b.Unit)
     static member (/) (a : int, b : Value)           = Value(Rational a / b.X, 1 / b.Unit)
@@ -437,11 +437,11 @@ and Value(x : Rational, unit : UnitOfMeasure) =
 
     static member (+) (a : Value, b : Value)    =
         if a.HasUnitsEquivalentTo b then
-            match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+            match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
             | (true, true) -> Value(a.X + b.X * b.Unit.Scale / a.Unit.Scale, a.Unit)
             | (true, false) -> Value(a.X + b.X, a.Unit)
             | (false, true) -> Value(a.X + b.X, b.Unit)
-            | (false, false) -> Value(a.X + b.X, UnitOfMeasure.None)
+            | (false, false) -> Value(a.X + b.X, Unit.None)
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
     static member (+) (a : Value, b : Rational) = Value(a.X + b, a.Unit)
@@ -453,11 +453,11 @@ and Value(x : Rational, unit : UnitOfMeasure) =
 
     static member (-) (a : Value, b : Value) =
         if a.HasUnitsEquivalentTo b then
-            match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+            match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
             | (true, true) -> Value(a.X - b.X * b.Unit.Scale / a.Unit.Scale, a.Unit)
             | (true, false) -> Value(a.X - b.X, a.Unit)
             | (false, true) -> Value(a.X - b.X, b.Unit)
-            | (false, false) -> Value(a.X - b.X, UnitOfMeasure.None)
+            | (false, false) -> Value(a.X - b.X, Unit.None)
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
     static member (-) (a : Value, b : Rational) = Value(a.X - b, a.Unit)
@@ -470,7 +470,7 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     member internal self.HasUnitsEquivalentTo (other : Value) = self.Unit.HasUnitsEquivalentTo(other.Unit)
     static member inline internal op (a : Value) (b : Value) f =
         if a.HasUnitsEquivalentTo b then
-            match (a.Unit <> UnitOfMeasure.None, b.Unit <> UnitOfMeasure.None) with
+            match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
             | (true, true) -> f (a.X * a.Unit.Scale) (b.X * b.Unit.Scale)
             | (true, false) -> f (a.X * a.Unit.Scale) b.X
             | (false, true) -> f a.X (b.X * b.Unit.Scale)
@@ -490,7 +490,7 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     interface IComparable<Value> with
         member self.CompareTo other =
             if self.HasUnitsEquivalentTo other then
-                match (self.Unit <> UnitOfMeasure.None, other.Unit <> UnitOfMeasure.None) with
+                match (self.Unit <> Unit.None, other.Unit <> Unit.None) with
                 | (true, true) -> ((self.X * self.Unit.Scale) :> IComparable<_>).CompareTo(other.X * other.Unit.Scale)
                 | (true, false) -> ((self.X * self.Unit.Scale) :> IComparable<_>).CompareTo(other.X)
                 | (false, true) -> (self.X :> IComparable<_>).CompareTo(other.X * other.Unit.Scale)
@@ -508,7 +508,7 @@ and Value(x : Rational, unit : UnitOfMeasure) =
     interface IEquatable<Value> with
         member self.Equals other =
             if self.HasUnitsEquivalentTo other then
-                match (self.Unit <> UnitOfMeasure.None, other.Unit <> UnitOfMeasure.None) with
+                match (self.Unit <> Unit.None, other.Unit <> Unit.None) with
                 | (true, true) -> self.X * self.Unit.Scale = other.X * other.Unit.Scale
                 | (true, false) -> self.X * self.Unit.Scale = other.X
                 | (false, true) -> self.X = other.X * other.Unit.Scale
@@ -523,31 +523,31 @@ and Value(x : Rational, unit : UnitOfMeasure) =
 
     override self.GetHashCode() = hash (self.X, self.Unit)
 
-and Constant(name : string, symbol : string, x : Rational, unit : UnitOfMeasure) =
+and Constant(name : string, symbol : string, x : Rational, unit : Unit) =
     member self.Name = name
     member self.Symbol = symbol
     member self.X = x
     member self.Unit = unit
     
-    new(name : string, symbol : string, x : Rational) = Constant(name, symbol, x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : Rational) = Constant(name, symbol, x, Unit.None)
     
-    new(name : string, symbol : string, x : bigint, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : bigint) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : bigint, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : bigint) = Constant(name, symbol, Rational x, Unit.None)
     
-    new(name : string, symbol : string, x : decimal, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : decimal) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : decimal, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : decimal) = Constant(name, symbol, Rational x, Unit.None)
     
-    new(name : string, symbol : string, x : int64, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : int64) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : int64, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : int64) = Constant(name, symbol, Rational x, Unit.None)
     
-    new(name : string, symbol : string, x : int, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : int) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : int, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : int) = Constant(name, symbol, Rational x, Unit.None)
     
-    new(name : string, symbol : string, x : float, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : float) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : float, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : float) = Constant(name, symbol, Rational x, Unit.None)
     
-    new(name : string, symbol : string, x : float32, unit : UnitOfMeasure) = Constant(name, symbol, Rational x, unit)
-    new(name : string, symbol : string, x : float32) = Constant(name, symbol, Rational x, UnitOfMeasure.None)
+    new(name : string, symbol : string, x : float32, unit : Unit) = Constant(name, symbol, Rational x, unit)
+    new(name : string, symbol : string, x : float32) = Constant(name, symbol, Rational x, Unit.None)
 
     new(name : string, symbol : string, x : Value) = Constant(name, symbol, x.X, x.Unit)
 
@@ -570,17 +570,17 @@ and Constant(name : string, symbol : string, x : Rational, unit : UnitOfMeasure)
         | true -> source.X.ToFloat()
         | false -> (source.X * source.Unit.Scale).ToFloat()
 
-    static member (=>) (self : Constant, unit : UnitOfMeasure) = Value(self.X, self.Unit) => unit
+    static member (=>) (self : Constant, unit : Unit) = Value(self.X, self.Unit) => unit
 
     static member (+) (a : Constant, b : Constant) = Value(a) + Value(b)
 
     static member (-) (a : Constant, b : Constant) = Value(a) - Value(b)
 
     static member (*) (a : Constant, b : Constant) = Value(a) * Value(b)
-    static member (*) (a : Constant, b : UnitOfMeasure) = Value(a) * b
+    static member (*) (a : Constant, b : Unit) = Value(a) * b
     static member (*) (a : Constant, b : Rational) = Value(a) * b
     static member (*) (a : Constant, b : int) = Value(a) * b
-    static member (*) (a : UnitOfMeasure, b : Constant) = a * Value(b)
+    static member (*) (a : Unit, b : Constant) = a * Value(b)
     static member (*) (a : Constant, b : UnitPrefix) = Value(a) * b
     static member (*) (a : UnitPrefix, b : Constant) = a * Value(b)
     static member (*) (a : Rational, b : Constant) = a * Value(b)
@@ -588,10 +588,10 @@ and Constant(name : string, symbol : string, x : Rational, unit : UnitOfMeasure)
     static member (*) (a : float, b : Constant) = a * Value(b)
 
     static member (/) (a : Constant, b : Constant) = Value(a) / Value(b)
-    static member (/) (a : Constant, b : UnitOfMeasure) = Value(a) / b
+    static member (/) (a : Constant, b : Unit) = Value(a) / b
     static member (/) (a : Constant, b : Rational) = Value(a) / b
     static member (/) (a : Constant, b : int) = Value(a) / b
-    static member (/) (a : UnitOfMeasure, b : Constant) = a / Value(b)
+    static member (/) (a : Unit, b : Constant) = a / Value(b)
     static member (/) (a : int, b : Constant) = a / Value(b)
 
 and UnitPrefix(name : string, symbol : string, scale : Rational) =
@@ -602,24 +602,20 @@ and UnitPrefix(name : string, symbol : string, scale : Rational) =
     new(name : string, symbol : string, scale : int) = UnitPrefix(name, symbol, Rational scale)
     new(name : string, symbol : string, scale : bigint) = UnitPrefix(name, symbol, Rational scale)
 
-    static member (*) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Scale * b.Scale)
-    static member (*) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Scale * b.Scale)
-    static member (/) (a : UnitPrefix, b : UnitOfMeasure) = UnitOfMeasure(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Scale / b.Scale)
-    static member (/) (a : UnitOfMeasure, b : UnitPrefix) = UnitOfMeasure(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Scale / b.Scale)
+    static member (*) (a : UnitPrefix, b : Unit) = Unit(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Scale * b.Scale)
+    static member (*) (a : Unit, b : UnitPrefix) = Unit(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Scale * b.Scale)
+    static member (/) (a : UnitPrefix, b : Unit) = Unit(a.Name + b.Name, a.Symbol + b.Symbol, UnitPrefix.baseOrSelf b, a.Scale / b.Scale)
+    static member (/) (a : Unit, b : UnitPrefix) = Unit(b.Name + a.Name, b.Symbol + a.Symbol, UnitPrefix.baseOrSelf a, a.Scale / b.Scale)
 
-    static member private baseOrSelf (unit:UnitOfMeasure) : UnitPowers =
+    static member private baseOrSelf (unit:Unit) : UnitPowers =
         match unit.IsDimensionLess with
         | true -> UnitPowers {Unit = unit; Power = 1}
         | false -> unit.BaseUnits
 
 
-type internal U = UnitOfMeasure
+type internal U = Unit
 
 module internal Fun =
-
-    let (^^) (a : int) (b : int) : Rational = Rational.Pow(bigint a, b)
-
-    let (^) (a : UnitOfMeasure) (b : int) : UnitOfMeasure = a.Pow(b)
 
     let E (m : float) (e : int) = Rational(m) * Rational.Pow(10, e)
 

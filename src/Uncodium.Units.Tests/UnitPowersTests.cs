@@ -55,8 +55,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void Equality9()
         {
-            var a = new UnitOfMeasure("meter", "m");
-            var b = new UnitOfMeasure("meter", "m");
+            var a = new Unit("meter", "m");
+            var b = new Unit("meter", "m");
 
             Assert.IsTrue(a.BaseUnits == b.BaseUnits);
         }

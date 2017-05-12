@@ -103,11 +103,11 @@ VacuumPermittivity |> string
 Newton / Ampere.Pow(2) |> string
 Farad / Meter |> string
 Newton / (Ampere.Pow(2))
-1 / (VacuumPermeability * U(SpeedOfLight).Pow(2))
-1 / U(VacuumPermeability) |> string
+1 / (VacuumPermeability * Unit(SpeedOfLight).Pow(2))
+1 / Unit(VacuumPermeability) |> string
 1 / Value(VacuumPermeability) |> string
 
-1 * UnitOfMeasure(International.Pound * StandardGravity) => Newton |> string
+1 * Unit(International.Pound * StandardGravity) => Newton |> string
 
 ImpedanceOfFreeSpace |> string
 

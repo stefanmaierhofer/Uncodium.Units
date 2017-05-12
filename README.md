@@ -1,16 +1,4 @@
-# Get started
-
-## Build
-
-First of all, run `build` command to install dependencies.
-
-In *Visual Studio Code* open repository directory. Use *Ctrl-Shift-B* to build.
-
-In *Visual Studio 2017* open `src/Uncodium.Units.sln`.
-
-## Examples
-
-### How many acres are in a square mile?
+How many acres are in a square mile?
 
 ```F#
 // F# Interactive
@@ -22,7 +10,7 @@ val it : float = 640.0
 > Print(SquareMile / Acre);
 [640]
 ```
-### The difference between a pint in the UK and in the US, in liters?
+What is the difference between a pint in the UK and in the US, in liters?
 
 ```F#
 // F# Interactive
@@ -34,5 +22,12 @@ val it : string = "0.095084777 l"
 > Print((1 * UK.LiquidVolume.Pint - 1 * US.LiquidVolume.UsPint).ConvertTo(Liter));
 [0.095084777 l]
 ```
+# Get started
+## Build
 
+First of all, run `build` command to install dependencies.
+
+In *Visual Studio Code* open repository directory. Use *Ctrl-Shift-B* to build.
+
+In *Visual Studio 2017* open `src/Uncodium.Units.sln`.
 

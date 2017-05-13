@@ -3,8 +3,6 @@
 /// http://www.bipm.org/utils/common/pdf/si_brochure_8_en.pdf
 module SI =
 
-    open Fun
-
     let internal prefix (name : string) (symbol : string) (a : int) (b : int)
         = UnitPrefix(name, symbol, Rational.Pow(a, b))
 

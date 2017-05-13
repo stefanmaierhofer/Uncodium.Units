@@ -42,6 +42,9 @@ type Unit =
     new(name : string, symbol : string) =
         Unit(name, symbol, UnitPowers.None, Rational.One)
     
+    new(name : string) =
+        Unit(name, name, UnitPowers.None, Rational.One)
+
     new(value : Value) =
         let u : Unit = value.Unit
         Unit(u.Name, u.Symbol, u.BaseUnits, value.X * u.Scale)

@@ -66,6 +66,77 @@ namespace Uncodium.Units.Tests
 
         #endregion
 
+        #region Divide
+
+        [Test]
+        public void MeterPerSecond()
+        {
+            var d = 1 * Meter;
+            var t = 1 * Second;
+            var x = d / t;
+        }
+
+        [Test]
+        public void KilometerPerSecond()
+        {
+            var d = 1 * Kilometer;
+            var t = 1 * Second;
+            var x = d / t;
+        }
+
+        [Test]
+        public void MeterPerHour()
+        {
+            var d = 1 * Meter;
+            var t = 1 * Hour;
+            var x = d / t;
+        }
+
+        [Test]
+        public void KilometerPerHour()
+        {
+            var d = 42.195 * Kilometer;
+            var t = 2.5 * Hour;
+            var x = d / t;
+        }
+
+        [Test]
+        public void KilometerPerHourToString()
+        {
+            var d = 42.195 * Kilometer;
+            var t = 2.5 * Hour;
+            var x = d / t;
+            var s = x.ToString();
+        }
+
+        [Test]
+        public void CentimeterPerSecond()
+        {
+            var x = Centimeter / Second;
+            Assert.IsTrue(x.Scale == new Rational(0.01));
+        }
+
+        #endregion
+
+        #region Conversion
+
+        [Test]
+        public void KilometerPerHourToMph()
+        {
+            var d = 42.195 * Kilometer;
+            var t = 2.5 * Hour;
+            var x = d / t;
+            var y = x.ConvertTo(MilesPerHour);
+        }
+
+        [Test]
+        public void Marathon()
+        {
+            var x = ((42.195 * Kilometer) / (2.5 * Hour));
+        }
+
+        #endregion
+
         #region Reciprocal
 
         [Test]

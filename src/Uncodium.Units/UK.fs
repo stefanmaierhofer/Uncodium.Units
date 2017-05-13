@@ -5,12 +5,11 @@ open System.Numerics
   
 module UK =
 
-    open Fun
     open SI
 
     module LiquidVolume =
 
-        /// A gallon is defined as exactly 4.54609 litres.
+        /// A gallon is defined as exactly 4.54609 liters.
         let Gallon          = U("gallon",               "gal",      SI.Liter,               454_609R / 100_000  )
         /// A bushel is equal to 8 gallons.
         let Bushel          = U("bushel",               "bushel",   Gallon,                 8                   )

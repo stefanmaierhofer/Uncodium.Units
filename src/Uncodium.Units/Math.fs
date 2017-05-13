@@ -5,8 +5,6 @@ open System.Numerics
   
 module Math =
 
-    open Fun
-
     /// The ratio of a circle's circumference to its diameter.
     let Pi                      = Constant("Pi", "π", Rational.Pi)
 

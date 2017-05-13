@@ -5,7 +5,6 @@ open System.Numerics
    
 module International =
 
-    open Fun
     open SI
     
     (*

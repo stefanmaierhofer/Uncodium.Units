@@ -8,6 +8,16 @@ open International
 open UK.LiquidVolume
 open US.LiquidVolume
 
+let SomeUnit = Unit("SomeUnit")
+let Foo = Unit("Foo", "foo", SomeUnit, 1R / 3)
+5 * Foo
+
+123456789123456789R / 100000000000000000R |> float
+
+0.123456789123
+
+1 * Yard * 2 * Decimeter * 3 * Nano * Lightsecond => CubicFoot |> string
+
 float(1 * Dyne * Centimeter) = 10R.Pow(-7).ToFloat()
 
 VacuumPermeability |> string

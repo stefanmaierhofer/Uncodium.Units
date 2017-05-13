@@ -5,7 +5,6 @@ open System.Numerics
   
 module US =
 
-    open Fun
     open SI
 
     module Survey =

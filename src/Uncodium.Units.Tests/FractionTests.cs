@@ -23,9 +23,9 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CanCreateFraction_double()
         {
-            var x = new Rational(3.1415);
-            Assert.IsTrue(x.ToFloat() == 3.1415);
-            Assert.IsTrue(x.Numerator == 31415 && x.Denominator == 10000);
+            var x = new Rational(1.01);
+            Assert.IsTrue(x.ToFloat() == 1.01);
+            Assert.IsTrue(x.Numerator == 101 && x.Denominator == 100);
         }
 
         [Test]
@@ -60,48 +60,48 @@ namespace Uncodium.Units.Tests
         public void CanCreateFraction_bigint_double()
         {
             var x = new Rational(new BigInteger(8), 0.5); 
-            Assert.IsTrue(x.Numerator == 80 && x.Denominator == 5);
+            Assert.IsTrue(x.Numerator == 16 && x.Denominator == 1);
         }
 
         [Test]
         public void CanCreateFraction_bigint_int()
         {
             var x = new Rational(new BigInteger(2), -2);
-            Assert.IsTrue(x.Numerator == -2 && x.Denominator == 2);
+            Assert.IsTrue(x.Numerator == -1 && x.Denominator == 1);
         }
 
         [Test]
         public void CanCreateFraction_double_bigint()
         {
-            var x = new Rational(0.123, new BigInteger(456));
-            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 456000);
+            var x = new Rational(0.123, new BigInteger(124));
+            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 124000);
         }
 
         [Test]
         public void CanCreateFraction_double_double_1()
         {
-            var x = new Rational(0.123, 45.6);
-            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 45600);
+            var x = new Rational(0.123, 12.4);
+            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 12400);
         }
         [Test]
         public void CanCreateFraction_double_double_2()
         {
-            var x = new Rational(0.0123, 0.000456);
-            Assert.IsTrue(x.Numerator == 12300 && x.Denominator == 456);
+            var x = new Rational(0.0123, 0.00017);
+            Assert.IsTrue(x.Numerator == 1230 && x.Denominator == 17);
         }
 
         [Test]
         public void CanCreateFraction_double_int()
         {
-            var x = new Rational(12.34, 10);
-            Assert.IsTrue(x.Numerator == 1234 && x.Denominator == 1000);
+            var x = new Rational(12.3, 10);
+            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 100);
         }
 
         [Test]
         public void CanCreateFraction_double_long()
         {
-            var x = new Rational(0.0123, 456L);
-            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 4560000);
+            var x = new Rational(0.0123, 124L);
+            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 1240000);
         }
 
         [Test]
@@ -114,8 +114,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CanCreateFraction_int_double()
         {
-            var x = new Rational(123, 456.0);
-            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 456);
+            var x = new Rational(123, 124.0);
+            Assert.IsTrue(x.Numerator == 123 && x.Denominator == 124);
         }
 
         [Test]
@@ -128,8 +128,8 @@ namespace Uncodium.Units.Tests
         [Test]
         public void CanCreateFraction_long_double()
         {
-            var x = new Rational(123L, 45600.789);
-            Assert.IsTrue(x.Numerator == 123000 && x.Denominator == 45600789);
+            var x = new Rational(123L, 12400.789);
+            Assert.IsTrue(x.Numerator == 123000 && x.Denominator == 12400789);
         }
 
         [Test]
@@ -140,10 +140,10 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void FractionIsNotSimplifiedOnCreation()
+        public void FractionIsSimplifiedOnCreation()
         {
             var x = new Rational(2, 4);
-            Assert.IsTrue(x.Numerator == 2 && x.Denominator == 4);
+            Assert.IsTrue(x.Numerator == 1 && x.Denominator == 2);
         }
 
         #endregion

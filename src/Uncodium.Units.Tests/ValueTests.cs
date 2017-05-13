@@ -69,7 +69,7 @@ namespace Uncodium.Units.Tests
         #region Divide
 
         [Test]
-        public void MeterPerSecond()
+        public void Divide1()
         {
             var d = 1 * Meter;
             var t = 1 * Second;
@@ -77,7 +77,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void KilometerPerSecond()
+        public void Divide2()
         {
             var d = 1 * Kilometer;
             var t = 1 * Second;
@@ -85,7 +85,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void MeterPerHour()
+        public void Divide3()
         {
             var d = 1 * Meter;
             var t = 1 * Hour;
@@ -93,7 +93,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void KilometerPerHour()
+        public void Divide4()
         {
             var d = 42.195 * Kilometer;
             var t = 2.5 * Hour;
@@ -101,7 +101,7 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void KilometerPerHourToString()
+        public void Divide5()
         {
             var d = 42.195 * Kilometer;
             var t = 2.5 * Hour;
@@ -110,10 +110,17 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
-        public void CentimeterPerSecond()
+        public void Divide6()
         {
-            var x = Centimeter / Second;
-            Assert.IsTrue(x.Scale == new Rational(0.01));
+            var x = Millimeter / Second;
+            var s = x.ToString();
+        }
+
+        [Test]
+        public void Divide7()
+        {
+            var x = Meter / KilometersPerHour;
+            var s = x.ToString();
         }
 
         #endregion
@@ -164,33 +171,33 @@ namespace Uncodium.Units.Tests
         [Test]
         public void Float1()
         {
-            var x = 7.5 * Meter;
-            var f = (float)x;
-            Assert.IsTrue(f == 7.5);
+            var x = 2.5 * Meter;
+            var f = (double)x;
+            Assert.IsTrue(f == 2.5);
         }
 
         [Test]
         public void Float1const()
         {
-            var x = new Constant("foo", "foo", 7.5, Meter);
-            var f = (float)x;
-            Assert.IsTrue(f == 7.5);
+            var x = new Constant("foo", "foo", 2.5, Meter);
+            var f = (double)x;
+            Assert.IsTrue(f == 2.5);
         }
 
         [Test]
         public void Float2()
         {
-            var x = 7.5 * Centimeter;
-            var f = (float)x;
-            Assert.IsTrue(f == 7.5);
+            var x = 2.5 * Centimeter;
+            var f = (double)x;
+            Assert.IsTrue(f == 2.5);
         }
 
         [Test]
         public void Float2const()
         {
-            var x = new Constant("foo", "foo", 7.5, Centimeter);
-            var f = (float)x;
-            Assert.IsTrue(f == 7.5);
+            var x = new Constant("foo", "foo", 2.5, Centimeter);
+            var f = (double)x;
+            Assert.IsTrue(f == 2.5);
         }
 
         #endregion

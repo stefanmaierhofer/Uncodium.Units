@@ -70,7 +70,7 @@ type Unit =
             | false -> b.BaseUnits
         let powers : UnitPowers = psa * psb
         let symbol =
-            if a = b && a.HasName && a.HasSymbol then
+            if a = b && powers.Count = 1 && a.HasName && a.HasSymbol then
                 let p = powers.Powers.[0]
                 match p.Power with
                 | 0 -> ""
@@ -109,19 +109,23 @@ type Unit =
             | false -> b.BaseUnits
         let powers : UnitPowers = psa / psb
         let symbol =
-            if powers.Count = 1 && a.HasName && a.HasSymbol then
+            if a = b && powers.Count = 1 && a.HasName && a.HasSymbol then
                 let p = powers.Powers.[0]
                 match p.Power with
                 | 0 -> ""
-                | 1 -> p.Unit.Symbol
-                | 2 -> p.Unit.Symbol + "²"
-                | 3 -> p.Unit.Symbol + "³"
-                | i -> p.Unit.Symbol + "^" + string(i)
-            elif powers.Count = 2 && a.HasName && a.HasSymbol && b.HasName && b.HasSymbol then
+                | 1 -> a.Symbol
+                | 2 -> a.Symbol + "²"
+                | 3 -> a.Symbol + "³"
+                | i -> a.Symbol + "^" + string(i)
+            elif powers.Count = 1 && a <> b then
+                ""
+            elif powers.Count = 0 then
+                ""
+            elif a.HasName && a.HasSymbol && b.HasName && b.HasSymbol then
                 a.Symbol + "/" + b.Symbol
             else
                 ""
-        Unit("", symbol, powers, (a.Scale / b.Scale).Simplified)
+        Unit("", symbol, powers, a.Scale / b.Scale)
 
     static member (/) (a : int, b : Unit) =
         let powers =
@@ -167,24 +171,25 @@ type Unit =
 
     override self.ToString () = 
         let ps : UnitPower[] = self.BaseUnits.Powers
-        if self.BaseUnits.Count = 1 && (ps.[0].Power = 1) then
+        if not self.HasSymbol && self.BaseUnits.Count = 1 && (ps.[0].Power = 1) then
             let p = ps.[0].Unit
-            match (p.HasName, p.HasSymbol, p.Scale.Denominator <> 1I) with
-            | (true, true, false) -> sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale.Numerator)
-            | (false, true, true) -> sprintf "%s %s" p.Symbol (string p.Scale)
-            | (false, true, false) -> sprintf "%s %s" p.Symbol (string p.Scale.Numerator)
-            | (false, false, true) -> sprintf "%s" (string p.Scale)
-            | (false, false, false) -> sprintf "%s" (string p.Scale.Numerator)
-            | _ -> sprintf "%s (%s) %s" p.Name p.Symbol (string p.Scale)
+            let scale = self.Scale * p.Scale
+            match (p.HasName, p.HasSymbol, scale.Denominator <> 1I) with
+            | (true, true, false) -> sprintf "%s (%s) %s" p.Name p.Symbol (string scale.Numerator)
+            | (false, true, true) -> sprintf "%s %s" p.Symbol (string scale)
+            | (false, true, false) -> sprintf "%s %s" p.Symbol (string scale.Numerator)
+            | (false, false, true) -> sprintf "%s" (string scale)
+            | (false, false, false) -> sprintf "%s" (string scale.Numerator)
+            | _ -> sprintf "%s (%s) %s" p.Name p.Symbol (string scale)
         else
             let bu = if self.IsDimensionLess then "" else " " + (string self.BaseUnits)
             match (self.HasName, self.HasSymbol, self.Scale.Denominator <> 1I) with
             | (true, true, false) -> sprintf "%s (%s) %s%s" self.Name self.Symbol (string self.Scale.Numerator) bu
-            | (false, true, true) -> sprintf "%s %s%s" self.Symbol (string self) bu
-            | (false, true, false) -> sprintf "%s %s %s" self.Symbol (string self.Scale.Numerator) bu
+            | (false, true, true) -> sprintf "%s %s%s" self.Symbol (string self.Scale) bu
+            | (false, true, false) -> sprintf "%s %s%s" self.Symbol (string self.Scale.Numerator) bu
             | (false, false, true) -> sprintf "%s%s" (string self.Scale) bu
             | (false, false, false) -> sprintf "%s%s" (string self.Scale.Numerator) bu
-            | _ -> sprintf "%s (%s) %s %s" self.Name self.Symbol (string self.Scale) bu
+            | _ -> sprintf "%s (%s) %s%s" self.Name self.Symbol (string self.Scale) bu
 
     static member private normalize (powers : Dictionary<Unit,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
@@ -331,16 +336,22 @@ and Value(x : Rational, unit : Unit) =
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
+    /// ConvertTo(unit : Unit)
     static member (=>) (self : Value, unit : Unit) =
         if self.Unit.HasUnitsEquivalentTo unit then
                 Value(self.X * self.Unit.Scale / unit.Scale, unit)
             else
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
-
+       
     static member op_Explicit(source: Value) : float =
         match source.Unit.HasSymbol with
         | true -> source.X.ToFloat()
         | false -> (source.X * source.Unit.Scale).ToFloat()
+
+    static member op_Explicit(source: Value) : int =
+        match source.Unit.HasSymbol with
+        | true -> source.X.ToFloat() |> int
+        | false -> (source.X * source.Unit.Scale).ToFloat() |> int
 
     member self.Inverse with get () = Value(self.X.Inverse, 1 / self.Unit)
     
@@ -366,7 +377,7 @@ and Value(x : Rational, unit : Unit) =
         | true -> Value(a.X, a.Unit * b)
         | false ->
             let x : Rational = a.X * b.Scale
-            Value(x, Unit.None)
+            Value(x.Simplified, Unit.None)
     static member (*) (a : Value, b : Constant)      =
         let f : Rational = a.X * b.X
         match (a.Unit <> Unit.None, b.Unit <> Unit.None) with
@@ -572,6 +583,11 @@ and Constant(name : string, symbol : string, x : Rational, unit : Unit) =
         match source.Unit.HasSymbol with
         | true -> source.X.ToFloat()
         | false -> (source.X * source.Unit.Scale).ToFloat()
+
+    static member op_Explicit(source: Constant) : int =
+        match source.Unit.HasSymbol with
+        | true -> source.X.ToFloat() |> int
+        | false -> (source.X * source.Unit.Scale).ToFloat() |> int
 
     static member (=>) (self : Constant, unit : Unit) = Value(self.X, self.Unit) => unit
 

@@ -11,9 +11,15 @@ type Rational =
 
         new(numerator: bigint, denominator: bigint) =
             if denominator = 0I then raise (DivideByZeroException())
-            match denominator > 0I with
-                | true -> { Numerator = numerator; Denominator = denominator }
-                | false -> { Numerator = -numerator; Denominator = -denominator }      
+            let d = bigint.GreatestCommonDivisor(numerator, denominator)
+            if d = 1I then
+                match denominator > 0I with
+                    | true -> { Numerator = numerator; Denominator = denominator }
+                    | false -> { Numerator = -numerator; Denominator = -denominator }
+            else
+                match denominator > 0I with
+                    | true -> { Numerator = numerator / d; Denominator = denominator / d }
+                    | false -> { Numerator = -numerator / d; Denominator = -denominator / d }      
         new(numerator: bigint, denominator: decimal)    = Rational(numerator, bigint denominator)
         new(numerator: bigint, denominator: int64)      = Rational(numerator, bigint denominator)
         new(numerator: bigint, denominator: int)        = Rational(numerator, bigint denominator)

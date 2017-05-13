@@ -100,8 +100,23 @@ For example, if you want to know the average speed in *mph* of a runner completi
 val it : string = "10.4875029825817 mph"
 ```
 
-## Creating units
+## Defining new units
 
+Let's say we want to define a unit representing the speed of a snail. According to Wikipedia the garden snail (Cornu aspersum) moves at top speeds of 1.3 centimeters per second. We can define this new *snail* unit as follows
+
+```F#
+> let Snail = Unit("speed of garden snail", "snail", Centimeter/Second, 1.3);;
+val Snail : Unit = speed of garden snail (snail) (13/1000)  [m^1][s^-1]
+```
+
+And how many days does it take a snail to complete a marathon?
+
+```F#
+> 42.195 * Kilometer / Snail => Day;;
+val it : Value = 37.5667735042735 d {Inverse = 0 [s^-1];
+                                     Unit = day (d) 86400 [s^1];
+                                     X = (70325/1872);}
+```
 
 
 ## Incompatible units

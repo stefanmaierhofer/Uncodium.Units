@@ -52,6 +52,14 @@ namespace Uncodium.Units.Tests
             var s = x.ToString();
             Assert.IsTrue(s == "640");
         }
+        
+        [Test]
+        public void ToString2()
+        {
+            var x = new Unit("foo", "f", Centimeter / Second, 1.3);
+            var s = x.ToString();
+            Assert.IsTrue(s == "foo (f) (13/1000) [m^1][s^-1]");
+        }
 
         #endregion
 
@@ -72,9 +80,9 @@ namespace Uncodium.Units.Tests
             var f = (double)x;
             Assert.IsTrue(f == 0.02);
         }
-        
-        #endregion
 
+        #endregion
+        
         [Test]
         public void UnitPerSameUnitYieldsDimensionlessUnit()
         {

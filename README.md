@@ -97,7 +97,7 @@ For example, if you want to know the average speed in *mph* of a runner completi
 
 ```F#
 > ((42.195 * Kilometer) / (2.5 * Hour)) => MilesPerHour |> string;;
-val it : string = "10.4875029825817 mph"
+val it : string = "10.4875 mph"
 ```
 
 ## Defining new units
@@ -113,8 +113,7 @@ And how many days does it take a snail to complete a marathon?
 
 ```F#
 > 42.195 * Kilometer / Snail => Day;;
-val it : Value = 37.5667735042735 d {Inverse = 0 [s^-1];
-                                     Unit = day (d) 86400 [s^1];
+val it : Value = 37.5668 d {Unit = day (d) 86400 [s^1];
                                      X = (70325/1872);}
 ```
 

@@ -130,16 +130,16 @@ System.InvalidOperationException: Values (7 m) and (42 s) have different units.
 
 # Modules
 
-  |                          |                 |
+  name                          |       description          |
 ----------------------------------|-------------
- Uncodium.Units.SI                | The International System of Units is the most widely used system of measurement.
- Uncodium.Units.International     | Yards and pounds used in US, UK, Canada, Australia, New Zealand, and South Africa.
- Uncodium.Units.US                | Customary units used in the US, not contained in Uncodium.Units.International.
- Uncodium.Units.UK                | Customary units used in the UK, not contained in Uncodium.Units.International.
- Uncodium.Units.Physics           | Physics units and constants.
- Uncodium.Units.Information       | Bit and bytes.
- Uncodium.Units.Math              | Math constants, like π and e.
- Uncodium.Units.Photometry        | Photometric units.
+ SI                | The International System of Units is the most widely used system of measurement.
+ International     | Yards and pounds used in US, UK, Canada, Australia, New Zealand, and South Africa.
+ US                | Customary units used in the US, not contained in Uncodium.Units.International.
+ UK                | Customary units used in the UK, not contained in Uncodium.Units.International.
+ Physics           | Physics units and constants.
+ Information       | Bit and bytes.
+ Math              | Math constants, like π and e.
+ Photometry        | Photometric units.
 
 In F# you can open modules like this:
 

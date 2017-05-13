@@ -130,14 +130,32 @@ System.InvalidOperationException: Values (7 m) and (42 s) have different units.
 
 # Modules
 
-## International System of Units (SI)
-The International System of Units (French: Système international d'unités; abbreviated as SI) is the modern form of the metric system, and is the most widely used system of measurement. It comprises a coherent system of units of measurement built on seven base units. The system also establishes a set of twenty prefixes to the unit names and unit symbols that may be used when specifying multiples and fractions of the units.
+  module                          | description
+----------------------------------|-------------
+ Uncodium.Units.SI                | The International System of Units is the most widely used system of measurement.
+ Uncodium.Units.International     | Yards and pounds used in US, UK, Canada, Australia, New Zealand, and South Africa.
+ Uncodium.Units.US                | Customary units used in the US, not contained in Uncodium.Units.International.
+ Uncodium.Units.UK                | Customary units used in the UK, not contained in Uncodium.Units.International.
+ Uncodium.Units.Physics           | Physics units and constants.
+ Uncodium.Units.Information       | Bit and bytes.
+ Uncodium.Units.Math              | Math constants, like π and e.
+ Uncodium.Units.Photometry        | Photometric units.
 
+In F# you can open modules like this:
 
+```F#
+open Uncodium.Units
+open SI
+open Physics
+```
 
-## Yards and Pounds
+In C# you can open modules like that:
 
-## Customary units in the US and GB
+```C#
+using Uncodium.Units;
+using static Uncodium.Units.SI;
+using static Uncodium.Units.Physics;
+```
 
 # Build from source
 

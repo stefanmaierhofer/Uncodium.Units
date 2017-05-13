@@ -133,8 +133,8 @@ System.InvalidOperationException: Values (7 m) and (42 s) have different units.
 ----------------------------------|-------------
  SI                | The International System of Units is the most widely used system of measurement.
  International     | Yards and pounds used in US, UK, Canada, Australia, New Zealand, and South Africa.
- US                | Customary units used in the US, not contained in Uncodium.Units.International.
- UK                | Customary units used in the UK, not contained in Uncodium.Units.International.
+ US                | US customary units (not contained in `International`).
+ UK                | UK customary units (not contained in `International`).
  Physics           | Physics units and constants.
  Information       | Bit and bytes.
  Math              | Math constants, like π and e.

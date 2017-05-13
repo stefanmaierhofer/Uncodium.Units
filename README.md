@@ -61,7 +61,7 @@ you will see the full underlying result
 val it : Value = 27 ft² {Unit = square foot (ft²) (145161/1562500)  [m^2];
                          X = (27/1);}
 ```
-which is a `Value` tying the the number `X=27/1` to the `Unit=square foot (ft²)`.
+which is a `Value` tying the the number `X=27/1` to `Unit=square foot (ft²)`.
 
 If we have a closer look at the unit
 
@@ -112,9 +112,8 @@ val Snail : Unit = speed of garden snail (snail) (13/1000)  [m^1][s^-1]
 And how many days does it take a snail to complete a marathon?
 
 ```F#
-> 42.195 * Kilometer / Snail => Day;;
-val it : Value = 37.5668 d {Unit = day (d) 86400 [s^1];
-                                     X = (70325/1872);}
+> 42.195 * Kilometer / Snail => Day |> string;;
+val it : string = "37.5667735042735 d"
 ```
 
 ## Arbitrary precision
@@ -123,7 +122,7 @@ Under the hood, Uncodium.Units represents all numeric values as ratios of bigint
 This means that it can perform exact arithmetic on rational numbers - no limits or rounding involved.
 
 For example, you can add 1 lightyear and 1 nanometer, then subtract again 1 lightyear, and get a difference of 1 nanometer.
-When using floating point values, the result is 0.0, since the first sum can not be represented using a 64-bit floating point value.
+When using floating point values, the result is 0.0, since the first sum cannot be represented using a 64-bit floating point value.
 ```F#
 let a = 1 * Lightyear + 1 * Nanometer
 let b = 1 * Lightyear

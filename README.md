@@ -117,6 +117,24 @@ val it : Value = 37.5668 d {Unit = day (d) 86400 [s^1];
                                      X = (70325/1872);}
 ```
 
+## Arbitrary precision
+
+Under the hood, Uncodium.Units represents all numeric values as ratios of bigint values.
+This means that it can perform exact arithmetic on rational numbers - no limits or rounding involved.
+
+For example, you can add 1 lightyear and 1 nanometer, then subtract again 1 lightyear, and get a difference of 1 nanometer.
+When using floating point values, the result is 0.0, since the first sum can not be represented using a 64-bit floating point value.
+```F#
+let a = 1 * Lightyear + 1 * Nanometer
+let b = 1 * Lightyear
+let diffExact = float(a - b)
+let diffFloat = float(a) - float(b)
+
+val a : Value = 9.4607304725808E+15 [m^1]
+val b : Value = 9.4607304725808E+15 [m^1]
+val diffExact : float = 1e-09
+val diffFloat : float = 0.0
+```
 
 ## Incompatible units
 Expressions trying to combine incompatible units, e.g. adding meters and seconds, will throw an exception, e.g. 

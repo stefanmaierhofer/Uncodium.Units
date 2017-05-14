@@ -8,6 +8,11 @@ open International
 open UK.LiquidVolume
 open US.LiquidVolume
 
+let a = 1 * Lightyear + 1 * Nanometer
+let b = 1 * Lightyear
+let diffExact = float(a - b)
+let diffFloat = float(a) - float(b)
+
 let SomeUnit = Unit("SomeUnit")
 let Foo = Unit("Foo", "foo", SomeUnit, 1R / 3)
 5 * Foo

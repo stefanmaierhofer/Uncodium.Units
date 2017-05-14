@@ -61,7 +61,7 @@ you will see the full underlying result
 val it : Value = 27 ft² {Unit = square foot (ft²) (145161/1562500)  [m^2];
                          X = (27/1);}
 ```
-which is a `Value` tying the the number `X=27/1` to `Unit=square foot (ft²)`.
+which is a `Value` tying the number `X=27/1` to `Unit=square foot (ft²)`.
 
 If we have a closer look at the unit
 
@@ -74,12 +74,12 @@ val it : Unit =
                                              Scale = (145161/1562500);
                                              Symbol = "ft²";}
 ```
-you can see that the its `Name`=*"square foot"* with `Symbol`=*"ft²"* and that it is defined in terms of SI `BaseUnits`=*[m^2]* with a conversion factor `Scale`=*145161/1562500*.
+you can see that its `Name`=*"square foot"* with `Symbol`=*"ft²"* and that it is defined in terms of SI `BaseUnits`=*[m^2]* (meters squared) with a conversion factor of `Scale`=*145161/1562500*.
 This means that *1 ft²* is exactly *145161/1562500 square meters*, where `Float`=*0.09290304* is the 64-bit floating point representation of the exact scale.
 
 ## Conversions
 
-You can always convert values to another unit using `ConvertTo`, e.g.
+You can always convert values to other units using `ConvertTo`, e.g.
 
 ```F#
 > (1.5 * Minute).ConvertTo(Second) |> string;;
@@ -102,27 +102,36 @@ val it : string = "10.4875 mph"
 
 ## Defining new units
 
-Let's say we want to define a unit representing the speed of a snail. According to Wikipedia the garden snail (Cornu aspersum) moves at top speeds of 1.3 centimeters per second. We can define this new *snail* unit as follows
+Let's say we want to define a unit representing the speed of a snail. According to Wikipedia the garden snail (Cornu aspersum) moves at top speeds of 1.3 centimeters per second. We can define a new *snail* unit as follows
 
 ```F#
 > let Snail = Unit("speed of garden snail", "snail", Centimeter/Second, 1.3);;
 val Snail : Unit = speed of garden snail (snail) (13/1000)  [m^1][s^-1]
 ```
 
-And how many days does it take a snail to complete a marathon?
+You can see that the base units are *[m^1][s^-1]*, i.e. *meter/second*, and *1 snail = 13/1000 m/s*.
+
+By the way, how many days does it take a snail to complete a marathon?
 
 ```F#
 > 42.195 * Kilometer / Snail => Day |> string;;
 val it : string = "37.5667735042735 d"
 ```
 
+This works, because our *snail* unit is defined in terms of *meter/second*. So if we divide *kilometers* (defined in terms of *1000/1 meter*), with *13/1000 meter/second*, we arrive at *meter/(meter/second) = meter (second/meter) = second*, which we can convert to *days* (defined in terms of *86400/1 second*). Combining all the conversion factors gives *1,000,000 / 1,123,200 = 625/702*
+```F#
+> (Kilometer / Snail => Day).Scale |> string;;
+val it : string = "(625/702)"
+```
+therefore it takes our garden snail *625/702* days to cover *1 kilometer*.
+
 ## Arbitrary precision
 
 Under the hood, Uncodium.Units represents all numeric values as ratios of bigint values.
 This means that it can perform exact arithmetic on rational numbers - no limits or rounding involved.
 
-For example, you can add 1 lightyear and 1 nanometer, then subtract again 1 lightyear, and get a difference of 1 nanometer.
-When using floating point values, the result is 0.0, since the first sum cannot be represented using a 64-bit floating point value.
+For example, you can add *1 lightyear* and *1 nanometer*, then subtract again *1 lightyear*, and get a difference of *1 nanometer*.
+When using floating point arithmetic, the result would be *0.0*, because of limited precision.
 ```F#
 let a = 1 * Lightyear + 1 * Nanometer
 let b = 1 * Lightyear

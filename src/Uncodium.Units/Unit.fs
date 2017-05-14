@@ -191,6 +191,14 @@ type Unit =
             | (false, false, false) -> sprintf "%s%s" (string self.Scale.Numerator) bu
             | _ -> sprintf "%s (%s) %s%s" self.Name self.Symbol (string self.Scale) bu
 
+    member self.ConvertTo(unit : Unit) =
+        if self.HasUnitsEquivalentTo unit then
+                Unit("", "", unit.BaseUnits, self.Scale / unit.Scale)
+            else
+                invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
+    
+    static member (=>) (self : Unit, unit : Unit) = self.ConvertTo(unit)
+
     static member private normalize (powers : Dictionary<Unit,int>) : UnitPower[] =
         let pos = powers |> Seq.filter (fun kv -> kv.Value > 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
         let neg = powers |> Seq.filter (fun kv -> kv.Value < 0) |> Seq.sortBy (fun kv -> kv.Key.Name)
@@ -337,11 +345,7 @@ and Value(x : Rational, unit : Unit) =
                 invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
 
     /// ConvertTo(unit : Unit)
-    static member (=>) (self : Value, unit : Unit) =
-        if self.Unit.HasUnitsEquivalentTo unit then
-                Value(self.X * self.Unit.Scale / unit.Scale, unit)
-            else
-                invalidOp (sprintf "Cannot convert (%A) to (%A)." self unit)
+    static member (=>) (self : Value, unit : Unit) = self.ConvertTo(unit)
        
     static member op_Explicit(source: Value) : float =
         match source.Unit.HasSymbol with

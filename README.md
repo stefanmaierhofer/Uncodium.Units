@@ -162,7 +162,7 @@ System.InvalidOperationException: Values (7 m) and (42 s) have different units.
  US                | US customary units (not contained in *International*).
  UK                | UK customary units (not contained in *International*).
  Physics           | Physics units and constants.
- Information       | Bit and bytes.
+ Information       | Bits and bytes.
  Math              | Math constants, like π and e.
  Photometry        | Photometric units.
 

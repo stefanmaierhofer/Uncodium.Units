@@ -1,3 +1,5 @@
+[Nuget package](https://www.nuget.org/packages/Uncodium.Units)
+
 # Get started
 How many acres are in a square mile?
 

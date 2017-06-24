@@ -1,4 +1,6 @@
-[Nuget package](https://www.nuget.org/packages/Uncodium.Units)
+[![Build status](https://ci.appveyor.com/api/projects/status/oo82mya99s390kj0?svg=true)](https://ci.appveyor.com/project/stefanmaierhofer/uncodium-units)
+
+Install [nuget package](https://www.nuget.org/packages/Uncodium.Units).
 
 # Get started
 How many acres are in a square mile?

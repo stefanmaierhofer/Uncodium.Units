@@ -14,7 +14,7 @@ if exist paket.lock (
     echo Paket.lock does not exist. use .paket\paket.exe install to create one.
 )
 
-.paket\paket.exe restore group Build
+.paket\paket.exe restore --group Build
 if errorlevel 1 (
   exit /b %errorlevel%
 )

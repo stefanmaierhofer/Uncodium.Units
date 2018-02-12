@@ -86,15 +86,21 @@ type Unit =
                 ""
         Unit("", symbol, powers, a.Scale * b.Scale)
     static member (*) (a : Unit, b : Rational)      = Value(b, a)
+    static member (*) (a : Unit, b : decimal)       = Value(Rational b, a)
     static member (*) (a : Unit, b : bigint)        = Value(Rational b, a)
     static member (*) (a : Unit, b : int64)         = Value(Rational b, a)
+    static member (*) (a : Unit, b : uint64)        = Value(Rational b, a)
     static member (*) (a : Unit, b : int)           = Value(Rational b, a)
+    static member (*) (a : Unit, b : uint32)        = Value(Rational b, a)
     static member (*) (a : Unit, b : float)         = Value(Rational b, a)
     static member (*) (a : Unit, b : float32)       = Value(Rational b, a)
     static member (*) (a : Rational, b : Unit)      = Value(a, b)
     static member (*) (a : bigint, b : Unit)        = Value(Rational a, b)
+    static member (*) (a : decimal, b : Unit)       = Value(Rational a, b)
     static member (*) (a : int64, b : Unit)         = Value(Rational a, b)
+    static member (*) (a : uint64, b : Unit)        = Value(Rational a, b)
     static member (*) (a : int, b : Unit)           = Value(Rational a, b)
+    static member (*) (a : uint32, b : Unit)        = Value(Rational a, b)
     static member (*) (a : float, b : Unit)         = Value(Rational a, b)
     static member (*) (a : float32, b : Unit)       = Value(Rational a, b)
 
@@ -127,12 +133,17 @@ type Unit =
                 ""
         Unit("", symbol, powers, a.Scale / b.Scale)
 
-    static member (/) (a : int, b : Unit) =
+    static member (/) (a : bigint, b : Unit) =
         let powers =
             match b.IsDimensionLess with
             | true -> UnitPowers { Unit = b; Power = -1 }
             | false -> b.BaseUnits.Inverse
         Unit("", "", powers, a / b.Scale)
+    static member (/) (a : int, b : Unit) = (/) (bigint a) b
+    static member (/) (a : uint32, b : Unit) = (/) (bigint a) b
+    static member (/) (a : int64, b : Unit) = (/) (bigint a) b
+    static member (/) (a : uint64, b : Unit) = (/) (bigint a) b
+    static member (/) (a : decimal, b : Unit) = (/) (bigint a) b
 
     member self.Pow (b : int) =
         if b = 0 then
@@ -311,12 +322,21 @@ and Value(x : Rational, unit : Unit) =
     
     new(x : bigint, unit : Unit) = Value(Rational x, unit)
     new(x : bigint) = Value(Rational x, Unit.None)
+
+    new(x : decimal, unit : Unit) = Value(Rational x, unit)
+    new(x : decimal) = Value(Rational x, Unit.None)
     
     new(x : int64, unit : Unit) = Value(Rational x, unit)
     new(x : int64) = Value(Rational x, Unit.None)
+
+    new(x : uint64, unit : Unit) = Value(Rational x, unit)
+    new(x : uint64) = Value(Rational x, Unit.None)
     
     new(x : int, unit : Unit) = Value(Rational x, unit)
     new(x : int) = Value(Rational x, Unit.None)
+
+    new(x : uint32, unit : Unit) = Value(Rational x, unit)
+    new(x : uint32) = Value(Rational x, Unit.None)
     
     new(x : float, unit : Unit) = Value(Rational x, unit)
     new(x : float) = Value(Rational x, Unit.None)
@@ -391,7 +411,9 @@ and Value(x : Rational, unit : Unit) =
         | (false, false) -> Value(f, Unit.None)
     static member (*) (a : Value, b : Rational)      = Value(a.X * b, a.Unit)
     static member (*) (a : Value, b : bigint)        = Value(a.X * Rational b, a.Unit)
+    static member (*) (a : Value, b : decimal)       = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : int64)         = Value(a.X * Rational b, a.Unit)
+    static member (*) (a : Value, b : uint64)         = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : int)           = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : float)         = Value(a.X * Rational b, a.Unit)
     static member (*) (a : Value, b : float32)       = Value(a.X * Rational b, a.Unit)
@@ -411,6 +433,8 @@ and Value(x : Rational, unit : Unit) =
         | (false, true) -> Value(f, b.Unit)
         | (false, false) -> Value(f, Unit.None)
     static member (*) (a : Rational, b : Value)      = Value(a * b.X, b.Unit)
+    static member (*) (a : bigint, b : Value)        = Value(Rational a * b.X, b.Unit)
+    static member (*) (a : decimal, b : Value)       = Value(Rational a * b.X, b.Unit)
     static member (*) (a : int64, b : Value)         = Value(Rational a * b.X, b.Unit)
     static member (*) (a : int, b : Value)           = Value(Rational a * b.X, b.Unit)
     static member (*) (a : float, b : Value)         = Value(Rational a * b.X, b.Unit)
@@ -435,6 +459,7 @@ and Value(x : Rational, unit : Unit) =
     static member (/) (a : Value, b : Constant)      = a / Value(b)
     static member (/) (a : Value, b : Rational)      = Value(a.X / b, a.Unit)
     static member (/) (a : Value, b : bigint)        = Value(a.X / Rational b, a.Unit)
+    static member (/) (a : Value, b : decimal)       = Value(a.X / Rational b, a.Unit)
     static member (/) (a : Value, b : int64)         = Value(a.X / Rational b, a.Unit)
     static member (/) (a : Value, b : int)           = Value(a.X / Rational b, a.Unit)
     static member (/) (a : Value, b : float)         = Value(a.X / Rational b, a.Unit)
@@ -448,6 +473,8 @@ and Value(x : Rational, unit : Unit) =
         | true -> Value(b.X, a / b.Unit)
         | false -> Value(b.X / a.Scale, Unit.None)
     static member (/) (a : Constant, b : Value)      = Value(a) / b
+    static member (/) (a : bigint, b : Value)        = Value(Rational a / b.X, 1 / b.Unit)
+    static member (/) (a : decimal, b : Value)       = Value(Rational a / b.X, 1 / b.Unit)
     static member (/) (a : int64, b : Value)         = Value(Rational a / b.X, 1 / b.Unit)
     static member (/) (a : int, b : Value)           = Value(Rational a / b.X, 1 / b.Unit)
     static member (/) (a : float, b : Value)         = Value(Rational a / b.X, 1 / b.Unit)
@@ -463,6 +490,7 @@ and Value(x : Rational, unit : Unit) =
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
     static member (+) (a : Value, b : Rational) = Value(a.X + b, a.Unit)
+    static member (+) (a : Value, b : decimal)  = Value(a.X + Rational b, a.Unit)
     static member (+) (a : Value, b : bigint)   = Value(a.X + Rational b, a.Unit)
     static member (+) (a : Value, b : int64)    = Value(a.X + Rational b, a.Unit)
     static member (+) (a : Value, b : int)      = Value(a.X + Rational b, a.Unit)
@@ -479,6 +507,7 @@ and Value(x : Rational, unit : Unit) =
         else
             invalidOp (sprintf "Values (%A) and (%A) have different units." a b)
     static member (-) (a : Value, b : Rational) = Value(a.X - b, a.Unit)
+    static member (-) (a : Value, b : decimal)  = Value(a.X - Rational b, a.Unit)
     static member (-) (a : Value, b : bigint)   = Value(a.X - Rational b, a.Unit)
     static member (-) (a : Value, b : int64)    = Value(a.X - Rational b, a.Unit)
     static member (-) (a : Value, b : int)      = Value(a.X - Rational b, a.Unit)

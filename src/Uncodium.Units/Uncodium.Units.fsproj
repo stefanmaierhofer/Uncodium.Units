@@ -67,6 +67,7 @@
     <Compile Include="Historic.fs" />
     <Compile Include="VariousStuffNotYetAdded.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="CryptoCurrency.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

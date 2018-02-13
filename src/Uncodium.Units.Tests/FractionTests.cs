@@ -29,6 +29,38 @@ namespace Uncodium.Units.Tests
         }
 
         [Test]
+        public void CanCreateFraction_double2()
+        {
+            var x = new Rational(1e-8);
+            Assert.IsTrue(x.ToFloat() == 1e-8);
+            Assert.IsTrue(x.Numerator == 1 && x.Denominator == 100000000);
+        }
+
+        [Test]
+        public void CanCreateFraction_double3()
+        {
+            var x = new Rational(1.5);
+            Assert.IsTrue(x.ToFloat() == 1.5);
+            Assert.IsTrue(x.Numerator == 3 && x.Denominator == 2);
+        }
+
+        [Test]
+        public void CanCreateFraction_double4()
+        {
+            var x = new Rational(1.0);
+            Assert.IsTrue(x.ToFloat() == 1.0);
+            Assert.IsTrue(x.Numerator == 1 && x.Denominator == 1);
+        }
+
+        [Test]
+        public void CanCreateFraction_double5()
+        {
+            var x = new Rational(0.0);
+            Assert.IsTrue(x.ToFloat() == 0.0);
+            Assert.IsTrue(x.Numerator == 0 && x.Denominator == 1);
+        }
+
+        [Test]
         public void CanCreateFraction_int()
         {
             var x = new Rational(7);

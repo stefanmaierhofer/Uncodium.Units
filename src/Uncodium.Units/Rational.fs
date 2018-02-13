@@ -19,78 +19,85 @@ type Rational =
             else
                 match denominator > 0I with
                     | true -> { Numerator = numerator / d; Denominator = denominator / d }
-                    | false -> { Numerator = -numerator / d; Denominator = -denominator / d }      
-        new(numerator: bigint, denominator: decimal)    = Rational(numerator, bigint denominator)
+                    | false -> { Numerator = -numerator / d; Denominator = -denominator / d }
+
+        new(numerator: decimal, denominator: decimal)   =
+            let mutable n = numerator
+            let mutable d = denominator
+            while Math.Truncate(n) <> n || Math.Truncate(d) <> d do
+                n <- n * 10m
+                d <- d * 10m
+            Rational(bigint n, bigint d) 
+
+        new(numerator: decimal) =
+            let mutable n = numerator
+            let mutable d = 1I
+            while Math.Truncate(n) <> n do
+                n <- n * 10m
+                d <- d * 10I
+            Rational(bigint n, d) 
+            
+
+        new(numerator: bigint, denominator: decimal)    = Rational(decimal numerator, denominator)
         new(numerator: bigint, denominator: int64)      = Rational(numerator, bigint denominator)
         new(numerator: bigint, denominator: int)        = Rational(numerator, bigint denominator)
-        new(numerator : bigint, denominator : float)    =
-            let f = Rational.scale denominator
-            Rational(numerator * f, bigint(denominator * float(f)))
-        new(numerator : bigint, denominator : float32)  = Rational(numerator, float denominator)
+        new(numerator : bigint, denominator : float)    = Rational(decimal numerator, decimal denominator)
+        new(numerator : bigint, denominator : float32)  = Rational(decimal numerator, decimal denominator)
         new(numerator: bigint)                          = Rational(numerator, 1I)
         
         new(numerator: int64, denominator: bigint)      = Rational(bigint numerator, denominator)
-        new(numerator: int64, denominator: decimal)     = Rational(bigint numerator, bigint denominator)
+        new(numerator: int64, denominator: decimal)     = Rational(decimal numerator, denominator)
         new(numerator: int64, denominator: int64)       = Rational(bigint numerator, bigint denominator)
         new(numerator: int64, denominator: int)         = Rational(bigint numerator, bigint denominator)
-        new(numerator: int64, denominator: float)       = Rational(bigint numerator, denominator)
-        new(numerator: int64, denominator: float32)     = Rational(bigint numerator, denominator)
+        new(numerator: int64, denominator: float)       = Rational(decimal numerator, decimal denominator)
+        new(numerator: int64, denominator: float32)     = Rational(decimal numerator, decimal denominator)
         new(numerator: int64)                           = Rational(bigint numerator, 1I)
 
         new(numerator: uint64, denominator: bigint)      = Rational(bigint numerator, denominator)
-        new(numerator: uint64, denominator: decimal)     = Rational(bigint numerator, bigint denominator)
+        new(numerator: uint64, denominator: decimal)     = Rational(decimal numerator, denominator)
         new(numerator: uint64, denominator: int64)       = Rational(bigint numerator, bigint denominator)
         new(numerator: uint64, denominator: int)         = Rational(bigint numerator, bigint denominator)
-        new(numerator: uint64, denominator: float)       = Rational(bigint numerator, denominator)
-        new(numerator: uint64, denominator: float32)     = Rational(bigint numerator, denominator)
+        new(numerator: uint64, denominator: float)       = Rational(decimal numerator, decimal denominator)
+        new(numerator: uint64, denominator: float32)     = Rational(decimal numerator, decimal denominator)
         new(numerator: uint64)                           = Rational(bigint numerator, 1I)
 
-        new(numerator: decimal, denominator: bigint)    = Rational(bigint numerator, denominator)
-        new(numerator: decimal, denominator: decimal)   = Rational(bigint numerator, bigint denominator)
-        new(numerator: decimal, denominator: int64)     = Rational(bigint numerator, bigint denominator)
-        new(numerator: decimal, denominator: int)       = Rational(bigint numerator, bigint denominator)
-        new(numerator: decimal, denominator: float)     = Rational(bigint numerator, denominator)
-        new(numerator: decimal, denominator: float32)   = Rational(bigint numerator, denominator)
-        new(numerator: decimal)                         = Rational(bigint numerator, 1I)
-
+        new(numerator: decimal, denominator: bigint)    = Rational(numerator, decimal denominator)
+        new(numerator: decimal, denominator: int64)     = Rational(numerator, decimal denominator)
+        new(numerator: decimal, denominator: int)       = Rational(numerator, decimal denominator)
+        new(numerator: decimal, denominator: float)     = Rational(numerator, decimal denominator)
+        new(numerator: decimal, denominator: float32)   = Rational(numerator, decimal denominator)
+        
         new(numerator: int, denominator: bigint)        = Rational(bigint numerator, denominator)
-        new(numerator: int, denominator: decimal)       = Rational(bigint numerator, bigint denominator)
+        new(numerator: int, denominator: decimal)       = Rational(decimal numerator, denominator)
         new(numerator: int, denominator: int64)         = Rational(bigint numerator, bigint denominator)
         new(numerator: int, denominator: int)           = Rational(bigint numerator, bigint denominator)
-        new(numerator: int, denominator: float)         = Rational(bigint numerator, denominator)
-        new(numerator: int, denominator: float32)       = Rational(bigint numerator, denominator)
+        new(numerator: int, denominator: float)         = Rational(decimal numerator, decimal denominator)
+        new(numerator: int, denominator: float32)       = Rational(decimal numerator, decimal denominator)
         new(numerator: int)                             = Rational(bigint numerator, 1I)
 
         new(numerator: uint32, denominator: bigint)     = Rational(bigint numerator, denominator)
-        new(numerator: uint32, denominator: decimal)    = Rational(bigint numerator, bigint denominator)
+        new(numerator: uint32, denominator: decimal)    = Rational(decimal numerator, denominator)
         new(numerator: uint32, denominator: int64)      = Rational(bigint numerator, bigint denominator)
         new(numerator: uint32, denominator: int)        = Rational(bigint numerator, bigint denominator)
-        new(numerator: uint32, denominator: float)      = Rational(bigint numerator, denominator)
-        new(numerator: uint32, denominator: float32)    = Rational(bigint numerator, denominator)
+        new(numerator: uint32, denominator: float)      = Rational(decimal numerator, decimal denominator)
+        new(numerator: uint32, denominator: float32)    = Rational(decimal numerator, decimal denominator)
         new(numerator: uint32)                          = Rational(bigint numerator, 1I)
         
-        new(numerator : float, denominator : bigint)    =
-            let f = Rational.scale numerator
-            Rational(bigint(numerator * float(f)), denominator * f)
-        new(numerator : float, denominator : decimal)   = Rational(numerator, bigint denominator)
-        new(numerator : float, denominator : int64)     = Rational(numerator, bigint denominator)
-        new(numerator : float, denominator : int)       = Rational(numerator, bigint denominator)
-        new(numerator : float, denominator : float)     =
-            let f = float(bigint.Max(Rational.scale numerator, Rational.scale denominator))
-            Rational(bigint(numerator * f), bigint(denominator * f))
-        new(numerator : float, denominator : float32)   = Rational(numerator, float denominator)
-        new(numerator : float)                          =
-            let d = Rational.scale numerator
-            let n = bigint(numerator * float(d))
-            Rational(n, d)
+        new(numerator : float, denominator : bigint)    = Rational(decimal numerator, decimal denominator)
+        new(numerator : float, denominator : decimal)   = Rational(decimal numerator, denominator)
+        new(numerator : float, denominator : int64)     = Rational(decimal numerator, decimal denominator)
+        new(numerator : float, denominator : int)       = Rational(decimal numerator, decimal denominator)
+        new(numerator : float, denominator : float)     = Rational(decimal numerator, decimal denominator)
+        new(numerator : float, denominator : float32)   = Rational(decimal numerator, decimal denominator)
+        new(numerator : float)                          = Rational(decimal numerator)
             
-        new(numerator : float32, denominator : bigint)  = Rational(float numerator, denominator)
-        new(numerator : float32, denominator : decimal) = Rational(float numerator, bigint denominator)
-        new(numerator : float32, denominator : int64)   = Rational(float numerator, bigint denominator)
-        new(numerator : float32, denominator : int)     = Rational(float numerator, bigint denominator)
-        new(numerator : float32, denominator : float)   = Rational(float numerator, denominator)
-        new(numerator : float32, denominator : float32) = Rational(float numerator, float denominator)
-        new(numerator : float32)                        = Rational(float numerator)
+        new(numerator : float32, denominator : bigint)  = Rational(decimal numerator, decimal denominator)
+        new(numerator : float32, denominator : decimal) = Rational(decimal numerator, denominator)
+        new(numerator : float32, denominator : int64)   = Rational(decimal numerator, decimal denominator)
+        new(numerator : float32, denominator : int)     = Rational(decimal numerator, decimal denominator)
+        new(numerator : float32, denominator : float)   = Rational(decimal numerator, decimal denominator)
+        new(numerator : float32, denominator : float32) = Rational(decimal numerator, decimal denominator)
+        new(numerator : float32)                        = Rational(decimal numerator)
 
         member self.Inverse with get () = Rational(self.Denominator, self.Numerator)
 
@@ -257,12 +264,6 @@ type Rational =
 
         static member Pi                = Rational(314159265358979323846264338327950288419716939937510I, bigint.Pow(10I, 50))
         static member e                 = Rational(271828182845904523536028747135266249775724709369995I, bigint.Pow(10I, 50))
-        
-        static member private scale (x : float) : bigint =
-            let s = string x
-            match s.IndexOf('.') with
-            | -1 -> 1I 
-            | i -> bigint.Pow(10I, s.Length - i - 1)
             
     end
     

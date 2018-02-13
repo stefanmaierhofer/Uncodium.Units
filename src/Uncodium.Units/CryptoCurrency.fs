@@ -6,6 +6,39 @@ open System.Numerics
 module CryptoCurrency =
     open SI
     
+    /// https://en.bitcoin.it/wiki/Units
+    module Bitcoin =
+        /// Bitcoin base unit.
+        let Bitcoin         = Unit("bitcoin",           "BTC"                               )
+        /// Bitcoin base unit.
+        let BTC             = Bitcoin
+
+        /// 1/1000 of a bitcoin.
+        let Millibitcoin    = Unit("millibitcoin",      "mBTC",     Milli * Bitcoin         )
+        /// 1/1000 of a bitcoin.
+        let mBTC            = Millibitcoin
+        /// 1/1000 of a bitcoin.
+        let millie          = Millibitcoin
+
+        /// 1/1000 of a millibitcoin.
+        let Microbitcoin    = Unit("microbitcoin",      "μBTC",     Micro * Bitcoin         )
+        /// 1/1000 of a millibitcoin.
+        let μBTC            = Microbitcoin
+        /// 1/1000 of a millibitcoin.
+        let bit             = Microbitcoin
+        
+        /// 1/100 000 000 bitcoin.
+        let Satoshi         = Unit("satoshi",           "sat",      Bitcoin, Rational(1, 100000000) )
+        /// 1/1000 of a millibitcoin.
+        let sat             = Satoshi
+
+        /// 1/100 000 000 bitcoin.
+        let Millisatoshi    = Unit("millisatoshi",      "msat",     Milli * Satoshi         )
+        /// 1/1000 of a millibitcoin.
+        let msat            = Millisatoshi
+
+
+
     /// http://ethdocs.org/en/latest/ether.html
     module Ethereum =
         /// Smallest denomination in Ethereum blockchain.

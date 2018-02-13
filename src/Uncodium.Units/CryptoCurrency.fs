@@ -28,7 +28,7 @@ module CryptoCurrency =
         let bit             = Microbitcoin
         
         /// 1/100 000 000 bitcoin.
-        let Satoshi         = Unit("satoshi",           "sat",      Bitcoin, Rational(1, 100000000) )
+        let Satoshi         = Unit("satoshi",           "sat",      Bitcoin,    1e-8        )
         /// 1/1000 of a millibitcoin.
         let sat             = Satoshi
 

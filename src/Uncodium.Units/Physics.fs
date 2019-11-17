@@ -497,7 +497,7 @@ module Physics =
     /// It is defined as exactly equal to 100,000 Pa, which is slightly less than the
     /// current average atmospheric pressure on Earth at sea level.
     /// https://en.wikipedia.org/wiki/Bar_(unit)
-    let Bar                     = U("bar",                      "bar",  Pascal,                 10_000                  )
+    let Bar                     = U("bar",                      "bar",  Pascal,                 100_000                 )
     
     /// The barye (symbol: Ba), or sometimes barad, barrie, bary, baryd, baryed, or barie,
     /// is the centimetre–gram–second (CGS) unit of pressure. It is equal to 1 dyne per square centimetre.
@@ -509,7 +509,7 @@ module Physics =
     /// It is the pressure resulting from a force of one pound-force applied to an area of one square inch.
     /// Therefore, one pound per square inch is approximately 6894.757 Pascal.
     /// https://en.wikipedia.org/wiki/Pounds_per_square_inch
-    let PoundsPerSquareInch     = U("pounds per square inch",   "psi",  International.Pound / International.SquareInch  )
+    let PoundsPerSquareInch     = U("pounds per square inch",   "psi",  PoundForce / International.SquareInch  )
     /// The pound per square inch or, more accurately, pound-force per square inch (symbol: lbf/in2; abbreviation: psi)
     /// is a unit of pressure or of stress based on avoirdupois units.
     /// It is the pressure resulting from a force of one pound-force applied to an area of one square inch.

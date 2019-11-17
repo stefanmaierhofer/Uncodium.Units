@@ -1,4 +1,5 @@
-﻿#r "../../bin/Debug/Uncodium.Units.dll"
+﻿#I "C:/Data/Development/Uncodium.Unit/bin/Debug/netcoreapp3.0"
+#r "Uncodium.Units.dll"
 open Uncodium.Units
 open SI
 open Physics
@@ -7,6 +8,8 @@ open Information
 open International
 open UK.LiquidVolume
 open US.LiquidVolume
+
+1 * Atmosphere => PSI
 
 let a = 1 * Lightyear + 1 * Nanometer
 let b = 1 * Lightyear
